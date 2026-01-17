@@ -5,3 +5,4 @@ bun.lockb
 *.png
 *.jpg
 *.jpeg
+.zed/settings.json
