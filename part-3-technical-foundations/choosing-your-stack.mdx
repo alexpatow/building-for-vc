@@ -62,6 +62,7 @@ This stack isn't exciting. It's boring, mature, widely-used technology. That's e
 The default stack covers most of what you'll build. But sometimes you need something it doesn't provide. The rule is: pick one or two new technologies per project, not more.
 
 **For Kepler** (Inflection's research platform), we introduced **Tiptap** to create a Notion-like editing experience. This made sense because:
+
 - The editing experience was core to the product's value
 - Tiptap is mature, well-funded, and widely used
 - It integrated cleanly with React/Next.js
@@ -140,6 +141,7 @@ Your engineering time, at a fully-loaded cost including salary and benefits, is 
 Minimize dependencies, but don't be dogmatic about it. If a well-maintained library solves your problem and lets you ship faster, use it.
 
 **In the VC ecosystem, you'll use vendor SDKs and integrations:**
+
 - API wrappers from your data providers
 - Vercel AI SDK for LLM integrations
 - Drizzle or Prisma for database access
@@ -147,11 +149,13 @@ Minimize dependencies, but don't be dogmatic about it. If a well-maintained libr
 These are core dependencies that make sense. They're maintained by companies who have financial incentive to keep them working, and they save you from writing API integration code from scratch.
 
 **Be selective about other dependencies:**
+
 - A well-maintained date library (date-fns) saves time and reduces bugs
 - A validation library (Zod for TypeScript, covered in [Integrations and APIs](/part-3-technical-foundations/integrations-and-apis)) is essential for API integrations
 - A testing library (Vitest) makes sense if you write tests (though for internal tools, extensive testing is often overkill)
 
 **Be wary of:**
+
 - Dependencies that do things you could write in 10 lines of code (micro-dependencies)
 - Dependencies with no recent commits or single maintainers
 - Dependencies that pull in huge transitive dependency trees
@@ -173,12 +177,14 @@ That said, this assumes someone who's already a strong engineer. If you're hirin
 GPs don't care that you used Next.js. They don't care about your database schema. They don't care about your deployment pipeline. They care about whether your tools help them find better companies, make better decisions, and ultimately generate better returns for LPs.
 
 **Your value comes from:**
+
 - Building a research platform that surfaces insights they wouldn't have found manually
 - Building sourcing tools that identify companies before competitors do
 - Building portfolio dashboards that show which companies need attention
 - Building analyses that inform thesis development or market understanding
 
 **Your value does not come from:**
+
 - Using the newest JavaScript framework
 - Having the most elegant architecture
 - Optimizing performance beyond what's necessary

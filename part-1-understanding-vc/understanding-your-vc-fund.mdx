@@ -34,6 +34,7 @@ Deal flow matters, but it's not about processing hundreds of deals. It's about s
 There's a subset of seed funds that take a different approach: 30-50+ investments per fund with smaller checks ($50K-$500K). These funds operate more like volume businesses with minimal diligence and binary outcomes. But this is less common than the concentrated approach.
 
 Examples:
+
 - [Inflection](https://inflection.fund/) - Deep tech pre-seed/seed
 - [Notation Capital](https://notation.vc/) - Concentrated seed fund
 - [Precursor Ventures](https://precursorvc.com/) - Pre-seed and seed
@@ -47,6 +48,7 @@ Series A and B funds occupy the middle ground. They see moderate deal volume (20
 Deal teams are larger here. You might have 5-10 investment professionals, plus operating partners or specialists. The diligence process involves multiple people: someone does market research, someone handles financial modeling, someone does customer reference calls, maybe someone does technical evaluation. Everything feeds into an investment committee meeting where partners debate the deal.
 
 Examples:
+
 - [Earlybird](https://earlybird.com/) - European Series A/B
 - [Balderton Capital](https://www.balderton.com/) - European Series A/B
 - [Index Ventures](https://www.indexventures.com/) - Series A and B focus
@@ -58,6 +60,7 @@ Growth equity funds operate at the other end of the spectrum. Low deal volume (m
 The focus here shifts from "will this work?" to "can this scale profitably?" Customer references matter a lot. Financial models need to be detailed. The fund often co-invests with other growth funds, so syndicate management becomes important. There's significant operational involvement. Some growth funds effectively function as operating partners, helping professionalize finance, sales, and operations.
 
 Examples:
+
 - [Insight Partners](https://www.insightpartners.com/) - Global growth equity
 - [General Atlantic](https://www.generalatlantic.com/) - Growth stage investor
 - [Summit Partners](https://www.summitpartners.com/) - Growth equity and buyout
@@ -75,6 +78,7 @@ Here's where the role of technology and data changes fundamentally. In PE, the q
 Post-deal, the work continues with portfolio companies. You might help a portfolio company with M&A analysis for add-on acquisitions. Or build custom models for their specific business challenges. Each project is tailored to bespoke needs. This isn't about building one platform that serves all portfolio companies. It's about being a data and technology partner embedded in the operational work of the fund and its portfolio.
 
 Examples:
+
 - [EQT](https://eqtgroup.com/) - Global PE with sector focus
 - [KKR](https://www.kkr.com/) - Large-cap buyout and growth
 - [Blackstone](https://www.blackstone.com/) - Largest alternative asset manager
@@ -90,6 +94,7 @@ This multi-fund structure affects everything about operations. You're not buildi
 The challenge is managing complexity while maintaining the benefits of integration. Each fund needs its own LP reporting, its own capital tracking, its own performance metrics. But deals, companies, and relationships should be shared. A partner working on both the seed and growth funds needs visibility across both, but LPs for each fund should only see their specific fund's data.
 
 Examples:
+
 - [Andreessen Horowitz](https://a16z.com/) - Multi-stage from seed to growth
 - [Sequoia Capital](https://www.sequoiacap.com/) - Seed, venture, and growth funds
 - [Accel](https://www.accel.com/) - Early stage through growth
@@ -109,6 +114,7 @@ Global funds face different challenges. Partners operate across time zones. Trav
 From a technical perspective, geographic focus shapes your architecture significantly. Multi-entity structures require careful data modeling: which legal entity made which investment? How do you aggregate performance across entities while maintaining separation for legal and tax purposes? Currency handling affects portfolio valuation and financial reporting. Time zones affect scheduling features, notification timing, and how you display dates. Access control becomes more complex: regional partners might only see deals in their geography, while HQ needs global visibility.
 
 Examples of funds with a geographic focus:
+
 - [byFounders](https://www.byfounders.vc/) - Nordic focus
 - [Cusp Capital](https://www.cuspcapital.com/) - Continental Europe
 - [Blackbird](https://blackbird.vc/) - Australia and New Zealand
@@ -128,6 +134,7 @@ Consumer and marketplace funds care about user growth, retention, cohort analysi
 Technically, industry specialization means building extensible metric systems from day one. You can't hard-code ARR fields when portfolio companies might have wildly different success metrics. Your data model needs to support custom metrics per company or per sector. Integration requirements vary dramatically: a fintech fund needs banking API connections and regulatory databases, while a deep tech fund needs patent databases and grant tracking systems. Document templates and diligence checklists become sector-specific. Even your deal sourcing might integrate with industry-specific data sources: blockchain explorers for crypto, clinical trial databases for biotech, or defense contract databases for dual-use technology.
 
 Examples of industry-focused funds:
+
 - [Scout Ventures](https://www.scoutventures.com/) - Defense and dual-use technology
 - [Paradigm](https://www.paradigm.xyz/) - Crypto and web3
 - [QED Investors](https://qedinvestors.com/) - Fintech
@@ -139,6 +146,7 @@ Generalist funds invest across sectors and stages. They rely on broader pattern 
 The technical challenge for generalist funds is flexibility without chaos. Your categorization systems need to handle companies that don't fit neat boxes. Tagging and metadata become more important than rigid hierarchies. Signal processing for deal flow requires broader pattern matching: you can't rely on sector-specific signals, so you need systems that surface opportunities based on founder quality, market dynamics, and thesis fit across different industries. Your metric tracking needs to gracefully handle B2B SaaS, consumer apps, marketplaces, and hardware companies in the same portfolio. The key is building abstractions that work across sectors while allowing customization where needed.
 
 Examples of generalist funds:
+
 - [Atomico](https://atomico.com/) - European multi-stage
 - [Creandum](https://creandum.com/) - European early stage
 - [Bessemer Venture Partners](https://www.bvp.com/) - US multi-stage generalist
@@ -164,12 +172,14 @@ What does this tell you? They're flexible on stage. You need to build for seed t
 To understand what to build, you need to understand how the GPs actually work. Interviews reveal workflows, pain points, and data needs. Here are questions that reveal technical requirements:
 
 **About Thesis Creation and Evolution:**
+
 - "How do you develop and refine your investment thesis?"
 - "What data or signals inform changes to your thesis over time?"
 - "How do you track emerging trends or technologies you're monitoring?"
 - "How do you share thesis work across the team?"
 
 **About Deal Flow:**
+
 - "Walk me through how a deal comes in and what happens next"
 - "How many deals do you see per month? How many do you invest in?"
 - "What's your typical timeline from first meeting to close?"
@@ -177,6 +187,7 @@ To understand what to build, you need to understand how the GPs actually work. I
 - "What opportunities have you missed that you wish you hadn't? Why did you miss them?"
 
 **About Due Diligence:**
+
 - "What does your diligence process look like?"
 - "What information do you need to make a decision?"
 - "How do you share information within the team?"
@@ -184,18 +195,21 @@ To understand what to build, you need to understand how the GPs actually work. I
 - "When you pass on a company, how do you track why you decided not to invest?"
 
 **About Portfolio Management:**
+
 - "How often do you interact with portfolio companies?"
 - "What information do you need from them regularly?"
 - "How do you decide on follow-on investments?"
 - "What board materials do you receive?"
 
 **About LP Reporting:**
+
 - "How often do you report to LPs?"
 - "What do LPs ask for that's hard to produce?"
 - "How long does it take to prepare LP reports?"
 - "What data is hardest to gather?"
 
 **About Pain Points:**
+
 - "What takes the most time that shouldn't?"
 - "What information do you wish you had but don't?"
 - "What manual processes drive you crazy?"

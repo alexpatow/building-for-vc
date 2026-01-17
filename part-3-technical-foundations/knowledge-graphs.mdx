@@ -68,12 +68,14 @@ An emerging application of knowledge graphs in VC is GraphRAG (Graph Retrieval-A
 **Why it matters for VC**: When a GP asks "which companies in our portfolio are working on AI infrastructure?", a traditional RAG system might retrieve documents mentioning "AI infrastructure." But GraphRAG can understand that Company A's infrastructure product is used by Company B (even if that relationship isn't explicitly stated in searchable text), or that the founders of Company C previously worked at Company D which built similar technology. The knowledge graph captures these relationships, making retrieval smarter.
 
 **Use cases**:
+
 - Answering questions about portfolio company relationships ("which of our portfolio companies could partner with each other?")
 - Understanding competitive landscapes ("show me companies that compete with our portfolio companies and their relationships to potential acquirers")
 - Connecting research insights ("what companies are working in adjacent spaces to this thesis we developed?")
 - Due diligence queries ("what are all the connections between this company and our existing network?")
 
 **How it works**: You build a knowledge graph of your companies, people, investors, and their relationships. When someone asks a question, the system:
+
 1. Identifies relevant entities in the question
 2. Traverses the knowledge graph to find related entities and relationships
 3. Retrieves documents/data associated with those entities
@@ -89,12 +91,14 @@ For most funds, this is still emerging territory. Traditional RAG systems work w
 Knowledge graphs are powerful, but they're not always the right choice. The decision depends on your queries, your team's expertise, and your infrastructure maturity.
 
 **Use knowledge graphs when:**
+
 - Your core queries involve traversing multiple levels of relationships (find companies 2-3 hops away through investor networks)
 - You need to visualize network structure (market maps showing company relationships)
 - Relationship patterns are as important as entity attributes (co-investment networks, competitive clusters)
 - You're building recommendation systems based on graph similarity (companies similar to this one based on their network position)
 
 **Stick with relational databases when:**
+
 - Most queries are about entity attributes, not relationships (show me all Series A companies in fintech)
 - Your team is much more comfortable with SQL than graph query languages
 - You're still figuring out your data model and need flexibility to change it
@@ -105,12 +109,14 @@ Knowledge graphs are powerful, but they're not always the right choice. The deci
 For most VC funds, the right answer is to model everything in a relational database first, then build knowledge graph views or projections on top when you need relationship-heavy queries.
 
 **Why this works:**
+
 - Your team already knows SQL. Teaching everyone Cypher or Gremlin adds complexity.
 - Relational databases are well-understood, mature, and have great tooling.
 - Most of your queries are probably fine in SQL. It's only specific relationship queries that benefit from graphs.
 - You can start simple and add graph capabilities later when you validate the need.
 
 **How to implement this:**
+
 - Model your core data (companies, people, investors, deals) in Postgres or similar relational database
 - Ensure you capture relationships (investments, employment, board seats, partnerships)
 - For basic relationship queries, use SQL joins (they work fine for 1-2 levels of relationships)
@@ -126,6 +132,7 @@ This gives you the benefits of graph thinking without committing to graph databa
 If you do decide to use a graph database (either as your primary store or as a secondary system), here are key considerations.
 
 **Graph database options:**
+
 - **Neo4j**: Most popular graph database, mature ecosystem, Cypher query language. Good developer experience and tooling.
 - **Amazon Neptune**: Managed graph database on AWS, supports both Gremlin and SPARQL. Good if you're already on AWS.
 - **TigerGraph**: Focuses on real-time graph analytics at scale. Good for very large graphs with complex analytics.

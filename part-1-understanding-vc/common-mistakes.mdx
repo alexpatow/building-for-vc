@@ -25,6 +25,7 @@ But here's the reality: the first one to three months should be mostly research 
 **Author Note: Jumping in too early at Inflection**
 
 At Inflection, we started by building a huge sourcing platform including agents, multiple data sources, and a graph database for modeling relationships. It showed some promising results, but didn't deliver the value we were hoping for. The interesting companies surfaced by the tool? We were already talking to them. Growing the haystack didn't help us find better needles.
+
 </Tip>
 
 ### How to Avoid It
@@ -35,6 +36,7 @@ Spend your first two weeks just observing. Shadow each GP for a day. Attend all 
 **Author Note: Shadowing GPs led to Kepler**
 
 [Kepler](https://svrgn.substack.com/p/introducing-kepler-inflections-home), Inflection's research platform, wouldn't have come about if it weren't for shadowing the GPs in a few deals and realizing how much research we were doing on the companies. That research wasn't being stored in a great way, it was too siloed. So we decided to build a research platform. The insight came from observation, not from asking "what should I build?"
+
 </Tip>
 
 Weeks three and four, start documenting what you've seen. Map out the current workflows, not the ones they told you about in the interview, but the ones you actually observed. Identify pain points. Document the current tools and data sources they're using. Interview each team member individually. You'll be surprised how different the story is when you talk to people one-on-one versus in a group setting.
@@ -45,6 +47,7 @@ Weeks five through eight, prove you understand the domain before building anythi
 **Author Note: Starting small at Inflection**
 
 At Inflection, I dipped my toes in by helping to automate the process of creating valuation memos for our audit process. This was a big win for the ops team which had to compile these manually, and it let us test out some AI frameworks for future tasks. Small win, real value, built trust.
+
 </Tip>
 
 By week nine, you should have enough context to propose a real technical strategy. Get buy-in on priorities. Now you can start building the right things.
@@ -77,6 +80,7 @@ Have the hard conversation early: "Here's what exists that we could buy. Here's 
 I've seen funds try to build custom CRMs, which used to be meaningful differentiation. But now you can get most features off the shelf with tools like Affinity or Attio. As a solo engineer or small team, I wouldn't spend time building a new one from scratch.
 
 The same goes for data scraping. I've seen engineers spend weeks building LinkedIn scrapers. While that data is important, your time as an engineer is the most expensive resource. Don't waste it when you can buy data from providers like Harmonic, Sourcescrub, or others. Build on top of purchased data, don't recreate it.
+
 </Tip>
 
 ## Mistake #3: Not Having Enough Resources
@@ -103,6 +107,7 @@ Watch out for red flags: "We need custom everything" usually means nobody's thou
 When we started building at Inflection, we had this huge backlog of products we thought we needed (you can [find a lot of them in this list](https://svrgn.substack.com/p/an-engineering-approach-to-venture) from before I was hired). If I was to execute on all these projects, I would always be context switching and stretched too thin. The key was constantly setting realistic priorities with the partnership, spelling out what it would actually take to build things, and forcing them to give feedback on what mattered most.
 
 Over time, many of those "critical" needs changed. The fund evolved. More importantly, more products became available to buy off the shelf. Half the backlog became irrelevant or solvable with purchased tools. That huge initial list wasn't wrong, it just wasn't static. Keep re-prioritizing based on what's actually needed today, not what seemed important six months ago.
+
 </Tip>
 
 ## Mistake #4: Over-Engineering for Scale You Don't Have
@@ -129,6 +134,7 @@ You'll know you need more complexity when you have actual performance problems (
 **Author Note: Kubernetes at a VC fund**
 
 Our initial sourcing tool at Inflection was set up on Kubernetes for workflow management, using Terraform. All the sins I told myself I wouldn't commit. Over a week, we transitioned to Modal. We ended up saving ourselves a bunch of money on resources we didn't need and had a much more reliable tool. Sometimes you need to catch yourself mid-over-engineering and course correct.
+
 </Tip>
 
 ## Mistake #5: Not Understanding Data Sensitivity and Compliance
@@ -160,9 +166,10 @@ It's not your call what gets shared with whom. But it is your responsibility to 
 <Tip>
 **Author Note: Work with compliance, don't fight it**
 
-At a small fund, there's an advantage: you often *are* compliance. You get to make the rules. At larger funds (or funds that are part of larger organizations), you need to build strong relationships with the CISO and internal IT teams.
+At a small fund, there's an advantage: you often _are_ compliance. You get to make the rules. At larger funds (or funds that are part of larger organizations), you need to build strong relationships with the CISO and internal IT teams.
 
 If you're running fast and want to try the latest tools, building trust with compliance is critical to moving quickly. Figure out what's important to them. Pick your battles. But most importantly, collaborate with them rather than maintaining the usual "devs vs. compliance" battle that persists at most companies. They're usually great people who want to help, not block you.
+
 </Tip>
 
 ## Mistake #6: Building in a Vacuum
@@ -193,6 +200,7 @@ Building in a vacuum is a huge problem at Inflection because we're remote. We tr
 A better model was at EQT, where we had one of the deal team members work as a product manager for Motherbrain during the rollout to the Private Equity organization. Working closely with the Deal Team and Digi Team in Motherbrain Labs was invaluable for quickly iterating on projects.
 
 The more time you can steal from the investors, the better. But keep in mind: this is often a +1 activity for them, not part of their job description. They're doing this on top of their actual work, so make their time count.
+
 </Tip>
 
 ## Mistake #7: Treating Investors Like Engineers
@@ -219,6 +227,7 @@ There are exceptions. With the CFO or fund administrator, you can get technical.
 This has been a big learning for me being the only engineer at Inflection: you need to wear the product hat, probably more than the engineering hat. Be really great at showing new features, but also explaining when and how to use them. Write documentation. Set metrics and follow up on those metrics. Kill what isn't working.
 
 You own the outcomes, not just the code. That's the real job.
+
 </Tip>
 
 ## The Bottom Line

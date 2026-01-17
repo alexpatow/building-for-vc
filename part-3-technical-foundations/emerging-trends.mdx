@@ -30,6 +30,7 @@ MCP servers let AI tools access this data directly. You can ask Claude Code "sho
 Whether through MCP servers, CLI tools, or other approaches, the key insight is that AI tools become dramatically more useful when they can access your internal data directly. Instead of being a general-purpose assistant, they become specialized tools that understand your fund's portfolio, pipeline, and research.
 
 This could mean:
+
 - Querying your CRM to find companies or check deal status
 - Running SQL against your data warehouse to analyze portfolio performance
 - Searching through investment memos and research to find relevant context
@@ -58,6 +59,7 @@ This is already powerful. As covered in [Choosing Your Stack](/part-3-technical-
 **Near future: Agent orchestration**
 
 The next evolution is multiple AI agents working in parallel on the same codebase through git worktrees. Instead of one Claude Code session, you might have ten agents simultaneously:
+
 - Agent 1 implements the frontend UI for a new feature
 - Agent 2 builds the backend API endpoints
 - Agent 3 writes tests for both
@@ -94,6 +96,7 @@ LLMs are dramatically better at this than traditional approaches.
 **Example: At Inflection, we use Mistral for PDF reading**
 
 When processing pitch decks or investment memos, we use Mistral's PDF capabilities to extract structured data. The workflow:
+
 1. Upload PDF to Mistral API
 2. Prompt: "Extract the following information from this pitch deck: company name, founders, revenue (if disclosed), team size, funding raised to date, funding amount being raised, use of funds, key metrics."
 3. Request response as JSON with specific schema
@@ -135,6 +138,7 @@ This means agents can work with files directly, like humans do. No chunking, no 
 **File-native agents: Documents stay as documents**
 
 Instead of transforming documents into vectors or graphs, file-native agents:
+
 1. Have direct access to files in their native formats (PDFs, markdown, spreadsheets)
 2. Use tools to search and analyze (grep for keywords, specialized readers for PDFs)
 3. Maintain context through compaction (file system holds artifacts, compacted context holds insights)
@@ -146,6 +150,7 @@ The key insight: files work because they're a shared abstraction. They're not op
 Don't build complex RAG systems for your internal documents. Don't extract entities from investment memos and build knowledge graphs. These are solutions to problems that no longer exist.
 
 Instead:
+
 - Store research as markdown files in git repositories
 - Give AI agents file system access to these repositories
 - Let agents use grep, read files, and search naturally

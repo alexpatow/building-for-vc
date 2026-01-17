@@ -70,6 +70,7 @@ Before investing in sophisticated entity resolution, consider whether you actual
 **Use single authoritative sources**: Instead of stitching together funding data from Crunchbase, PitchBook, and your CRM, pick the best source for funding data (probably PitchBook) and use only that for market analysis. Don't try to combine them. This avoids the entity resolution problem entirely for that use case.
 
 **Examples where single-source works**:
+
 - Analyzing total funding in a market? Use PitchBook exclusively.
 - Tracking employee counts? Use LinkedIn data only.
 - Understanding investor networks? Pick one source (Harmonic or Specter) and stick with it.
@@ -139,6 +140,7 @@ When comparing two company records to decide if they're the same entity, match o
 **The incremental matching workflow**:
 
 When a new company record arrives from a data source:
+
 1. Check if it has a URL or LinkedIn URL that matches an existing canonical entity → if yes, link it
 2. If no URL match, check for high-confidence name + location match → if yes, link it
 3. If medium confidence match, flag for human review
@@ -153,12 +155,14 @@ Automated matching will never be 100% accurate. You will have false positives (i
 **Review interface**: Show suggested matches with confidence scores. A human reviews the match (looking at names, URLs, descriptions, and any other data) and confirms or rejects it. This is especially important for medium-confidence matches where the algorithm isn't sure.
 
 **Merge interface**: When you discover two canonical entities that should be one (the algorithm missed a match), you need to merge them. This means:
+
 - Choosing which canonical ID to keep
 - Mapping all external references from the old ID to the new ID
 - Combining data from both entities into a single record
 - Preserving history (you want to know these were merged in case you need to undo it)
 
 **Split interface**: When you discover one canonical entity that should be two (the algorithm incorrectly merged different companies), you need to split them:
+
 - Create a new canonical ID for the second entity
 - Decide which external references belong to which entity (this is hard - you're untangling merged data)
 - Recalculate any analytics or relationships that were affected by the incorrect merge

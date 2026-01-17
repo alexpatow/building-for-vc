@@ -34,29 +34,35 @@ Different vendors specialize in different categories. Some provide comprehensive
 This is a starting point, not a comprehensive list. Many providers fall into multiple categories. If you're a data provider and want to be featured, please file a GitHub issue.
 
 **Company and Investment Data:**
+
 - [PitchBook](https://pitchbook.com/)
 - [Crunchbase](https://www.crunchbase.com/)
 - [Dealroom](https://dealroom.co/)
 
 **People Data:**
+
 - [People Data Labs](https://www.peopledatalabs.com/)
 - [Coresignal](https://coresignal.com/)
 - [Mixrank](https://mixrank.com/)
 
 **Signal and Sourcing Data:**
+
 - [Harmonic](https://harmonic.ai/)
 - [Specter](https://www.usespecter.com/)
 - [Evertrace](https://www.evertrace.io/)
 - [Gravity](https://www.gravity.inc/)
 
 **Market Data:**
+
 - [S&P Capital IQ](https://www.spglobal.com/marketintelligence/en/solutions/sp-capital-iq-platform) (public markets)
 
 **Research:**
+
 - [Lens](https://www.lens.org/)
 - [arXiv](https://arxiv.org/)
 
 **General guidance on choosing vendors:**
+
 - Start with what your fund actually needs (don't subscribe to everything)
 - Test accuracy with your portfolio companies ([Data Quality](/part-3-technical-foundations/data-quality))
 - Consider whether you need comprehensive coverage or can start smaller
@@ -71,12 +77,14 @@ Data providers deliver data in two main ways: APIs and files. Each has different
 Most modern vendors provide REST APIs. You authenticate with an API token, make HTTP requests, and receive JSON responses. This is real-time or near-real-time: when you need data about a company, you query the API and get current information.
 
 **Benefits:**
+
 - Real-time or near-real-time data
 - Query exactly what you need (don't download everything)
 - Easy to integrate into applications (CRM enrichment, sourcing tools)
 - Can build interactive features (search, live updates)
 
 **Considerations:**
+
 - Rate limits (covered in [Integrations and APIs](/part-3-technical-foundations/integrations-and-apis))
 - Per-request or per-entity costs (each API call might cost money)
 - Need to handle failures, retries, validation ([Integrations and APIs](/part-3-technical-foundations/integrations-and-apis))
@@ -87,12 +95,14 @@ Most modern vendors provide REST APIs. You authenticate with an API token, make 
 Some vendors provide data as file exports: CSV, Parquet, or JSON files that you download or they upload to your S3 bucket. This is common for bulk data (entire company database, historical funding data, quarterly dumps).
 
 **Benefits:**
+
 - Can be cheaper than API calls for bulk data
 - Get everything at once (good for analytics, data warehouse loading)
 - Predictable costs (usually flat fee for the export)
 - No rate limits once you have the file
 
 **Considerations:**
+
 - Data is a snapshot (not real-time, might be hours or days old)
 - Need to process and load files (use Dagster, Airflow, or BigQuery Data Transfer)
 - File format matters significantly
@@ -114,6 +124,7 @@ Some vendors offer both APIs (for real-time enrichment) and bulk exports (for lo
 Most vendors use API tokens (also called API keys). You get a token from the vendor (usually through their dashboard), include it in your HTTP requests (usually as a Bearer token in the Authorization header), and the vendor identifies your account and tracks usage.
 
 Store API tokens securely:
+
 - Use environment variables, not hardcoded in code
 - Use a secrets manager (AWS Secrets Manager, 1Password) for production
 - Never commit tokens to git
@@ -123,6 +134,7 @@ Store API tokens securely:
 **File delivery authentication**
 
 For file-based vendors, they usually:
+
 - Upload files to their own S3 bucket that you can access (they provide AWS credentials)
 - Upload files directly to your S3 bucket (you provide them with write-only credentials)
 - Provide download links through their portal (you download manually or via script)
@@ -146,6 +158,7 @@ Choose based on your use case. For LP reporting or board materials, use accurate
 **Coverage differences**
 
 Vendors have different coverage by stage, geography, and sector:
+
 - Some excel at early-stage companies (Harmonic, Specter)
 - Some excel at later-stage (PitchBook for established companies)
 - Some have strong US coverage but weak international
@@ -154,6 +167,7 @@ Vendors have different coverage by stage, geography, and sector:
 **Test with your portfolio companies**
 
 The best way to evaluate vendor accuracy is to check their data against companies you know well: your portfolio companies. Take 10-20 portfolio companies and see how accurately each vendor represents them:
+
 - Is funding data correct (amounts, dates, investors)?
 - Are employee counts reasonable?
 - Are descriptions accurate?
@@ -164,6 +178,7 @@ This gives you ground truth for choosing vendors and understanding their limitat
 **Data freshness**
 
 Different vendors update at different cadences:
+
 - Real-time (APIs that reflect changes within hours)
 - Daily (updated nightly)
 - Weekly or monthly (bulk refreshes)
@@ -222,6 +237,7 @@ Established vendors are less flexible, but newer vendors building for the VC mar
 **Support and documentation**
 
 Vendor quality varies significantly in support and documentation:
+
 - Some have excellent docs, responsive support, active communities
 - Some have minimal docs, slow support, no community
 - Some provide developer relations people who help with integration

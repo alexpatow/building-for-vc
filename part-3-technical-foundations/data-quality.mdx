@@ -52,6 +52,7 @@ Before worrying about validation, make the right choices about which data source
 **Use your portfolio companies as ground truth**
 
 You know your portfolio companies better than any external data source. Use them to validate the accuracy of vendors. Take 10-20 of your portfolio companies and check how accurately each vendor represents them:
+
 - Is the funding data correct (amounts, dates, investors)?
 - Are employee counts reasonably accurate?
 - Are the company descriptions accurate?
@@ -96,6 +97,7 @@ This is why you should know the industries and markets your fund focuses on. If 
 **Basic sanity checks that help**
 
 Some validation is still worth doing:
+
 - Funding dates should be reasonable (not in the future, not before the company was founded)
 - Funding amounts should be positive numbers
 - URLs should be valid domains
@@ -177,6 +179,7 @@ Good data quality comes from both preventing bad data from entering your systems
 **Prevention: Good ingestion practices**
 
 When you ingest data from external sources:
+
 - Validate basic formats (URLs are URLs, dates are dates, numbers are numbers)
 - Normalize data (consistent date formats, consistent naming, lowercase domains)
 - Log what you received so you can trace errors back to the source
@@ -190,6 +193,7 @@ These practices don't prevent all errors, but they prevent careless mistakes and
 Set up automated tests that run frequently to catch data quality issues before they reach users. dbt (data build tool) tests are particularly good for this. They let you define tests in SQL that run against your data warehouse and alert you when things break.
 
 **Examples of useful dbt tests for VC data:**
+
 - Uniqueness: Each company should have only one canonical ID
 - Not null: Required fields like company name, founding date are populated
 - Relationships: Every investment references a valid company and investor
@@ -199,6 +203,7 @@ Run these tests frequently (daily or after each data ingestion). When tests fail
 **Why automated validation is even harder than it seems**
 
 You might think you can set up alerts for obviously wrong data: funding amounts over $1B, companies with over 100,000 employees, founding dates before 1900, or sudden 10x changes in employee count. But all of these occur as valid data:
+
 - Later-stage companies do raise $1B+ rounds (OpenAI, Stripe, etc.)
 - Large public and private companies do have 100,000+ employees
 - Old companies founded in the 1800s are still operating

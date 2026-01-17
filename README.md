@@ -49,14 +49,27 @@ description: "Brief description for SEO and navigation"
 
 This site uses Mintlify's GitHub integration. Changes pushed to the default branch are automatically deployed to production.
 
-To set up deployment:
-1. Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app)
-2. Connect this repository
-3. Push changes to deploy
-
 ## Contributing
 
 If you find errors, have suggestions, or want to contribute additional content, please open an issue or pull request. Feel free to reach out on [LinkedIn](https://www.linkedin.com/in/alexpatow/) or via email at [ap@ınflection.fund](mailto:ap@inflection.fund).
+
+### Code Quality and Formatting
+
+This project uses [Prettier](https://prettier.io/) to maintain consistent formatting across all MDX and JSON files.
+
+**Before committing changes**, check that your files are formatted correctly:
+
+```bash
+bun run format:check
+```
+
+If there are formatting issues, auto-fix them with:
+
+```bash
+bun run format
+```
+
+**Git hooks**: This repository uses pre-commit hooks to automatically check formatting before commits. If formatting is incorrect, the commit will be blocked. Run `bun run format` to fix issues, then commit again.
 
 ## License
 

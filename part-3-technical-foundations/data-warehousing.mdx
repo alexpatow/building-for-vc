@@ -18,6 +18,7 @@ This chapter covers when you actually need a data warehouse, which one to choose
 Most funds don't start with a data warehouse. They start with a CRM, maybe some spreadsheets, and direct queries to data vendors. This works fine at first. But as you add more data sources, want to track changes over time, or need to run analyses that combine multiple sources, you hit the limits of this approach.
 
 **The right time to set up a data warehouse**: After your CRM is set up and being used consistently. The CRM is your source of truth for deal flow and relationships. A data warehouse extends that by:
+
 - Tracking historical changes (you can see how your pipeline evolved over time, not just current state)
 - Combining CRM data with external sources (merge your deal flow with funding data from PitchBook, employee data from LinkedIn, etc.)
 - Running analyses that would be painful in your CRM's query interface
@@ -36,6 +37,7 @@ There are several options for data warehouses. The right choice depends on your 
 If you're a small fund (Fund I or early Fund II, team of 5-15 people, not yet tracking hundreds of thousands of companies), Postgres is often the easiest choice. It's a relational database, not a specialized data warehouse, but for smaller data volumes it works perfectly well.
 
 **Why Postgres makes sense for small funds**:
+
 - Simpler to set up and manage than specialized warehouses
 - Cheaper (you can run it yourself or use managed services like AWS RDS or Neon for much less than Snowflake)
 - Your team probably already knows SQL and Postgres
@@ -149,6 +151,7 @@ When you do need dashboards, tools like Hex or Mode let you write SQL queries ag
 At Inflection, we use Hex. When a GP wants to see something, we can spin up a dashboard in an hour or two: write SQL queries against the warehouse, add visualizations, share a link. This responsiveness is valuable. You're not waiting weeks for data engineering to build custom dashboards. You're answering questions as they come up.
 
 **Examples of common analyses**:
+
 - Pipeline metrics (deals in each stage, conversion rates, time in pipeline, source of deals)
 - Market maps (companies in specific sectors, with funding, stage, growth data)
 - Portfolio tracking (company metrics over time, which companies need attention)

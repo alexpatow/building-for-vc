@@ -1,0 +1,7 @@
+node_modules
+bun.lockb
+.git
+*.svg
+*.png
+*.jpg
+*.jpeg

@@ -1,0 +1,18 @@
+{
+  "name": "building-for-vc",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write \"**/*.{mdx,md,json}\"",
+    "format:check": "prettier --check \"**/*.{mdx,md,json}\"",
+    "dev": "bunx mint dev",
+    "prepare": "simple-git-hooks"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "bun run format:check"
+  },
+  "devDependencies": {
+    "mint": "^4.2.284",
+    "prettier": "^3.8.0",
+    "simple-git-hooks": "^2.13.1"
+  }
+}

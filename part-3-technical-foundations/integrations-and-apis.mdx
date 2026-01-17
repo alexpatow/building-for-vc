@@ -16,6 +16,7 @@ This chapter covers common integration patterns you'll encounter, how to validat
 The integrations you build fall into a few common patterns.
 
 **Tool-to-tool glue**: Connecting SaaS tools your team uses. Examples:
+
 - Meeting transcription tool (Granola, Otter) → CRM (Attio) to automatically log conversations
 - CRM → data warehouse for analysis
 - Email → CRM to track outreach
@@ -25,6 +26,7 @@ The integrations you build fall into a few common patterns.
 Some of these have out-of-box integrations. Many require custom code to map fields, handle authentication, and deal with differences in data models.
 
 **Data vendor → your systems**: Pulling data from external providers and loading it into your infrastructure. Examples:
+
 - PitchBook API → data warehouse for funding data
 - People Data Labs → database for employee/people data (LinkedIn-like data)
 - Harmonic/Specter → sourcing tool or data warehouse
@@ -50,7 +52,7 @@ For TypeScript: **Zod**. For Python: **Pydantic**. These libraries let you defin
 
 ```typescript
 // TypeScript with Zod
-import { z } from 'zod';
+import { z } from "zod"
 
 const CompanySchema = z.object({
   id: z.string(),
@@ -58,18 +60,18 @@ const CompanySchema = z.object({
   founded_date: z.string().datetime().optional(),
   funding_total: z.number().positive().optional(),
   employee_count: z.number().int().positive().optional(),
-});
+})
 
 // When you get data from an API
-const response = await fetch('https://api.vendor.com/companies/123');
-const data = await response.json();
+const response = await fetch("https://api.vendor.com/companies/123")
+const data = await response.json()
 
 // Validate it
-const company = CompanySchema.parse(data); // Throws if invalid
+const company = CompanySchema.parse(data) // Throws if invalid
 // or
-const result = CompanySchema.safeParse(data); // Returns success/error
+const result = CompanySchema.safeParse(data) // Returns success/error
 if (!result.success) {
-  console.error('Invalid data from API:', result.error);
+  console.error("Invalid data from API:", result.error)
   // Handle the error
 }
 ```
@@ -124,6 +126,7 @@ Many vendors (especially CRM systems like Attio, Affinity) provide webhooks: the
 **Setting up webhooks**
 
 The first time is tricky. You need:
+
 - An HTTPS endpoint that the vendor can reach (not localhost - use a service like ngrok for local development, deploy to production for real webhooks)
 - To register your endpoint with the vendor (usually through their dashboard)
 - To handle webhook verification (vendors send a signature to prove the request actually came from them, not a malicious actor)
@@ -132,40 +135,40 @@ Example webhook handler:
 
 ```typescript
 // Next.js API route for Attio webhooks
-import { NextRequest, NextResponse } from 'next/server';
-import crypto from 'crypto';
+import { NextRequest, NextResponse } from "next/server"
+import crypto from "crypto"
 
 export async function POST(request: NextRequest) {
-  const body = await request.text();
-  const signature = request.headers.get('x-attio-signature');
+  const body = await request.text()
+  const signature = request.headers.get("x-attio-signature")
 
   // Verify webhook signature
   const expectedSignature = crypto
-    .createHmac('sha256', process.env.ATTIO_WEBHOOK_SECRET!)
+    .createHmac("sha256", process.env.ATTIO_WEBHOOK_SECRET!)
     .update(body)
-    .digest('hex');
+    .digest("hex")
 
   if (signature !== expectedSignature) {
-    return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+    return NextResponse.json({ error: "Invalid signature" }, { status: 401 })
   }
 
   // Parse and process the event
-  const event = JSON.parse(body);
+  const event = JSON.parse(body)
 
   // Handle idempotency - check if we've seen this event before
-  const eventId = event.id;
-  const alreadyProcessed = await checkIfProcessed(eventId);
+  const eventId = event.id
+  const alreadyProcessed = await checkIfProcessed(eventId)
   if (alreadyProcessed) {
-    return NextResponse.json({ success: true }); // Already handled
+    return NextResponse.json({ success: true }) // Already handled
   }
 
   // Process the event
-  await handleEvent(event);
+  await handleEvent(event)
 
   // Mark as processed
-  await markProcessed(eventId);
+  await markProcessed(eventId)
 
-  return NextResponse.json({ success: true });
+  return NextResponse.json({ success: true })
 }
 ```
 
@@ -188,6 +191,7 @@ External APIs have rate limits. PitchBook might allow 100 requests per minute. P
 Beyond rate limits, many vendors charge per request or per entity returned. People Data Labs might charge $0.01 per person record. PitchBook charges based on data access. Harmonic and Specter have usage-based pricing.
 
 This changes how you think about API usage. You can't just make thousands of exploratory requests to see what's available. Each request costs money. Be thoughtful about:
+
 - Only requesting data you actually need (don't pull full company profiles if you just need basic info)
 - Caching responses so you don't request the same data repeatedly
 - Batching requests when possible (some APIs let you request multiple entities in one call)
@@ -215,38 +219,35 @@ Add jitter (random variation in wait time) to prevent many clients from retrying
 async function fetchWithRetry(url: string, maxRetries = 5) {
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      const response = await fetch(url);
+      const response = await fetch(url)
 
       if (response.status === 429) {
         // Rate limited
-        const retryAfter = response.headers.get('retry-after');
-        const waitSeconds = retryAfter
-          ? parseInt(retryAfter)
-          : Math.pow(2, attempt) + Math.random(); // Exponential backoff with jitter
+        const retryAfter = response.headers.get("retry-after")
+        const waitSeconds = retryAfter ? parseInt(retryAfter) : Math.pow(2, attempt) + Math.random() // Exponential backoff with jitter
 
-        await sleep(waitSeconds * 1000);
-        continue;
+        await sleep(waitSeconds * 1000)
+        continue
       }
 
       if (response.ok) {
-        return response;
+        return response
       }
 
       // Other errors - decide if retriable
       if (response.status >= 500) {
         // Server error, might be transient
-        await sleep(Math.pow(2, attempt) * 1000);
-        continue;
+        await sleep(Math.pow(2, attempt) * 1000)
+        continue
       }
 
       // Client error (4xx), don't retry
-      throw new Error(`API error: ${response.status}`);
-
+      throw new Error(`API error: ${response.status}`)
     } catch (error) {
       if (attempt === maxRetries - 1) {
-        throw error;
+        throw error
       }
-      await sleep(Math.pow(2, attempt) * 1000);
+      await sleep(Math.pow(2, attempt) * 1000)
     }
   }
 }
@@ -274,21 +275,24 @@ Example: you're importing a company with funding rounds. You insert the company,
 
 ```typescript
 await db.transaction(async (tx) => {
-  const company = await tx.insert(companies).values({
-    id: data.id,
-    name: data.name,
-  }).returning();
+  const company = await tx
+    .insert(companies)
+    .values({
+      id: data.id,
+      name: data.name,
+    })
+    .returning()
 
   for (const round of data.funding_rounds) {
     await tx.insert(fundingRounds).values({
       company_id: company.id,
       round_name: round.name,
       amount: round.amount,
-    });
+    })
   }
 
   // If any insert fails, everything rolls back
-});
+})
 ```
 
 **Present useful error messages**
@@ -308,15 +312,15 @@ Especially when rolling out new models, providers have outages. OpenAI's API goe
 Services like Vercel's AI SDK or LiteLLM provide failover across multiple LLM providers. If OpenAI is down, automatically failover to Anthropic. If Anthropic is rate-limited, try OpenAI.
 
 ```typescript
-import { openai, anthropic } from '@ai-sdk/providers';
-import { generateText } from 'ai';
+import { openai, anthropic } from "@ai-sdk/providers"
+import { generateText } from "ai"
 
 // Vercel AI SDK handles failover automatically
 const result = await generateText({
-  model: openai('gpt-4'), // Primary
-  fallbacks: [anthropic('claude-3-5-sonnet')], // Fallback if primary fails
-  prompt: 'Summarize this company...',
-});
+  model: openai("gpt-4"), // Primary
+  fallbacks: [anthropic("claude-3-5-sonnet")], // Fallback if primary fails
+  prompt: "Summarize this company...",
+})
 ```
 
 **Handle streaming responses**
@@ -334,6 +338,7 @@ If you're building internal services that need APIs (your research platform, sou
 **Pick one language and framework for everything**
 
 At Inflection, everything is TypeScript with Next.js. This consistency means:
+
 - You write code the same way across services
 - You can reuse libraries and utilities
 - You can move between codebases easily
@@ -364,6 +369,7 @@ Some vendors provide flat files (CSV, Parquet, JSON) that you download or they u
 **Prefer Parquet over CSV/TSV**: If vendors offer multiple formats, always choose Parquet. It's columnar (faster for analytics), includes schema information (you know data types without guessing), compresses well (smaller files), and loads much faster into data warehouses. CSV/TSV files require parsing, have encoding issues, no schema, and are slower to work with. Ask vendors to provide Parquet if they don't already.
 
 Import these files into your data warehouse using tools like:
+
 - **Dagster**: Data orchestration, can schedule file imports and transformations
 - **Airflow**: Workflow orchestration, similar to Dagster
 - **BigQuery Data Transfer Service**: If you use BigQuery, can automatically import files from S3/GCS

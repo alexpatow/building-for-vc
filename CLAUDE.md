@@ -1,15 +1,18 @@
 # Building for Venture Capital - Content Guidelines
 
 ## Project Overview
+
 This is a technical book for engineers, data people, and technical operators building technology at VC funds. It's opinionated, practical, and based on real experience building VC infrastructure at Inflection and EQT.
 
 ## Writing Voice and Tone
 
 **Direct and opinionated**: This book takes strong positions based on real experience. Use clear language:
+
 - ✅ "Don't build your own CRM. Use Attio or Affinity."
 - ❌ "You might want to consider whether building a CRM is the right choice for your organization."
 
 **Second-person "you"**: Always address the reader directly as someone doing this work.
+
 - ✅ "You're building for 5-30 people..."
 - ❌ "One might build for teams of 5-30 people..."
 - ❌ "Engineers build for teams of 5-30 people..."
@@ -17,6 +20,7 @@ This is a technical book for engineers, data people, and technical operators bui
 **Technical but accessible**: Assume technical competence but explain context. The reader is a competent engineer who may not know VC-specific details.
 
 **No corporate speak or buzzwords**: Avoid marketing language, hype, and vague business terminology.
+
 - ✅ "Use Postgres. It's boring technology that works."
 - ❌ "Leverage cutting-edge database solutions to maximize operational synergies."
 
@@ -27,10 +31,12 @@ This is a technical book for engineers, data people, and technical operators bui
 **Practical over theoretical**: Every section should answer "what should I actually do?" Include real examples, specific tools, actual code.
 
 **Acknowledge trade-offs**: Most decisions have context. Explain when advice applies and when it doesn't.
+
 - "For funds under 50 people, use [X]. Larger funds might need [Y]."
 - "This works if you're technical. If you're not, buy [vendor] instead."
 
 **Real examples from experience**: Reference actual work at Inflection and EQT when relevant. Be specific:
+
 - ✅ "At Inflection, we use Attio for CRM and sync it to Postgres nightly."
 - ❌ "Some funds use CRM systems and might integrate them with databases."
 
@@ -43,24 +49,28 @@ This is a technical book for engineers, data people, and technical operators bui
 **Use "The bottom line" summaries**: Many chapters end with a "Bottom Line" section that distills key takeaways. These should be practical, action-oriented summaries.
 
 **Author Notes in `<Tip>` components**: Use for personal asides, contextual notes, or clarifications:
+
 ```mdx
 <Tip>
-**Author note**: At Inflection, we tried building this ourselves and it was a mistake. Save yourself the pain.
+  **Author note**: At Inflection, we tried building this ourselves and it was a mistake. Save
+  yourself the pain.
 </Tip>
 ```
 
 **Code examples with context**: Always include language tags. Explain what the code does and why, not just what it is:
+
 ```typescript
 // TypeScript with Zod for validation
-import { z } from 'zod';
+import { z } from "zod"
 
 const CompanySchema = z.object({
   name: z.string(),
   // ... rest of schema
-});
+})
 ```
 
 **Real examples clearly labeled**: When providing case studies or specific examples:
+
 ```mdx
 **Example: At Inflection, we use Mistral for PDF reading**
 
@@ -72,11 +82,13 @@ When processing pitch decks...
 **Sentence structure**: Prefer shorter sentences and clear paragraphs. Break up long blocks of text. Use periods over em-dashes in most cases.
 
 **Lists for clarity**: Use bulleted or numbered lists to make information scannable:
+
 - When listing tools or options
 - When outlining steps in a process
 - When comparing approaches
 
 **Avoid passive voice**: Write actively.
+
 - ✅ "Use Postgres for your data warehouse"
 - ❌ "Postgres should be used for data warehousing"
 
@@ -105,10 +117,12 @@ When processing pitch decks...
 ## Technical Standards
 
 **Format**: MDX files with YAML frontmatter
+
 - title: Clear, descriptive (e.g., "Data Modeling and Schema Design")
 - description: Concise, practical summary (e.g., "How to model companies, deals, and relationships - the core data structures for VC infrastructure")
 
 **Code blocks**: Always include language tags for syntax highlighting
+
 ```typescript
 // Good - has language tag
 ```
@@ -118,6 +132,7 @@ When processing pitch decks...
 ```
 
 **Internal links**: Use root-relative paths when linking between chapters:
+
 - ✅ `[Chapter 5](/part-2-tech-stack/crm-and-deal-flow)`
 - ❌ `[Chapter 5](../part-2-tech-stack/crm-and-deal-flow.mdx)`
 
