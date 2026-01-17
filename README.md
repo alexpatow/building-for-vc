@@ -10,7 +10,7 @@ This book is for engineers, data people, and technical operators building techno
 - **Part 2: The VC Tech Stack** - Research platforms, sourcing tools, CRM, fund operations, portfolio support, fundraising, and external presence
 - **Part 3: Technical Foundations** - Technology stack selection, data providers, modeling, entity resolution, data quality, warehousing, knowledge graphs, integrations, security, and emerging trends
 
-Written by someone who has built VC infrastructure at Inflection and EQT, this book is opinionated, practical, and focused on what actually works.
+Written by someone who has built VC infrastructure at [Inflection](https://inflection.fund) and [EQT](https://eqtgroup.com), this book is opinionated, practical, and focused on helping you succeed.
 
 ## Local Development
 
@@ -54,24 +54,13 @@ To set up deployment:
 2. Connect this repository
 3. Push changes to deploy
 
-## Theme
-
-The site uses a minimal, sophisticated aesthetic with a charcoal/dark gray color scheme:
-- Primary: `#374151`
-- Light: `#4B5563`
-- Dark: `#1F2937`
-
 ## Contributing
 
-If you find errors, have suggestions, or want to contribute additional content, please open an issue or pull request.
+If you find errors, have suggestions, or want to contribute additional content, please open an issue or pull request. Feel free to reach out on [LinkedIn](https://www.linkedin.com/in/alexpatow/) or via email at [ap@ınflection.fund](mailto:ap@inflection.fund).
 
 ## License
 
 See [LICENSE](LICENSE) for details.
-
-## Author
-
-Built on the experience of implementing VC infrastructure at Inflection and EQT, where I learned what works (and what doesn't) when building technology for venture capital funds.
 
 ## Resources
 
