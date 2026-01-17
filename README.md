@@ -1,43 +1,79 @@
-# Mintlify Starter Kit
+# Building for Venture Capital
 
-Use the starter kit to get your docs deployed and ready to customize.
+A comprehensive guide to building technology for venture capital funds, covering everything from understanding VC fundamentals to implementing production infrastructure.
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+## About This Book
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+This book is for engineers, data people, and technical operators building technology at venture capital funds. It covers:
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+- **Part 1: Understanding VC** - How VC funds work, fund structures, and common mistakes when starting at a fund
+- **Part 2: The VC Tech Stack** - Research platforms, sourcing tools, CRM, fund operations, portfolio support, fundraising, and external presence
+- **Part 3: Technical Foundations** - Technology stack selection, data providers, modeling, entity resolution, data quality, warehousing, knowledge graphs, integrations, security, and emerging trends
 
-## Development
+Written by someone who has built VC infrastructure at Inflection and EQT, this book is opinionated, practical, and focused on what actually works.
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
+## Local Development
 
-```
-npm i -g mint
-```
+This site is built with [Mintlify](https://mintlify.com). To preview changes locally:
 
-Run the following command at the root of your documentation, where your `docs.json` is located:
-
-```
-mint dev
+```bash
+bunx mint dev
 ```
 
-View your local preview at `http://localhost:3000`.
+This will start a local development server at `http://localhost:3000`.
 
-## Publishing changes
+## Structure
 
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
+```
+building-for-vc/
+├── docs.json                        # Navigation and theme configuration
+├── index.mdx                        # Homepage
+├── quickstart.mdx                   # Reading guide
+├── part-1-understanding-vc/         # Chapters 1-3
+├── part-2-tech-stack/               # Chapters 4-12
+└── part-3-technical-foundations/    # Chapters 13-23
+```
 
-## Need help?
+## Content Format
 
-### Troubleshooting
+All chapters are written in MDX (Markdown + JSX components) with YAML frontmatter:
 
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
+```yaml
+---
+title: "Chapter Title"
+description: "Brief description for SEO and navigation"
+---
+```
 
-### Resources
-- [Mintlify documentation](https://mintlify.com/docs)
+## Publishing Changes
+
+This site uses Mintlify's GitHub integration. Changes pushed to the default branch are automatically deployed to production.
+
+To set up deployment:
+1. Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app)
+2. Connect this repository
+3. Push changes to deploy
+
+## Theme
+
+The site uses a minimal, sophisticated aesthetic with a charcoal/dark gray color scheme:
+- Primary: `#374151`
+- Light: `#4B5563`
+- Dark: `#1F2937`
+
+## Contributing
+
+If you find errors, have suggestions, or want to contribute additional content, please open an issue or pull request.
+
+## License
+
+See [LICENSE](LICENSE) for details.
+
+## Author
+
+Built on the experience of implementing VC infrastructure at Inflection and EQT, where I learned what works (and what doesn't) when building technology for venture capital funds.
+
+## Resources
+
+- [Mintlify Documentation](https://mintlify.com/docs)
+- [MDX Documentation](https://mdxjs.com/)

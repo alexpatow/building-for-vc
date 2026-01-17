@@ -1,0 +1,176 @@
+---
+title: "Security and Compliance"
+description: "Handling sensitive data, basic security principles, and working with compliance teams - what you need to know as a VC technologist."
+---
+
+## Overview
+
+VC funds handle sensitive data. Information about LPs (limited partners) who invest in your fund. Material non-public information (MNPI) about companies you're evaluating or have invested in. Portfolio company financials, cap tables, and metrics. Internal investment memos with proprietary analysis. All of this needs to be protected both for regulatory reasons and to maintain trust with LPs, portfolio companies, and the founders you work with.
+
+This chapter isn't a comprehensive guide to SEC regulations or compliance frameworks. Those require specialized legal and compliance expertise that goes beyond technical implementation. Instead, this chapter covers what you need to know as someone building technology for a VC fund: what sensitive data exists, why it matters, basic security principles you should follow, and when to involve compliance and legal teams.
+
+The bottom line: take security seriously, use proven tools rather than building your own, and work closely with your fund's compliance officers and lawyers on anything related to regulatory requirements.
+
+## Sensitive Data and Why It Matters
+
+VC funds handle several types of sensitive data. Understanding what's sensitive and why it matters helps you make the right decisions about access controls, encryption, and retention policies.
+
+**LP (Limited Partner) PII**
+
+Your LPs are individuals and institutions who have invested money in your fund. You have their personal information: names, addresses, social security numbers or tax IDs, bank account details, investment amounts. This is personally identifiable information (PII) that must be protected for both regulatory and trust reasons.
+
+Private fund advisers managing $150M or more in AUM must register as RIAs with the SEC, which comes with specific compliance obligations around data handling (Regulation S-P for privacy, Regulation S-ID for identity theft prevention). Funds below this threshold can often qualify as Exempt Reporting Advisers (ERAs) with lighter requirements. But regardless of registration status, LPs invest millions of dollars in your fund and need to trust you'll handle their information properly. Data breaches with LP PII can result in lawsuits and damaged LP relationships.
+
+If you're building fund operations software or LP portals, this data needs strong access controls. Most funds restrict LP data access to fund operations staff and partners.
+
+**Material Non-Public Information (MNPI)**
+
+When you're evaluating companies or working with portfolio companies, you learn things that aren't public: upcoming fundraising rounds, acquisition discussions, financial performance, product roadmaps, major hires or departures. This is MNPI, and mishandling it has legal consequences. SEC enforcement actions for improper handling of MNPI aren't theoretical - they happen, and they're expensive.
+
+For engineers, the practical implication is that any system touching company data (CRM, data warehouse, research platforms) needs proper access controls. You can't have this data accessible to everyone at the fund, and you definitely can't expose it publicly or to unauthorized parties.
+
+**Portfolio Company Data**
+
+Your portfolio companies share sensitive information with you: detailed financials, metrics, cap tables, customer lists, strategic plans. They trust you to keep this confidential. Leaking portfolio company data damages your reputation and makes it harder to work with companies in the future. Other founders hear about it, and your ability to build relationships suffers.
+
+When you're building portfolio dashboards or analytics systems, consider who should have access. Usually partners and investment team members need access, but not everyone at the fund.
+
+**Internal Investment Analysis**
+
+Your investment memos, due diligence notes, IC (investment committee) discussions, and proprietary research represent your fund's intellectual property. Competitors would love to know what you're looking at, what your thesis is, and how you evaluate companies. While this isn't regulated the same way as MNPI or LP PII, it's still sensitive and needs protection.
+
+When building research platforms or CRM systems, think about access controls and who can see what information.
+
+**The bottom line**: You're handling data that has regulatory requirements (LP PII, MNPI), relationship consequences (LP trust, portfolio company trust), and legal liability (SEC enforcement, lawsuits). The specific regulations are complex and require legal expertise to interpret correctly. Work with compliance officers and lawyers who understand what applies to your fund's specific situation.
+
+## Basic Security Principles
+
+These principles apply regardless of what systems you're building.
+
+**Principle 1: Use proven tools, don't build your own security**
+
+Don't write your own authentication system. Don't implement your own encryption. Don't build your own access control framework from scratch. Use established libraries and services that have been reviewed by security experts and are widely deployed.
+
+For authentication, use OAuth providers (Google, Microsoft, Okta) or authentication services (Auth0, Clerk). For encryption, use standard libraries rather than implementing crypto yourself. For access controls, use frameworks with built-in RBAC (role-based access control).
+
+Security is hard to get right. The people who built these tools thought deeply about attack vectors, edge cases, and proper implementation. You won't do better by rolling your own.
+
+**Principle 2: Encrypt data at rest and in transit**
+
+All sensitive data should be encrypted when stored (at rest) and when transmitted over networks (in transit).
+
+For data in transit, use HTTPS everywhere. Every API, every internal service, every dashboard should use TLS/SSL. This is standard now: any modern hosting platform (Vercel, AWS, etc.) makes this trivial.
+
+For data at rest, use database encryption. Managed database services (AWS RDS, Google Cloud SQL, hosted Postgres) offer encryption at rest as a checkbox option. Turn it on. For particularly sensitive data (LP PII, certain MNPI), consider application-level encryption where data is encrypted before being stored in the database.
+
+**Principle 3: Implement proper access controls**
+
+Not everyone at your fund should have access to everything. Partners might need access to all portfolio company data, but junior associates probably don't need access to LP PII. Engineers debugging systems need access to logs and error information, but probably don't need access to production financial data.
+
+Implement role-based access control (RBAC) in your systems. Define roles (partner, associate, operations, engineering) and permissions (read portfolio data, edit CRM records, view LP information), and assign roles to users. This is easier to maintain than per-user permissions.
+
+Use audit logs to track who accessed what data and when. If there's ever a question about whether information was accessed inappropriately, you need to be able to answer it.
+
+**Principle 4: Follow the principle of least privilege**
+
+Give people (and services) only the minimum access they need to do their jobs. If someone doesn't need access to LP data, don't give it to them "just in case." If a service only needs read access to your database, don't give it write access.
+
+This limits damage if credentials are compromised. If an engineer's laptop is stolen and they only had read access to non-sensitive data, the exposure is limited. If they had admin access to everything, the exposure is much larger.
+
+**Principle 5: Keep data only as long as needed**
+
+Don't keep sensitive data forever. Define retention policies: how long do you keep LP information after they exit the fund? How long do you keep due diligence data on companies you passed on? How long do you keep audit logs?
+
+Some data you're required to keep for regulatory reasons (usually 5-7 years for RIAs). Other data can be deleted sooner. Talk to your compliance team about appropriate retention periods, then implement automatic deletion policies so old data doesn't accumulate indefinitely.
+
+## Working with Your Compliance and Legal Teams
+
+As an engineer or data person building systems for a VC fund, you're not expected to be a compliance expert. But you need to work with people who are.
+
+**Before building systems that handle sensitive data, ask:**
+
+- What regulatory requirements apply to this data? (LP information has different requirements than CRM data about companies you're researching)
+- Who should have access to this data? (Define roles and permissions upfront)
+- How long should we keep this data? (Set retention policies early)
+- Do we need audit trails? (Usually yes for anything involving LP data or MNPI)
+- Are there specific security controls required? (Encryption, MFA, etc.)
+
+Your compliance officer or external compliance consultant can answer these questions. They understand RIA regulations, SEC requirements, and what your fund's specific obligations are.
+
+**When launching new tools, get compliance review**: Before you launch a new LP portal, portfolio dashboard, or research platform, have compliance review it. They'll check whether access controls are appropriate, whether data handling meets requirements, and whether you're missing anything important.
+
+This isn't adversarial. Compliance teams want you to build good tools. They just need to make sure those tools don't create regulatory or legal problems.
+
+**Document your security and access controls**: Write down who has access to what systems, what data is stored where, what encryption you use, and how long you retain data. This documentation is useful for audits, for onboarding new team members, and for compliance reviews.
+
+## Practical Implementation Guidance
+
+Here's how these principles translate to the systems you're actually building.
+
+**For CRM systems** (Attio, Affinity, Salesforce):
+
+- Use SSO (single sign-on) with your company's identity provider so you can centrally manage access
+- Set up role-based permissions so not everyone can see all data
+- Enable audit logging if the CRM supports it
+- If you're building a custom CRM, use an established auth framework (NextAuth, Clerk) rather than rolling your own
+
+**For data warehouses** (Postgres, Snowflake, BigQuery):
+
+- Enable encryption at rest (checkbox in most managed services)
+- Use separate credentials for different services (your research platform should have different database credentials than your portfolio dashboard)
+- Limit access to production data - most people should use development/staging environments
+- Set up query logging so you can audit who accessed what data
+
+**For internal tools and dashboards**:
+
+- Require authentication: don't build unauthenticated internal tools that anyone with the URL can access
+- Use HTTPS everywhere
+- Consider IP allowlisting for particularly sensitive tools (only accessible from office network or VPN)
+- Implement session timeouts so inactive sessions don't stay logged in forever
+
+**For API integrations with external vendors**:
+
+- Store API keys securely (environment variables or secrets manager, never in code)
+- Use separate API keys for production vs. development
+- Rotate API keys periodically (every 6-12 months)
+- Monitor API usage for anomalies (sudden spike in requests might indicate compromised credentials)
+
+**For data sharing with portfolio companies**:
+
+- Use authenticated, access-controlled systems rather than emailing spreadsheets
+- Use per-company access controls (Company A can only see their own data, not Company B's)
+- Track what data was shared with whom
+- Remove portfolio company access when projects finish
+
+## If You Want to Go Above and Beyond
+
+The security principles covered above are sufficient for most small to mid-size VC funds. But if you want to implement additional security measures, or if your compliance team, LPs, or fund size require them, here are areas to consider:
+
+**SOC 2 compliance**: SOC 2 certification demonstrates that your systems meet specific security, availability, and confidentiality standards. This is common for companies selling software to enterprises, and some larger funds pursue it (especially if LPs explicitly require it). For most small to mid-size funds building internal tools, it's not necessary, but it can provide additional assurance to LPs and portfolio companies about your data handling practices.
+
+**Penetration testing**: Regular penetration testing by security professionals can identify vulnerabilities in your systems before attackers do. For most funds, following security best practices is sufficient, but pentest results can provide additional confidence and are sometimes required by compliance teams or LPs at larger funds.
+
+**Data Loss Prevention (DLP)**: Enterprise DLP systems monitor file transfers, emails, and data movement to prevent sensitive information from leaving your organization. For most funds, basic access controls and encryption are sufficient, but DLP can add an extra layer of protection if you're handling particularly sensitive data or operating at significant scale.
+
+**Advanced threat detection**: Enterprise-grade SIEM (security information and event management) systems aggregate logs from all your systems and use machine learning to detect potential security incidents. This is typically overkill for small to mid-size funds, but becomes more relevant at larger funds with sophisticated IT infrastructure.
+
+Ask your compliance team what's actually required vs. what's nice to have for your fund's specific situation. For most smaller funds, the basic security principles covered earlier are sufficient. These advanced measures become more relevant as you scale.
+
+## The Bottom Line
+
+Security and compliance are important for VC funds. You handle sensitive data about LPs, portfolio companies, and your investment strategy. Mishandling this data has regulatory, legal, and reputational consequences.
+
+As someone building systems for a VC fund, follow these principles:
+
+- Use proven tools for authentication, encryption, and access control, don't build your own
+- Encrypt data at rest and in transit
+- Implement role-based access controls and the principle of least privilege
+- Keep audit logs of who accessed what data
+- Define data retention policies and delete data when it's no longer needed
+- Work with your compliance and legal teams on regulatory requirements
+
+Most importantly, recognize what requires specialized expertise. You don't need to become an expert in SEC regulations or RIA compliance. You need to build systems that make it possible to meet those requirements, and you need to work with people who understand the legal side.
+
+Get compliance review before launching tools that handle sensitive data. Document your security controls. Use managed services that handle security fundamentals for you. And when in doubt, ask your compliance team.
+
+In the next chapter, we'll cover emerging trends in VC technology: MCP, AI agents, and what's worth paying attention to versus what's hype.

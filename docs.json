@@ -1,86 +1,68 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Building for Venture Capital",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#374151",
+    "light": "#4B5563",
+    "dark": "#1F2937"
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Guide",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Introduction",
             "pages": [
               "index",
-              "quickstart",
-              "development"
+              "quickstart"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Part 1: Understanding VC",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "part-1-understanding-vc/what-is-a-vc-fund",
+              "part-1-understanding-vc/understanding-your-vc-fund",
+              "part-1-understanding-vc/common-mistakes"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Part 2: The VC Tech Stack",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "part-2-tech-stack/introduction",
+              "part-2-tech-stack/research-platforms",
+              "part-2-tech-stack/sourcing-tools",
+              "part-2-tech-stack/crm-and-deal-flow",
+              "part-2-tech-stack/fund-operations",
+              "part-2-tech-stack/portfolio-support",
+              "part-2-tech-stack/fundraising",
+              "part-2-tech-stack/website-and-external-presence",
+              "part-2-tech-stack/putting-it-together"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Part 3: Technical Foundations",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "part-3-technical-foundations/choosing-your-stack",
+              "part-3-technical-foundations/data-providers",
+              "part-3-technical-foundations/data-modeling",
+              "part-3-technical-foundations/entity-resolution",
+              "part-3-technical-foundations/data-quality",
+              "part-3-technical-foundations/data-warehousing",
+              "part-3-technical-foundations/knowledge-graphs",
+              "part-3-technical-foundations/integrations-and-apis",
+              "part-3-technical-foundations/security-and-compliance",
+              "part-3-technical-foundations/emerging-trends",
+              "part-3-technical-foundations/final-thoughts"
             ]
           }
         ]
       }
     ],
     "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
+      "anchors": []
     }
   },
   "logo": {
@@ -88,17 +70,7 @@
     "dark": "/logo/dark.svg"
   },
   "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
+    "links": []
   },
   "contextual": {
     "options": [
@@ -113,10 +85,6 @@
    ]
   },
   "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
+    "socials": {}
   }
 }

@@ -1,0 +1,207 @@
+---
+title: "Choosing Your Technology Stack"
+description: "The default technology stack for VC tools, when to deviate from it, and why shipping fast matters more than using the newest framework."
+---
+
+## Overview
+
+Your job is to ship tools that help your fund make better investment decisions. Technology choices matter because they affect how fast you can build, how easy it is to maintain what you've built, and what you can accomplish as a small team with limited resources.
+
+But here's what's different about building technology at a VC fund: you're not building the next Stripe. You're building internal tools for 5-20 people. You're probably a solo developer or a team of 2-3. Your users are investors who care about insights, not engineers who care about architecture. Most importantly, you need to prove value quickly to justify your role and get support for bigger projects.
+
+These constraints should drive every technology decision you make. The right stack for VC is one that lets you ship fast, maintain easily, and integrate with the specific ecosystem of tools that VCs use. It's not about using the newest framework or the most elegant architecture. It's about building things that work and that people actually use.
+
+This chapter covers the default technology stack you should use, when to deviate from it, how to handle existing code you inherit, and why your value comes from what you build rather than how you build it.
+
+## Why Technology Choices Matter for VC
+
+The technology decisions you make have direct consequences for what you can accomplish:
+
+**Velocity matters more than performance**. You're building tools for tens of users, not millions. A research platform that loads in 200ms versus 50ms makes no difference to a GP. But a research platform that exists in 2 weeks versus 2 months makes a huge difference to whether you get support for the next project.
+
+**Maintenance matters more than elegance**. You'll be maintaining this code, probably alone, for years. The clever architecture that seemed smart when you built it becomes a nightmare when you're the only person who understands it. Boring, well-documented, widely-used technology means you can fix things quickly and onboard others if your team grows.
+
+**Integration matters more than custom solutions**. VC funds live in an ecosystem of specific tools: Attio or Affinity for CRM, PitchBook for data, Harmonic or Specter for sourcing. You need to integrate with these. Choosing technology that makes API integrations easy is more valuable than choosing technology that's theoretically more powerful.
+
+**AI coding assistance is now essential**. When you're a solo developer building multiple tools, AI coding agents (Claude Code, Cursor, Codex) are the difference between shipping something in a day versus a month. These tools work dramatically better with popular, well-documented frameworks. Choosing Next.js over some obscure framework means Claude Code can help you ship faster.
+
+**Your time is the constraint, not compute**. Infrastructure costs for internal VC tools are trivial compared to data subscriptions and compared to your salary. Optimizing for developer velocity rather than hosting costs is the right tradeoff.
+
+## The Default Stack
+
+At Inflection, our default stack for web applications and APIs is:
+
+- **Next.js**: React framework with built-in routing, API routes, server-side rendering
+- **TypeScript**: JavaScript with static typing
+- **Shadcn**: Component library built on Radix UI and Tailwind CSS
+- **Postgres**: Relational database
+- **Drizzle**: TypeScript ORM for Postgres
+- **Vercel AI SDK**: For LLM integrations
+- **Deployed on Vercel**: Git push equals deployment, zero DevOps overhead
+
+This isn't the only viable stack. But it's the right default for most VC tools, and here's why in VC-specific terms:
+
+**Next.js gives you full-stack in one framework**. You can build UI, API endpoints, background jobs, and webhooks all in the same codebase. For a research platform or sourcing tool, this means you don't need separate frontend and backend repos, separate deployments, or coordination between different frameworks. One codebase, one deployment, less complexity.
+
+**TypeScript catches errors before they reach users**. When you're shipping fast with limited testing, static typing is your safety net. The compiler catches bugs that would otherwise break production. And with modern AI coding tools, TypeScript's explicitness helps Claude Code understand your codebase and generate correct code.
+
+**Shadcn provides good-enough UI components**. VCs aren't evaluating your tools based on design polish. They care about functionality and insights. Shadcn gives you professional-looking components that work well without hiring a designer. Your GPs will never complain that you used Shadcn instead of a custom design system.
+
+**Postgres is the right database for most VC tools**. It's relational (your data is structured: companies, deals, people, relationships), it's mature, it scales far beyond what you'll need, and as covered in Chapter 18, it's adequate as a data warehouse for small to mid-size funds before you need Snowflake or BigQuery.
+
+**Vercel deployment means zero DevOps**. You push to git, Vercel builds and deploys, you get a URL. No Docker, no Kubernetes, no CI/CD configuration, no server management. For internal tools where you're the only developer, eliminating DevOps overhead is essential.
+
+**AI SDK makes LLM integration trivial**. Most tools you build will use LLMs for something: summarizing companies, analyzing research, answering questions. Vercel's AI SDK handles streaming, function calling, and failover between providers. You focus on prompts and features, not plumbing.
+
+**AI coding agents work best with this stack**. Next.js and TypeScript are among the most popular technologies developers use. This means Claude Code, Cursor, and Copilot have seen enormous amounts of training data with these frameworks. They generate better code, make fewer mistakes, and help you ship faster than if you chose something obscure.
+
+This stack isn't exciting. It's boring, mature, widely-used technology. That's exactly what you want. Your value comes from what you build, not from using cutting-edge frameworks.
+
+## When to Introduce New Technology
+
+The default stack covers most of what you'll build. But sometimes you need something it doesn't provide. The rule is: pick one or two new technologies per project, not more.
+
+**For Kepler** (Inflection's research platform), we introduced **Tiptap** to create a Notion-like editing experience. This made sense because:
+- The editing experience was core to the product's value
+- Tiptap is mature, well-funded, and widely used
+- It integrated cleanly with React/Next.js
+- It solved a problem the default stack didn't address
+
+We didn't also introduce a new database, a new deployment platform, a new state management library, and a new UI framework. We changed one thing where it mattered.
+
+**Evaluate new technology with these questions:**
+
+1. **Does the default stack actually not solve this?** Often you can build what you need with what you already have. Don't add complexity for marginal improvements.
+
+2. **Is this technology mature and well-maintained?** Check recent commits, number of contributors, whether there's a company behind it or just a solo maintainer. You don't want to adopt something that will be abandoned in 6 months.
+
+3. **Does it have financial backing?** If it's open source, is there a company funding development? If it's proprietary, is the company sustainable? Switching technologies later is expensive.
+
+4. **Does it integrate well with your existing stack?** Adding a Python-based tool to an otherwise TypeScript codebase creates friction. Not insurmountable, but adds complexity.
+
+5. **Will AI coding agents understand it?** Obscure libraries mean Claude Code can't help you as effectively. Popular libraries mean you ship faster.
+
+For most projects, you won't introduce new technology. When you do, be selective and strategic about it.
+
+## When Python Makes Sense
+
+The default stack for us is TypeScript, but you can't escape Python entirely at a VC fund. Here's where Python is the right choice:
+
+**Data analysis and exploration**. When a GP asks "how many Series A companies in fintech raised in the last 6 months?", you open a Jupyter or Hex notebook, write SQL to pull data from your warehouse, and use pandas to analyze it. Python notebooks are the standard for ad-hoc data work. TypeScript isn't competitive here.
+
+**Data transformations in the warehouse**. If you're using dbt for data transformations (covered in Chapter 18), you'll write Python for custom models that run in Snowpark (Snowflake), BigQuery DataFrames, or PySpark. The data warehouse ecosystem is Python-native.
+
+**Machine learning and AI work**. If you're building anything involving model training, embeddings, or scientific computing, Python's ecosystem (scikit-learn, numpy, PyTorch) is unmatched.
+
+**Our approach**: TypeScript by default for everything. Python when you genuinely need it for data work. That's two stacks total: web stack (TypeScript/Next.js) and data stack (Python). Don't add a third unless you have an exceptional reason.
+
+Interestingly, TypeScript has gotten much better for data purposes, but you still can't escape Python for notebooks, dbt, and in-warehouse computation.
+
+## Existing Code: Don't Rewrite Unless It's Broken
+
+A common scenario: you join a VC fund that already has tools built by someone who left. The code is in a different stack than you'd choose. It's not documented well. It's not how you'd architect it. Your first instinct is to rewrite it in your preferred stack.
+
+**Resist this instinct.**
+
+If the existing tools work and serve GPs well, continue building on them. Your first job isn't to rip everything out and start fresh. It's to understand what the fund needs, fix what's broken, and add value incrementally.
+
+**Only rewrite existing code if:**
+
+- **It's blocking new features**. The architecture is so inflexible that you can't add what GPs need without a rewrite.
+
+- **It's unmaintainable**. The code is so poorly structured or undocumented that fixing bugs takes weeks instead of hours.
+
+- **It's actively broken**. The tools don't work, GPs don't use them, and fixing them would take longer than rebuilding.
+
+**If you do rewrite, do it incrementally.** Don't announce "I'm rewriting everything, it'll be ready in 3 months." Build the new version alongside the old one, migrate features one by one, and deprecate the old system only when the new one is proven. This keeps GPs working while you improve infrastructure.
+
+At Inflection, I was blessed to have no legacy code, but if we'd inherited working tools, the default would be to keep them running and iterate rather than rebuild.
+
+## Lean on Managed Services
+
+Use managed services for everything unless you have a specific reason not to.
+
+**For hosting**: Vercel for Next.js apps. Railway, Render, or Fly.io for other services. These platforms handle deployment, scaling, monitoring, and uptime. You push code, they run it. The alternative is configuring AWS infrastructure, managing Docker containers, setting up CI/CD, monitoring servers, and handling incidents. Not worth your time.
+
+**For databases**: Neon, Supabase, or PlanetScale for Postgres. AWS RDS if you're already committed to AWS. Don't run your own database servers. Let someone else handle backups, replication, and uptime.
+
+**For background jobs**: If you need async task processing, use a managed service like Trigger.dev, Inngest, Vercel's workflow SDK rather than running your own job queue infrastructure.
+
+**For monitoring**: Use Vercel's built-in monitoring or services like Sentry for error tracking. Don't build your own observability stack.
+
+**The cost argument**: Managed services are more expensive than self-hosting. Vercel costs more than running an EC2 instance. Managed Postgres costs more than running your own RDS instance. But the cost difference is trivial compared to your time.
+
+Your engineering time, at a fully-loaded cost including salary and benefits, is worth (at minimum) $100-200/hour at a VC fund. Spending 4 hours a month managing infrastructure to save $200 on hosting is a terrible trade. Spend that time building features that help GPs make better investment decisions.
+
+**The exception**: If you have specific compliance requirements (Chapter 21 covers security and compliance), you might need self-hosted infrastructure for data residency or audit reasons. But this is rare for most funds and work with your CISO or compliance officer to find a path forward. Default to managed services.
+
+## Dependencies: Be Selective But Not Afraid
+
+Minimize dependencies, but don't be dogmatic about it. If a well-maintained library solves your problem and lets you ship faster, use it.
+
+**In the VC ecosystem, you'll use vendor SDKs and integrations:**
+- API wrappers from your data providers
+- Vercel AI SDK for LLM integrations
+- Drizzle or Prisma for database access
+
+These are core dependencies that make sense. They're maintained by companies who have financial incentive to keep them working, and they save you from writing API integration code from scratch.
+
+**Be selective about other dependencies:**
+- A well-maintained date library (date-fns) saves time and reduces bugs
+- A validation library (Zod for TypeScript, covered in Chapter 20) is essential for API integrations
+- A testing library (Vitest) makes sense if you write tests (though for internal tools, extensive testing is often overkill)
+
+**Be wary of:**
+- Dependencies that do things you could write in 10 lines of code (micro-dependencies)
+- Dependencies with no recent commits or single maintainers
+- Dependencies that pull in huge transitive dependency trees
+
+Check financial backing and maintenance status. A library with a company behind it is safer than a side project from a solo developer. Not a hard rule, but a useful signal.
+
+## Modern Dev Tools Change the Hiring Equation
+
+With the development tools available today, you can learn any language or framework very quickly. Better linting, tree-sitter-based code navigation, tab autocomplete, and especially AI coding agents like Claude Code mean that switching between languages is less of a barrier than it was five years ago.
+
+**The implication for hiring**: If you do hire engineers to join your team, hire for VC domain knowledge and product sense over language expertise. Someone who understands venture capital, knows how investors think, and can build tools that GPs actually use is far more valuable than someone who's an expert in React but doesn't understand your users.
+
+With Claude Code or Cursor, a smart engineer who knows Python can become productive in TypeScript within a week. The AI tools handle syntax, suggest patterns, and catch mistakes. What matters is understanding what to build and why, not memorizing framework APIs.
+
+That said, this assumes someone who's already a strong engineer. If you're hiring junior developers, the equation changes. But at VC funds, you should be hiring senior people.
+
+## What GPs Actually Care About
+
+GPs don't care that you used Next.js. They don't care about your database schema. They don't care about your deployment pipeline. They care about whether your tools help them find better companies, make better decisions, and ultimately generate better returns for LPs.
+
+**Your value comes from:**
+- Building a research platform that surfaces insights they wouldn't have found manually
+- Building sourcing tools that identify companies before competitors do
+- Building portfolio dashboards that show which companies need attention
+- Building analyses that inform thesis development or market understanding
+
+**Your value does not come from:**
+- Using the newest JavaScript framework
+- Having the most elegant architecture
+- Optimizing performance beyond what's necessary
+- Building infrastructure for scale you'll never reach
+
+This is why the chapter emphasizes boring, proven technology. The stack doesn't matter. What matters is shipping tools that work, that GPs actually use, and that make your fund better at investing.
+
+Technology is a means to an end. The end is helping your fund deploy capital more effectively. Choose technology that lets you reach that end faster.
+
+## The Bottom Line
+
+Use boring, proven technology that lets you ship fast. At Inflection, that's Next.js, TypeScript, Postgres, and Vercel. For data work, Python when you need it.
+
+Only introduce new technology (like Tiptap for Kepler) when it solves a problem the default stack doesn't address. Pick one or two new technologies per project, not more. Ensure they're well-maintained and financially backed.
+
+If you inherit existing code that works, continue building on it. Don't rewrite unless it's truly blocking progress or broken beyond repair.
+
+Lean on managed services for everything. Your time is worth more than the cost difference between managed and self-hosted infrastructure.
+
+Be selective about dependencies, but use well-maintained libraries that speed up development. In VC, that includes vendor SDKs for Attio, PitchBook, data providers, and LLM integrations.
+
+With modern AI coding tools, learning new languages and frameworks is fast. Language expertise matters less than VC domain knowledge and product sense.
+
+Most importantly: GPs care about insights and decisions, not technology. Your value comes from what you build, not how you build it. Ship fast, prove value, get support for bigger projects. Use technology that enables that, not technology that impresses other engineers.
+
+In the next chapter, we'll cover data providers: the external vendors who supply information about companies, funding, people, and markets that you'll integrate into the tools you build.

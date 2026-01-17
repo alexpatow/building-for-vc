@@ -1,0 +1,127 @@
+---
+title: "CRM and Deal Flow Management"
+description: "Understanding why every fund needs a CRM, how to choose between options, and making it actually work for your team."
+---
+
+## Overview
+
+Unlike sourcing tools, which work for some funds and not others, CRM is universally valuable. Every fund tracks relationships and manages deal flow. The question isn't whether you need it, but which tool you use and whether you actually use it consistently.
+
+CRM stands for Customer Relationship Management, which is a terrible name for what venture funds need. You're not managing customers. You're tracking relationships with founders, managing deal pipeline, coordinating your team, and maintaining institutional memory about every company you've ever talked to. But "relationship and deal flow management system" doesn't fit on marketing materials, so CRM it is.
+
+The reality is that all CRMs feel terrible to use. They're not built for venture capital out of the box. They're built for sales teams with standardized processes, clear conversion funnels, and lots of repetitive activity. VC is messier. Every deal is different. The relationship with a founder you passed on three years ago might lead to your best investment next year. You can't force this into a linear sales pipeline.
+
+But building your own CRM from scratch is worse. Much worse. It's 2026. Don't do it. Buy something customizable, integrate it with your other tools, and commit to actually using it. This chapter covers how to choose a CRM and make it work for your fund.
+
+## Why CRMs Feel Terrible
+
+Every VC complains about their CRM. The interface is clunky. Data entry feels like homework. The workflow doesn't match how you actually work. You're constantly clicking through screens that don't apply to your process. It's tempting to think "we should just build our own."
+
+The problem is that CRMs aren't built for venture capital specifically. They're built for sales organizations. Enterprise sales has standardized stages: lead, qualified, demo, proposal, negotiation, closed. You can forecast revenue based on conversion rates. Pipeline management means moving deals through predictable stages.
+
+Venture doesn't work this way. You meet a founder. Maybe you pass. Three months later they email you an update. Six months after that you introduce them to a potential customer. A year later they're raising their next round and you lead it. Or you meet a founder, love them immediately, and invest in two weeks. The stages aren't linear. The timeline isn't predictable. The "deal" might not be a deal for years.
+
+So CRMs force you to contort your process into their model. You create custom fields. You ignore half the features. You build workarounds. It never feels quite right. This is the reality of using CRMs in venture capital. They're better than the alternative (spreadsheets, scattered notes, institutional knowledge in people's heads), but they're never perfect.
+
+The key is finding something customizable enough to match your process reasonably well, then committing to using it despite the friction.
+
+## What You Actually Need
+
+Before choosing a CRM, understand what you actually need it to do for a venture fund.
+
+**Relationship tracking**: Every person you've met. Founders, operators, other investors, domain experts, potential LPs. How you met them. When you last talked. What you talked about. The context of your relationship. Six months from now, you should be able to look up someone and remember the full history.
+
+**Company tracking**: Every company you've evaluated. How you met them. Who on your team has relationships with the founders. The full history of your interactions over time.
+
+**Deal pipeline**: What deals (specific funding rounds) are active right now. Who's working on them. What stage they're at in your process. When decisions need to be made. What the next steps are.
+
+<Tip>
+**Note on data modeling**: VCs invest in deals (specific funding rounds), not companies. Model your CRM at the deal level: "Acme Corp Seed Round" (Invested), "Acme Corp Series A" (Invested), "Acme Corp Series B" (Passed). If you model at the company level, you'll have problems when follow-on rounds come up - you can't mark a company as both "Invested" and "Passed" at the same time. I have first hand experience of trying to change this data model, it's a nightmare. Most good CRMs support this if you set it up correctly from the start.
+</Tip>
+
+**Team coordination**: In a fund with multiple people, you need to know who's talking to which founders, who's working on which deals, and what everyone learned. The CRM prevents duplicate outreach, surfaces relevant context when someone else talked to a founder months ago, and helps the team build on each other's work.
+
+**Email and meeting integration**: The best CRMs automatically log emails and calendar meetings with companies and founders. You don't manually enter "had coffee with Sarah on Tuesday." The system sees the meeting in your calendar, knows Sarah is a founder, and logs it. This is the difference between a CRM people actually use and one that becomes stale.
+
+**Notes and history**: When you talked to a founder six months ago, what did you learn? When they email you an update, can you quickly see the full context? The CRM should be the source of truth for all interactions with companies and founders.
+
+**Search and filtering**: Find all the AI infrastructure companies you talked to in the last year. Find everyone you met at that conference. Find all the founders you passed on who you said you'd check back with in six months. If you can't find information quickly, you won't use the system. Unfortunately, search systems on CRMs are inexplicably poor in 2026.
+
+**Beyond deal flow**: While this chapter focuses on deal flow management, many funds also use their CRM to manage LP relationships. Tracking interactions with current and potential LPs, managing fundraising pipelines, and maintaining investor reporting history. The same principles apply: relationship tracking, interaction history, and systematic follow-up. Some funds use separate systems for LPs, others use the same CRM with different pipelines.
+
+## Choosing Your CRM
+
+There's no perfect CRM for venture capital. There are three main options that funds use, each with tradeoffs.
+
+**Attio**: Modern, flexible, and designed with relationship-centric businesses in mind. Better UX than traditional CRMs. Strong customization without requiring a full-time admin. Good email and calendar integration. Pricing is reasonable for small to mid-sized funds. The main limitation is that it's less established than Affinity or Salesforce, so fewer integrations and smaller ecosystem.
+
+Many newer funds choose Attio because it's easier to customize to match your specific workflow without fighting the tool, it also tends to be the cheapest.
+
+**Affinity**: Built specifically for relationship-driven industries like venture capital. Automatically enriches contact data and tracks relationship strength based on email and meeting patterns. Strong at surfacing "who knows who" for warm intros. More opinionated about workflow, which means less customization but faster setup.
+
+Large funds and established GPs often choose Affinity because it has VC-specific features out of the box. The tradeoff is less flexibility if your process differs from what Affinity expects.
+
+**Salesforce**: The enterprise standard. Extremely customizable. Massive ecosystem of integrations and consultants. Can be configured to do almost anything. The downsides are cost (expensive for small funds), complexity (requires real admin overhead), and UX that feels dated.
+
+Larger, established funds with dedicated operations teams sometimes use Salesforce because they need complex workflows and have resources to maintain it. Not recommended for small funds.
+
+**The decision**: Prioritize customizability over features. You'll need to adapt the CRM to match your fund's specific process. Attio and Affinity are both good choices for most funds. Attio if you want more control over structure and workflow. Affinity if you want VC-specific features. Salesforce only if you're large enough to have dedicated CRM admin resources.
+
+## Making It Actually Work
+
+Buying a CRM isn't enough. Making it work requires integration, discipline, and actually using it.
+
+**Integrate with your other tools**: The CRM should connect to your email (Gmail, Outlook), calendar, and other tools you use. When you email a founder, it logs automatically. When you have a meeting, it logs automatically. When you add a company to your sourcing tool, it flows into the CRM. The less manual data entry, the more people will actually use it.
+
+Most CRMs have APIs. Use them. Build light integrations between your CRM and your research platform, your sourcing tools, and anything else you use. The CRM becomes more valuable when it's connected to the rest of your stack.
+
+**Use it in deal flow calls**: The single most important habit. When your team discusses deal flow, have the CRM open. Update company stages. Add notes. Assign next steps. If you talk about a company and don't update the CRM, information gets lost. Make it part of the meeting process, not something you do afterward.
+
+This also keeps the CRM current. If the system reflects the actual state of your pipeline, people trust it and use it. If it's always out of date, people stop checking it.
+
+**Commit to entering data**: There's no way around this. Someone needs to enter information about companies, founders, and meetings. With good email and calendar integration, a lot happens automatically. But initial company setup, notes from meetings that aren't on calendar, and context about relationships still require manual entry.
+
+The key is making it low-friction. If entering data takes too many clicks or too many required fields, people won't do it. Customize the system to minimize friction while capturing what actually matters. Use integrations from meeting note taking apps like Granola to also remove friction.
+
+**Don't overthink the workflow**: Many funds spend weeks designing the perfect pipeline stages and custom fields. This is usually overengineering. Start simple. You can always add complexity later. The basics (who are we talking to, what stage are they at, what's the next step) cover 80% of what you need.
+
+## Don't Start With Airtable or Notion
+
+Many funds start with Airtable or Notion for deal flow tracking. They're familiar, flexible, and easy to set up. This is a mistake.
+
+The problem is that Airtable and Notion don't integrate with email and calendar. You have to manually enter everything. "Had coffee with Sarah" doesn't get logged automatically. That email thread with the founder doesn't get captured. The updates they sent you last month aren't linked to their company record.
+
+What happens is that people stop updating it. Someone enters information for the first few weeks. Then it becomes stale. Six months later you have a partially-filled database that nobody trusts or uses. You've lost all the email and meeting history that a real CRM would have captured automatically.
+
+Just buy a real CRM from the start. Yes, they cost money. The cost is worth it for the automatic email and meeting tracking alone. You'll save more time than you spend in subscription fees.
+
+## Real Example: Attio at Inflection
+
+<Tip>
+**Author Note: Choosing a CRM**
+
+Inflection chose Attio after evaluating several options. The deciding factors were customizability and ease of integration.
+
+The setup took about a week to get the basic structure right. We kept the stages in the Deal Funnel simple:
+
+1. **New** - Something came into our pipeline
+2. **Initial Contact** - Conversed over email and had the first call
+3. **Research** - Diving deep, more meetings, talking with advisors
+4. **Term Sheet** - Interested and extended a term sheet
+5. **Invested** - Wired payment
+6. **Watchlist** - Passed for now, but could be interested again later
+7. **Passed** - Actually passed
+8. **Lost** - Deals we wanted but didn't get allocation
+
+This framework has worked well. The key distinctions are Watchlist (companies we might revisit) versus Passed (definitely not), and Lost (we wanted to but couldn't) versus Passed (we chose not to). These capture the non-linear nature of VC relationships better than a pure sales funnel.
+
+The hardest part wasn't the technical setup. It was the discipline of actually using it. Put it up on the screen when having the deal flow meeting. Just do it.
+</Tip>
+
+## The Bottom Line
+
+Buy a CRM. Don't build one. Don't start with Airtable or Notion. Choose something designed for relationship management (Attio or Affinity for most funds), customize it to match your process, integrate it with your other tools, and commit to using it.
+
+The hardest part isn't choosing the right tool. It's the discipline of actually using it consistently. Use it in deal flow calls. Make sure email and meeting tracking work automatically. Keep the data current. A mediocre CRM used consistently is better than a perfect CRM that nobody updates.
+
+In the next chapter, we'll look at fund operations software, which handles the financial side of running a venture fund.

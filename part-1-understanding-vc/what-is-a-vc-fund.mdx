@@ -1,0 +1,274 @@
+---
+title: "What is a VC Fund?"
+description: "Fundamental terms, structures, and concepts that apply across all VC funds - your glossary and mental model for how venture capital works."
+---
+
+## Overview
+
+Before building software for venture capital, you need to speak the same language as investors. This chapter covers the fundamental terms, structures, and concepts that apply across all VC funds.
+
+Think of this as your glossary and mental model for how VC works. You don't need to be an expert investor, but you need to understand the basic mechanics well enough to make good technical decisions.
+
+## Resources
+
+- **[The Business of Venture Capital, 3rd Edition](https://www.amazon.se/-/en/Business-Venture-Capital-Third-Structuring/dp/1119639689)** by Mahendra Ramsinghani - Comprehensive overview of fund structures, legal frameworks, and the LP-GP relationship
+- [**Venture Deals** by Brad Feld and Jason Mendelson](https://www.amazon.se/-/en/Venture-Deals-Smarter-Lawyer-Capitalist/dp/1119594820/ref=pd_lpo_d_sccl_1/259-5033149-9306011?pd_rd_w=ZdNmw&content-id=amzn1.sym.7d0a2f69-66fb-4c7e-903c-ce17ff0b2ad4&pf_rd_p=7d0a2f69-66fb-4c7e-903c-ce17ff0b2ad4&pf_rd_r=7G0ME1NJHNK2BFR6N0AH&pd_rd_wg=QBk3V&pd_rd_r=e4f436f3-feda-4d0d-9214-35f50071aa71&pd_rd_i=1119594820&psc=1) - Essential reading on how VC deals work
+- [**Secrets of Sand Hill Road**](https://www.amazon.se/-/en/Secrets-Sand-Hill-Road-Capital_and/dp/0753553961/ref=sr_1_1?crid=ZKSGJILFAMK8&dib=eyJ2IjoiMSJ9.jyx30XfinMsTpzoGq7gzxQ.-73Lxa4MbBDc8BXZxFxFO2Zi8pK--6pbbnrDo_EucY8&dib_tag=se&keywords=secrets+of+sand+hill+road&qid=1768495828&sprefix=**Secrets+of+Sand+Hill+Road**,aps,116&sr=8-1) by Scott Kupor - Inside look at how VC firms operate
+
+## The Players: LPs, GPs, and Portfolio Companies
+
+At its core, a venture capital fund involves three groups: Limited Partners who provide the capital, General Partners who manage it, and Portfolio Companies who receive it. Understanding these relationships is fundamental to everything else.
+
+### Limited Partners: The Money
+
+Limited Partners, or LPs, are the investors in a venture capital fund. They're the ones providing the capital that eventually gets invested in startups. LPs come in many forms: pension funds managing retirement savings for teachers and firefighters, university endowments looking to fund scholarships, family offices managing wealth for wealthy families, and sometimes corporations looking to gain strategic exposure to emerging technologies.
+
+The word "limited" is important here. LPs have limited involvement in the fund's day-to-day operations and limited liability for the fund's debts. They commit capital to the fund but don't make investment decisions or sit in partner meetings debating which startup to back. Their role is largely passive: they commit money, receive regular reports on how that money is being deployed, and eventually receive distributions when portfolio companies exit.
+
+This limited involvement comes with significant confidentiality. LP identities and their commitment amounts are typically kept private. An LP might not want it publicly known that they're investing in venture capital, or they might not want other GPs to know the size of their commitments elsewhere. This confidentiality shapes everything from how data is secured to who can access what information in any software you build.
+
+It's also crucial to understand that when an LP commits $10 million to a fund, they don't write a $10 million check on day one. Instead, they promise to provide that capital over time as the fund needs it for investments. The money stays in the LP's accounts earning returns until the fund calls for it. This distinction between committed capital and called capital runs through every aspect of how VC funds operate.
+
+### General Partners: The Operators
+
+On the other side are the General Partners, or GPs. These are the investors you think of when you picture venture capitalists: the partners who source deals, conduct due diligence, make investment decisions, sit on boards, and work with portfolio companies. They're the ones running the fund's operations day to day.
+
+Unlike LPs, GPs have unlimited liability (in theory, though in practice this is often structured differently) and make all the decisions about how the fund's capital gets deployed. They decide which companies to invest in, how much to invest, what terms to negotiate, and when to exit.
+
+GPs make money in two ways. First, they receive management fees, typically 2% of the committed capital per year. For a $100 million fund, that's $2 million annually to cover salaries, office space, travel, and all the operational costs of running the fund. These fees are paid regardless of how well the investments perform.
+
+Second, and more importantly, GPs receive carried interest, or "carry." This is their share of the profits, typically 20%. But here's the key: carry only gets paid after the LPs have received back all their invested capital, and sometimes only after a preferred return hurdle is met. This alignment of incentives means GPs only make serious money if the fund performs well for the LPs.
+
+The way GPs spend their time reveals what any software system needs to support: sourcing deals through their networks, evaluating companies, conducting due diligence, preparing for and running investment committee meetings, negotiating terms with founders, sitting on portfolio company boards, and maintaining relationships with LPs. Each of these activities generates data and requires workflows.
+
+### Portfolio Companies: The Investments
+
+Portfolio companies are the startups and businesses that receive investment from the fund. They're the reason the whole ecosystem exists: LPs provide capital to GPs so GPs can invest in promising companies that will hopefully generate returns.
+
+From the fund's perspective, portfolio companies exist in different states. Before investment, they're prospects moving through the deal pipeline. They get evaluated, researched, debated. After investment, they become part of the portfolio. They get tracked, monitored, supported. The relationship changes from courtship to partnership.
+
+Once invested, the fund's relationship with a portfolio company is ongoing and multifaceted. Most funds that lead rounds or make significant investments take a board seat, giving them formal governance responsibility and requiring regular attendance at board meetings. Even without a board seat, funds want regular updates: quarterly financial reports, monthly metrics, informal check-ins about challenges and wins.
+
+Portfolio companies send data to their investors constantly: revenue numbers, burn rate, cash runway, customer acquisition metrics, hiring updates, product milestones. The format varies wildly. Some funds have structured data collection through portals or templates, others receive casual email updates with PDFs attached. Some companies are religious about monthly updates; others go quiet for months then surface when they need help or are raising another round.
+
+The fund also provides value beyond capital. GPs make introductions to potential customers, help recruit executives, advise on strategy, connect companies to later-stage investors, and sometimes help navigate crises. This value-add varies dramatically by fund - some are highly engaged, others are passive financial investors. But even passive funds need to track their portfolio companies' progress to report to LPs and make follow-on investment decisions.
+
+Portfolio companies also create most of the complexity in a fund's data model. Each company goes through multiple financing rounds at different valuations. Ownership percentages change over time as new investors join and existing investors get diluted. Companies pivot, changing their business model and metrics. Some succeed spectacularly, some fail, most are in between. Some exit through acquisitions, some through IPOs, some through secondary sales, some die quietly.
+
+Understanding portfolio companies means understanding that they're not static database records. They're dynamic businesses that evolve over years. The company you invested in at seed stage looks completely different three years later when they've raised a Series B, hired 50 people, and pivoted twice. Your system needs to track this evolution while maintaining the historical record of how the company has developed.
+
+## The Structure: Companies and Vehicles
+
+Here's where things get confusing for most people new to VC: a "venture capital fund" isn't just one entity. It's actually a collection of related but legally separate entities, each serving a specific purpose.
+
+### The Management Company
+
+The management company is the operating entity. Think of it as the business itself. If you see "Acme Ventures LLC," that's probably the management company. This is the entity that employs the team, signs the office lease, and pays the bills. The management company receives management fees from the fund and uses those fees to cover operating expenses.
+
+A single management company typically manages multiple funds over time. Acme Ventures LLC might manage Acme Ventures Fund I, then raise and manage Acme Ventures Fund II a few years later, and so on. The same team, the same entity, but different fund vehicles.
+
+### The Fund Vehicle
+
+The actual fund (let's say "Acme Ventures Fund I, LP") is a separate legal entity, usually structured as a limited partnership. This is the vehicle that holds the LP commitments, makes the investments, owns the equity in portfolio companies, and distributes returns. The LPs are limited partners in this entity, and the management company (or its affiliates) serves as the general partner.
+
+This separation isn't just legal technicality. Money flows differently through these entities. Management fees flow from the fund to the management company. Investment capital flows from LPs to the fund to portfolio companies. Returns flow back from portfolio companies to the fund to LPs. Understanding these flows is essential because you'll need to track them separately, allocate expenses correctly, and report on them accurately.
+
+### SPVs and Side Cars
+
+As if two entities weren't enough, there are often more. Special Purpose Vehicles, or SPVs, are created for specific investments. Let's say Acme Ventures wants to invest $5 million in a hot company, but several LPs want additional exposure. The fund might create an SPV just for this deal, allowing those LPs to invest beyond their fund commitment. It's a separate legal entity, created for one investment, with its own investors and terms.
+
+Side cars are similar but broader. They're parallel vehicles that invest alongside the main fund across multiple deals. A fund might create a side car for a specific LP who wants more exposure than their fund commitment allows, or for a group of co-investors who want to invest in the fund's deals.
+
+Each of these entities needs to be tracked separately, but they're all interconnected. An investment might involve capital from the main fund, an SPV, and a side car. Ownership calculations need to account for all three. Reporting needs to aggregate across them appropriately. It's complex, and it's one of the first places developers go wrong if they don't understand the structure.
+
+## How Money Moves: The Capital Lifecycle
+
+The movement of capital through a VC fund follows a predictable but often misunderstood lifecycle. It's not as simple as "LPs give money, fund invests money, fund returns money." The reality is more nuanced and plays out over years.
+
+### Fundraising and Commitments
+
+It starts with fundraising. The GPs go out and pitch their strategy to potential LPs: "We're raising a $100 million fund to invest in early-stage B2B SaaS companies in Europe." LPs who are interested don't write checks immediately. Instead, they sign commitment letters promising to provide capital when called upon.
+
+A fund might have a target size of $100 million but a hard cap of $150 million. They'll announce a "first close" when they reach the minimum needed to start investing, say $50 million in commitments. They can now legally start making investments. The fund continues fundraising until they reach final close, which might be $120 million in total commitments. This fundraising period typically takes 6-18 months.
+
+During this time, LPs haven't actually transferred most of their money yet. They've just promised it. This is a crucial distinction that confuses many people building VC software: committed capital is not the same as cash in the bank.
+
+### Capital Calls
+
+When the fund finds an investment opportunity (let's say they want to invest $3 million in a promising startup), they don't have a bank account with $100 million sitting in it. Instead, they issue a capital call to the LPs.
+
+A capital call is a formal notice saying "We need $3 million for this investment. Each of you needs to send us your pro-rata share within 30 days." An LP who committed $10 million (10% of the fund) would need to wire $300,000 (10% of the call). The fund collects the capital from all the LPs, then wires the money to the portfolio company and receives equity in return.
+
+This happens over and over throughout the investment period of the fund. Each time the fund makes an investment, it calls capital. This means the fund is constantly tracking how much each LP has committed, how much has been called, and how much remains uncalled (often called "dry powder").
+
+LPs occasionally miss or delay capital calls, which creates its own complications. The fund needs to track who's paid, who hasn't, follow up with delinquent LPs, and handle the paperwork. It's a workflow that software needs to support reliably.
+
+### Making Investments
+
+When the fund receives the called capital, it invests in a portfolio company. But "investment" isn't as simple as it sounds. The fund might receive common equity, preferred equity, a SAFE (Simple Agreement for Future Equity), a convertible note, or various other instruments. Each has different terms, conversion mechanics, and implications for ownership.
+
+The fund tracks its cost basis (the actual dollars invested) but also needs to track current ownership percentage, which can change over time as the company raises more money and the fund gets diluted. The fund might invest in the company multiple times across different rounds, each at different valuations. Tracking all of this accurately is essential for calculating fund performance and reporting to LPs.
+
+### Portfolio Management
+
+After investing, the fund monitors the portfolio company. Some GPs sit on the board, attending meetings quarterly or monthly. Portfolio companies send updates. Sometimes these are structured financial reports, sometimes casual email updates. The fund tracks key metrics: revenue, burn rate, runway, user growth, whatever matters for that particular company and sector.
+
+The fund also decides whether to invest more. Most VC funds reserve capital for follow-on investments in their best companies. When a portfolio company raises a Series B, the fund needs to decide: do we invest again to maintain our ownership percentage (exercising pro-rata rights), or do we let ourselves get diluted? This decision-making process involves data, discussion, and usually formal approval.
+
+### Exits and Distributions
+
+Eventually, some portfolio companies exit. A company gets acquired, goes public, or sells shares in a secondary transaction. The fund receives either cash or liquid stock in return for its equity. This is when LPs finally see returns.
+
+But the money doesn't just get distributed immediately. First, it flows through what's called a distribution waterfall. The standard VC structure works like this: first, return all the capital that LPs invested. If the fund called $80 million total from LPs over the fund's life, the first $80 million of exits goes back to LPs. Then split remaining profits: typically 80% to LPs, 20% to GPs as carry. Some funds (more common in PE) include a preferred return hurdle between these steps, typically 8% annually that LPs must receive before carry is paid.
+
+These waterfall calculations get complex fast. Different investments exit at different times. LPs care about exactly when they receive distributions. The fund needs to track everything precisely: how much each LP contributed across all capital calls, how much they've received in distributions so far, and how profits should be split according to the fund's specific waterfall structure.
+
+Distributions happen throughout the fund's life as companies exit, not all at once at the end. A fund might make its first distribution in year 3, continue distributing through year 10, and potentially make final distributions in year 12 or 15 if some companies took a long time to exit. Throughout all of this, the fund reports to LPs on performance using metrics like DPI, TVPI, and IRR (which we'll define shortly).
+
+## The Language: Key Terms
+
+Every field has its jargon, and venture capital is no exception. Here are the terms you'll hear constantly and need to understand deeply if you're building software in this space.
+
+### Performance Metrics
+
+**DPI (Distributions to Paid-In Capital)** is the most important metric for LPs because it measures actual cash returned. Take the total cash distributed to LPs and divide by the total capital called from LPs. If a fund called $80 million and has distributed $120 million, the DPI is 1.5x. This is real money in LPs' bank accounts, not theoretical value.
+
+**TVPI (Total Value to Paid-In Capital)** includes both distributions and the current value of remaining investments. If that same fund has distributed $120 million and its remaining portfolio companies are valued at $40 million, the TVPI is 2.0x ($160M / $80M). This metric is less reliable than DPI because it depends on valuations of unrealized investments, which might not materialize.
+
+**IRR (Internal Rate of Return)** is the annualized return accounting for the timing of cash flows. It's time-weighted, so returning 3x in 3 years is much better than returning 3x in 10 years, and IRR captures that difference. The calculation is complex. It's finding the discount rate where the net present value of all cash flows equals zero.
+
+**MOIC (Multiple on Invested Capital)** is the simplest: total value divided by total invested. 3x MOIC means you tripled the money, regardless of whether it took 3 years or 10 years. LPs care more about IRR because time matters, but MOIC is easier to understand and communicate.
+
+### Investment Instruments
+
+Funds don't always receive simple equity. Different instruments have different terms, conversion mechanics, and implications.
+
+**Equity (Preferred Stock)** is direct ownership in the company. When a fund invests in a Series A, they typically receive preferred stock with specific rights: liquidation preferences, board seats, protective provisions, anti-dilution protection. This is straightforward ownership but comes with negotiated terms that affect outcomes in exits.
+
+**Common Stock** is what founders and employees typically own. It has no special preferences or protections. Investors rarely take common stock except in unusual circumstances.
+
+**SAFE (Simple Agreement for Future Equity)** is a convertible instrument popular in early-stage investing, invented by Y Combinator. The investor gives the company money now, and the SAFE converts into equity later during a priced round. SAFEs have a valuation cap (the maximum valuation at which they convert) and/or a discount (investors get a better price than the next round). They're "simple" because they defer valuation negotiations until later.
+
+**Convertible Note** is similar to a SAFE but structured as debt. The investor loans money to the company with interest, and the note converts to equity in a future priced round. Like SAFEs, they typically have a cap and/or discount. The key difference is that convertible notes have a maturity date and accrue interest, though in practice they almost always convert rather than being repaid.
+
+Why this matters: Each instrument type needs different data modeling. A SAFE doesn't give you ownership percentage until it converts. A convertible note has interest calculations. Tracking what will happen when instruments convert requires understanding caps, discounts, and the terms of future rounds.
+
+### Funding Rounds
+
+Venture capital happens in stages, each with different characteristics, valuations, and investor types.
+
+**Pre-Seed** is the earliest stage, often before the company has launched or has meaningful revenue. Rounds are typically $100K-$1M, often from angel investors, very early stage funds, or accelerators. Companies might just have a prototype or idea. High risk, very early.
+
+**Seed** is when the company has proven some concept but is still early. Rounds are typically $500K-$3M. The company might have initial product-market fit, some revenue, or strong early traction. Seed funds specialize in this stage, along with angel investors and some multi-stage funds doing early deals.
+
+**Series A** is the first institutional round for most companies. Rounds typically $3M-$15M. The company has proven product-market fit and needs capital to scale. They usually have meaningful revenue or user growth. Series A funds look for clear metrics: revenue growth, customer acquisition, team strength. This is where things get more formal: boards, proper governance, structured metrics.
+
+**Series B** is about scaling what works. Rounds typically $15M-$50M. The company has proven they can grow and now needs capital to expand: new markets, more sales people, larger team. Clear business model, strong revenue, maybe even profitability or a clear path to it.
+
+**Series C and beyond** are later stages focused on scaling faster or expanding into new areas. Rounds can be $50M-$200M+. These companies are usually mature businesses with strong revenue, clear unit economics, and paths to exit. The focus shifts from "will this work?" to "how big can this get?"
+
+**Growth/Late Stage** rounds are the final stages before IPO or acquisition. Rounds can be $100M-$500M+. Companies are often profitable or nearly so, with hundreds of millions in revenue. These look more like PE deals than traditional venture.
+
+Why this matters: The stage determines everything about how you track the investment. Seed investments might not have board seats or detailed metrics. Series B+ investments require comprehensive tracking, board management, and detailed reporting. Your software needs to handle the complexity appropriate to each stage.
+
+### Valuation Terms
+
+When a fund invests in a company, the **pre-money valuation** is what the company was worth before the investment. If a company has a $10 million pre-money valuation and the fund invests $3 million, the **post-money valuation** is $13 million. The fund owns $3M / $13M = 23% of the company. This math is fundamental to tracking ownership.
+
+**Pro-rata rights** give investors the option to invest in future rounds to maintain their ownership percentage. If the fund owns 23% and the company raises a Series B, pro-rata rights let the fund invest enough to stay at 23% instead of getting diluted down. These rights are negotiated as part of each investment and need to be tracked because they affect follow-on investment decisions.
+
+**Liquidation preferences** determine who gets paid first in an exit. A "1x liquidation preference" means the fund gets their money back before other shareholders see anything. In a $50 million exit, if the fund invested $10 million with a 1x preference, they get $10 million off the top, and the remaining $40 million is split among all shareholders. More complex preferences (2x, participating preferences) exist and dramatically affect exit proceeds.
+
+**Dilution** is what happens when a company issues new shares, reducing everyone's percentage ownership. If the fund owns 20% and the company raises a new round, the fund might get diluted down to 15%. Tracking dilution accurately requires understanding every financing event in the company's history and how it affected the cap table.
+
+## How GPs Actually Make Money
+
+It's worth understanding the economics of running a VC fund, because they shape everything about how funds operate and what they prioritize.
+
+### Management Fees: Keeping the Lights On
+
+The standard structure is 2% of committed capital annually, though this varies. For a $100 million fund, that's $2 million per year. Over a typical 10-year fund life, that's $20 million total. Many funds step down fees after the investment period ends - 2% for the first 5 years while actively investing, then 1.5% or less while just managing existing investments.
+
+This fee revenue needs to cover everything: partner salaries, analyst salaries, office rent, travel, legal fees, accounting, software, data, subscriptions, events, everything. For a small fund, 2% often isn't enough to cover a large team, which is why many seed funds are small teams or solo GPs. For larger funds, management fees can support bigger teams with specialized roles.
+
+### Carry: The Real Upside
+
+Carried interest is where GPs make real money, but only if the fund performs. The standard is 20% of profits, but this only kicks in after returning LP capital and paying preferred return (if applicable).
+
+Here's an example: a $100 million fund fully deploys its capital into portfolio companies. Years later, the portfolio exits for $300 million total. First, $100 million goes back to LPs (their capital back). That leaves $200 million in profit. LPs get 80% of the profit ($160 million), and GPs get 20% ($40 million) as carry.
+
+That $40 million carry is split among the GPs according to the partnership agreement. A large fund with many partners might split it widely; a small fund with two GPs might split it 50/50. Either way, carry is the incentive to generate returns, and it dwarfs management fees for successful funds.
+
+## The Process: How Deals Flow
+
+Understanding how a deal moves through a fund from first contact to portfolio company helps explain what data needs to be tracked and what workflows need to be supported.
+
+It starts with **research and thesis development**. Many funds don't just wait for deals to come to them. They proactively research macro trends, emerging technologies, and market dynamics to build investment theses. A fund might spend months researching AI infrastructure, talking to experts, mapping the ecosystem, and developing a point of view on where opportunities exist. This research informs what they look for and where they focus their sourcing efforts.
+
+Then comes **sourcing**. Deals come in through warm introductions from other founders, VCs, or friends in the network. They come from cold emails to a fund's info@ address. They come from events, demo days, conferences. But increasingly, deals also come from proactive outreach based on research. A fund identifies interesting companies from their market mapping and reaches out directly. Someone at the fund (often a junior team member) tracks all these incoming leads and flags which came from proactive research versus inbound.
+
+Then comes **screening**, the fast filter. Does this even fit the fund's thesis? Right stage, right geography, right sector? A quick look at the deck, maybe a 15-minute call. Most deals get rejected at this stage with a polite pass. It's about volume management. A fund might see 500 deals a year and screen out 450 of them quickly.
+
+For deals that pass screening, **due diligence** begins. This is where the fund does real work: market research, customer reference calls, technical evaluation if it's a technical product, financial model review, background checks on founders, legal review of the company structure and contracts. Different funds have different diligence processes, from lightweight for seed investments to extensive for growth equity deals lasting months.
+
+The **investment committee** (IC) is where investment decisions are made. Someone at the fund (the deal champion) presents the opportunity to the partnership. There's discussion, debate, questions. The committee decides: pass, invest, or "not now but circle back later." The decision might be subject to conditions: "yes, but only if we can lead the round" or "yes, but at this valuation, not their asking price."
+
+If the IC says yes, the **closing** process begins. Lawyers draft and negotiate documents. Terms get finalized. The company, fund, and other investors sign the paperwork. The fund issues a capital call to LPs. Money is wired. Equity is issued. The company is now officially in the portfolio.
+
+Finally, **post-investment** begins. The fund tracks the portfolio company's progress, supports them where possible, attends board meetings if they have a seat, participates in future financing rounds, and eventually helps guide the company toward an exit. This phase lasts years and generates most of the ongoing work for a fund.
+
+Each stage has different data needs, different participants, and different workflows. A deal moves through these stages over weeks or months, and the fund needs to track where each deal is, who's responsible, what's been done, and what needs to happen next.
+
+## The Timeline: Fund Lifecycle
+
+VC funds operate on long timelines, typically 10 years with options to extend. Understanding this lifecycle helps explain why different features matter at different times.
+
+**Year 0** is fundraising. The GPs are pitching LPs, negotiating terms, signing commitment letters. No investing is happening yet because there's no fund yet. Once they reach first close (the minimum threshold), the fund legally exists and investing can begin.
+
+**Years 1-4** are the investment period. The fund is actively looking at deals, making new investments, deploying capital. This is when deal flow management matters most. The fund is building its portfolio, typically making 20-50 investments depending on stage and strategy. Capital calls go out regularly as new investments are made.
+
+**Years 5-10** are the harvesting period. The fund has largely stopped making new investments except follow-ons in existing portfolio companies. The focus shifts to helping portfolio companies grow and exit. As companies exit, distributions flow to LPs. The fund's performance metrics start becoming real as DPI increases. Reporting to LPs becomes more focused on realized returns rather than unrealized valuations.
+
+**Years 10+** are extension periods, if needed. Some portfolio companies haven't exited yet. The fund extends its life to continue managing those remaining investments until they can exit. It's not ideal (LPs prefer getting their money back sooner), but it's common in venture capital where exits take time.
+
+This timeline shapes what software features matter when. A young fund cares about deal flow and making investments efficiently. A mature fund cares about portfolio monitoring and LP reporting. A fund in harvesting mode cares about tracking exits and calculating distributions. The priorities shift as the fund ages.
+
+## Common Misconceptions
+
+Before we tie this all together, let's clear up some common misunderstandings that lead to bad technical decisions.
+
+**"VCs have a pile of cash to invest"** - No, they have LP commitments. The cash is still in LP bank accounts until it's called. This means funds care deeply about capital call management and timing. Software that assumes cash is always available will break workflows.
+
+**"All VC funds work the same way"** - Not at all. Stage, size, and strategy create vastly different operations. A seed fund operates nothing like a growth equity fund. Software built for one won't work for the other without major changes. This is why understanding YOUR fund matters so much (Chapter 2).
+
+**"Exits happen quickly"** - The average time from investment to exit is 7-10 years. Sometimes longer. This long timeline means data needs to be preserved, systems need to be maintained for years, and investors care about tracking companies over long periods. Features that assume quick exits will feel broken.
+
+**"VCs just pick winners"** - Portfolio construction matters more than most people realize. A fund needs enough shots on goal to find winners, but not so many that they're spread too thin. Follow-on investment strategy matters. How active the fund is post-investment matters. It's not just picking; it's managing a portfolio over time.
+
+**"Fund performance is easy to calculate"** - IRR calculations are notoriously tricky to get right. Waterfall calculations have edge cases. Unrealized valuations are subjective. Performance reporting to LPs needs to be precise because it's often audited. This is not something to build carelessly.
+
+## Why This All Matters for Building Software
+
+Now that you understand how VC funds actually work, the technical implications become clearer.
+
+Every concept we covered translates directly into how you build software:
+
+**LPs and GPs** aren't just "users" in your system. They're different entities with different data access needs. LP data is confidential - GPs often can't see other LPs' information. GPs need collaborative access to deals and portfolio data. You need role-based access control that reflects these real-world boundaries.
+
+**The distinction between management company and fund** means you need multi-entity data models from day one. Expenses, fees, and investments all flow through different legal entities. Reports need to aggregate data correctly across entities. Getting this wrong early means painful refactoring later.
+
+**Capital calls** are not just transactions; they're workflows. You need to track who's been notified, who's paid, who's late. You need to generate official notices, track receipt of funds, handle exceptions. This is a core workflow that needs to be reliable, auditable, and compliant.
+
+**Investments over time** means you can't just track "current ownership." You need to track every round, every valuation change, every dilution event. Your data model needs to support temporal data, versioning, and the ability to recreate historical views. Questions like "what was our ownership percentage at Series A?" need to be answerable years later.
+
+**Performance metrics** like IRR and DPI need to be calculated correctly. These aren't approximate. They're used in official LP reports and audits. Getting IRR wrong by implementing a buggy formula will erode trust fast. These calculations need to be precise, testable, and documented.
+
+**The investment process** from sourcing to post-investment isn't a linear pipeline. Deals can move backward, skip stages, or sit dormant for months. Your deal flow system needs to support the messy reality of how deals actually flow, not an idealized pipeline.
+
+**The fund lifecycle** means the features you need change over time. A young fund needs robust deal flow management. An older fund needs sophisticated portfolio reporting. Your system needs to grow with the fund, or at minimum, you need to understand which features matter for your fund's current stage.
+
+**Confidentiality and compliance** aren't afterthoughts. VC data is highly sensitive. Funds have legal obligations to LPs, portfolio companies, and regulators. Audit trails, data security, access controls, and privacy protections need to be baked in from the start, not added later.
+
+Understanding these fundamentals doesn't just help you build a VC system. It helps you build the *right* VC system. You'll make better decisions about data models, you'll prioritize the right features, and you'll avoid costly mistakes that come from not understanding the domain.
+
+In the next chapter, we'll move from general VC knowledge to understanding your specific fund - because not all VC funds are created equal, and the type of fund you're building for dramatically changes what you need to build.

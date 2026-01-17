@@ -1,0 +1,234 @@
+---
+title: "Common Mistakes When Starting at a Fund"
+description: "Learn the seven common mistakes developers make when joining VC funds and how to avoid them before they cost you months of work."
+---
+
+## Overview
+
+You've learned the VC fundamentals. You've analyzed your specific fund. Now you're ready to start building, right?
+
+Not quite.
+
+Even with solid understanding of VC and your fund's needs, there are common mistakes that almost every technical person makes when they join a VC fund. I've made most of them. Other CTOs at funds have made them. Developers building VC software have made them. This chapter exists so you don't have to learn these lessons the expensive way.
+
+## Mistake #1: Jumping In Too Early
+
+Picture this: It's your first week at a new fund. You walk in and immediately see problems everywhere. Excel spreadsheets tracking deals. Manual processes for everything. No proper CRM. Partners complaining about how hard it is to find information. You're a builder. You see technical problems. You want to fix them.
+
+So you start coding. You're excited. You're making progress. You're shipping features. Three months later, you demo your beautiful new deal flow tool to the partners. They're polite. They say it's nice. But nobody uses it. Or worse, they try it for a week and go back to their spreadsheets. You built the wrong thing.
+
+This happens because you're hired to "build technology," so you feel pressure to ship quickly. Technical problems are comfortable. Domain problems are messy and ambiguous. Building feels productive. Research feels slow. You want to prove your value fast, and the best way you know how is to write code.
+
+But here's the reality: the first one to three months should be mostly research and observation, not building. You need to understand how the fund actually operates, not how they say they operate in the interview. You need to understand what the real pain points are, not what people think they are when you ask them directly. You need to know what's been tried before and why it failed. Most importantly, you need to understand what workflows are essential versus nice-to-have.
+
+<Tip>
+**Author Note: Jumping in too early at Inflection**
+
+At Inflection, we started by building a huge sourcing platform including agents, multiple data sources, and a graph database for modeling relationships. It showed some promising results, but didn't deliver the value we were hoping for. The interesting companies surfaced by the tool? We were already talking to them. Growing the haystack didn't help us find better needles.
+</Tip>
+
+### How to Avoid It
+
+Spend your first two weeks just observing. Shadow each GP for a day. Attend all the partner meetings. Watch how deals actually flow through the organization. Take notes. Ask questions. But don't propose solutions yet. You don't know enough.
+
+<Tip>
+**Author Note: Shadowing GPs led to Kepler**
+
+[Kepler](https://svrgn.substack.com/p/introducing-kepler-inflections-home), Inflection's research platform, wouldn't have come about if it weren't for shadowing the GPs in a few deals and realizing how much research we were doing on the companies. That research wasn't being stored in a great way, it was too siloed. So we decided to build a research platform. The insight came from observation, not from asking "what should I build?"
+</Tip>
+
+Weeks three and four, start documenting what you've seen. Map out the current workflows, not the ones they told you about in the interview, but the ones you actually observed. Identify pain points. Document the current tools and data sources they're using. Interview each team member individually. You'll be surprised how different the story is when you talk to people one-on-one versus in a group setting.
+
+Weeks five through eight, prove you understand the domain before building anything big. Fix one small, obvious problem. Automate one manual process that everyone agrees is annoying. Show that you get it. Build trust before building big.
+
+<Tip>
+**Author Note: Starting small at Inflection**
+
+At Inflection, I dipped my toes in by helping to automate the process of creating valuation memos for our audit process. This was a big win for the ops team which had to compile these manually, and it let us test out some AI frameworks for future tasks. Small win, real value, built trust.
+</Tip>
+
+By week nine, you should have enough context to propose a real technical strategy. Get buy-in on priorities. Now you can start building the right things.
+
+Watch out for these red flag phrases, especially from yourself: "Let's just start building and iterate." "This should be quick to throw together." "We can always change it later." These are all signs you're jumping in too early.
+
+There's one exception: if the fund is two people and has literally no technology at all, you may need to move faster. But even then, start small and specific. Build one thing that solves one problem. Then build the next thing.
+
+## Mistake #2: Not Aligning on Buy vs. Build Strategy
+
+Here's a nightmare scenario: You spend three months building a custom deal flow CRM. You're proud of it. It's tailored perfectly to the fund's workflow. Then in a partner meeting, the managing partner casually mentions they're also evaluating Affinity and Harmonic. Wait, what? Nobody told you they were considering buying software.
+
+Or the reverse happens. You do your homework, research the available tools, and propose using Affinity for deal flow management. The GPs look confused. They hired a "CTO." They expected you to build something custom. They're visibly disappointed that you want to buy instead of build.
+
+This misalignment happens all the time. The role of "CTO at a VC fund" means different things to different people. Some funds want someone to build custom software. Others want someone to evaluate, buy, and integrate existing tools. Most want some combination, but nobody makes that explicit upfront. Add to this that fund partners often don't know what's available to buy in the VC software ecosystem (it's niche and not well marketed), and you don't know either when you first start. Sometimes there's internal politics: some partners want to build custom tools, others just want to buy and move on.
+
+So when should you buy versus build? Commodity functionality should almost always be bought. CRM basics, email tracking, document signing—these are solved problems. Complex compliance requirements like fund administration and LP reporting should definitely be bought unless you have deep expertise and significant resources. Standard integrations with banks, DocuSign, and other services work better when you're using established tools. If you're a small team without significant engineering resources, buy more and build less. And if speed to value matters more than perfect fit, buying gets you there faster.
+
+Build when you have true differentiation. If your fund has a novel sourcing strategy or unique thesis that requires custom tooling, that's worth building. Build when you have highly specific workflows that genuinely don't map to existing tools (but be honest about whether they're truly unique). Build when you have the engineering resources to maintain what you create. Build when you've actually tried existing tools and they've failed for specific, articulable reasons. And build when integration between multiple systems is the main value you're creating.
+
+There's also a middle ground: build on top of bought software. Use vendor APIs to extend functionality. Build internal tools that integrate with external platforms. Create custom reporting and analytics on top of existing data. This often gives you the best of both worlds.
+
+The key is to have this conversation explicitly, not assume everyone's on the same page. In the interview process, ask directly: "What do you expect me to build versus buy?" Ask what tools they've already evaluated or tried. Ask about their budget for software versus engineering salaries. In your first month, create a landscape document of available VC tools. Categorize them: deal flow, portfolio management, LP reporting, fund administration. Propose a "buy/build/integrate" strategy and get explicit sign-off on the approach.
+
+Have the hard conversation early: "Here's what exists that we could buy. Here's what we'd need to build. Here's the tradeoffs in terms of time, cost, and fit. What's more important to you: speed or perfect fit?" Get this alignment before you write a single line of code or sign a single software contract.
+
+<Tip>
+**Author Note: What not to build anymore**
+
+I've seen funds try to build custom CRMs, which used to be meaningful differentiation. But now you can get most features off the shelf with tools like Affinity or Attio. As a solo engineer or small team, I wouldn't spend time building a new one from scratch.
+
+The same goes for data scraping. I've seen engineers spend weeks building LinkedIn scrapers. While that data is important, your time as an engineer is the most expensive resource. Don't waste it when you can buy data from providers like Harmonic, Sourcescrub, or others. Build on top of purchased data, don't recreate it.
+</Tip>
+
+## Mistake #3: Not Having Enough Resources
+
+You're the only technical person at a five-person fund managing $50M. In your first week, you collect all the requests. They want a custom deal flow CRM. Portfolio tracking dashboards. Automated LP reporting. A public-facing fund website. Internal knowledge management. Data pipelines from five different sources. You write it all down. You start estimating.
+
+This is two to three years of work. Minimum. For one person.
+
+This happens because funds fundamentally underestimate software complexity. They're used to buying software, where you pay a subscription and it just works. They don't understand what goes into building and maintaining custom software. And honestly, you probably overestimate what you can ship alone too. You're optimistic. You're capable. You think you can move fast. Nobody scoped the work before hiring you. The interview focused on vision and potential, not realistic timelines. The "how hard can it be?" mentality prevails.
+
+Here's what one technical person can realistically do: integrate and manage existing tools, build one or two custom internal tools (simple ones), automate some workflows, create custom reports and dashboards, and manage data infrastructure. That's a full plate. That's valuable work.
+
+Here's what one technical person cannot do: build and maintain a full custom stack from scratch, replace Carta, Affinity, and DocuSign with custom-built alternatives, provide 24/7 support for critical systems, or keep up with every new request that comes in.
+
+You need to set expectations early. During the interview process, ask to see the list of desired projects. Ask about team size and budget for contractors or vendors. Be honest about what's realistic. Discuss priorities: what actually comes first? In your first month, audit all the requested projects. Estimate time for each one generously (double your initial estimate, then add 50%). Show the math: "This is three years of work. I'm one person. Let's talk about priorities."
+
+Set clear expectations about what you can ship in Q1, what requires buying software, what requires hiring another person, and what you probably shouldn't do at all. Get help where you need it. Budget for contractors for specific projects. Use agencies for one-off work like website design. Automate with no-code tools where possible. Buy software for non-differentiating work.
+
+Watch out for red flags: "We need custom everything" usually means nobody's thought about buy versus build. "Buying software is expensive" ignores that building is far more expensive when you factor in your time. "You'll have help... eventually" is code for "we have no concrete plans to hire." "Just get something working, we'll improve it later" is how you accumulate crushing technical debt.
+
+<Tip>
+**Author Note: The evolving backlog at Inflection**
+
+When we started building at Inflection, we had this huge backlog of products we thought we needed (you can [find a lot of them in this list](https://svrgn.substack.com/p/an-engineering-approach-to-venture) from before I was hired). If I was to execute on all these projects, I would always be context switching and stretched too thin. The key was constantly setting realistic priorities with the partnership, spelling out what it would actually take to build things, and forcing them to give feedback on what mattered most.
+
+Over time, many of those "critical" needs changed. The fund evolved. More importantly, more products became available to buy off the shelf. Half the backlog became irrelevant or solvable with purchased tools. That huge initial list wasn't wrong, it just wasn't static. Keep re-prioritizing based on what's actually needed today, not what seemed important six months ago.
+</Tip>
+
+## Mistake #4: Over-Engineering for Scale You Don't Have
+
+You're building a deal flow tool for a fund that sees 200 deals per year. You sit down to design the architecture. Microservices, obviously. Event-driven workflows for flexibility. Caching layers for performance. Kubernetes for orchestration. Horizontal scaling for growth. This is "best practice," after all. This is how you build software "the right way."
+
+Six months later, you've spent all your time on infrastructure. The tool still doesn't actually work for the core use case. The fund is frustrated. Partners are asking why this is taking so long. You're debugging Kubernetes networking issues instead of shipping features.
+
+This happens constantly when engineers come from tech companies with real scale problems. You're used to building for millions of users. You want to build "the right way" from the start. Over-engineering feels professional and impressive. Simple solutions feel almost embarrassingly basic. Sometimes it's even resume-driven development: you want to list these technologies on your LinkedIn.
+
+But here's the reality. A $100M VC fund's scale looks like this: five to twenty employees, 200 to 500 deals per year in the funnel, 20 to 50 portfolio companies, 20 to 100 LPs, and quarterly reporting (not real-time dashboards). This is not scale. This is a small business. You can run all of this on a single Postgres database, a monolithic application, simple cron jobs, and basic authentication.
+
+You don't need microservices. You don't need Kubernetes. You don't need event-driven architecture. You don't need complex caching. You don't need auto-scaling. What you need is to ship something that works.
+
+Start with the simplest thing that could possibly work. Single application server. One database. Cron jobs for batch processing. Deploy to Heroku, Render, or Railway with a single command. Manual processes for rare operations that happen once a quarter.
+
+Add complexity only when you have a specific problem. The database is slow? Add indexes and optimize queries. Deployments are risky? Add tests and CI/CD. The server goes down? Add monitoring and auto-restart. But don't build complex caching because something "might be slow someday." Build it when it's actually slow today.
+
+Know your actual constraints. How many users? Probably fewer than 20. How much data? Probably less than a gigabyte. How many requests per minute? Probably fewer than 100. What's acceptable downtime? Probably an hour is totally fine. This is an internal tool, not a public API.
+
+You'll know you need more complexity when you have actual performance problems (not hypothetical ones), when the simple solution is causing real pain (not theoretical pain), when you've exhausted simple optimizations, and when the ROI of additional complexity is crystal clear.
+
+<Tip>
+**Author Note: Kubernetes at a VC fund**
+
+Our initial sourcing tool at Inflection was set up on Kubernetes for workflow management, using Terraform. All the sins I told myself I wouldn't commit. Over a week, we transitioned to Modal. We ended up saving ourselves a bunch of money on resources we didn't need and had a much more reliable tool. Sometimes you need to catch yourself mid-over-engineering and course correct.
+</Tip>
+
+## Mistake #5: Not Understanding Data Sensitivity and Compliance
+
+You build a cool deal flow tool. You add a public API so you can integrate with other services. You set up Slack notifications for new deals. You log everything to Datadog for monitoring. You use OpenAI's API to automatically analyze companies and generate summaries. It all works great. Modern development practices. Best in class tools.
+
+Then someone points out you've exposed confidential deal information, LP identities, and fund strategy to multiple external services. Disaster.
+
+A year later, during an LP audit, auditors ask for historical valuations with complete audit trails. You can't produce it. Your system overwrites old values. The auditors are not happy.
+
+VC confidentiality and compliance requirements are fundamentally different from consumer apps. In consumer tech, data is often public or semi-public. You move fast and break things. But in VC, there are real confidentiality obligations and audit requirements. The challenge is finding the right balance between security and actually building useful things.
+
+VCs tend to care about this less than PE funds, where everything is top secret. VCs frequently need to syndicate deals with other investors, so some information sharing is necessary. Different firms have different risk tolerances. Some are more open, others more locked down. Your job isn't to make those decisions. It's to understand where your partnership stands on that spectrum and build accordingly.
+
+Here's what's typically highly sensitive: LP identities and commitments (never public, often contractually confidential), competitive deal flow, detailed diligence notes (legal liability if they leak), fund performance details (LPs only), portfolio company board materials, and specific investment terms (covered by NDAs). You have legal obligations through NDAs, LP agreements, and securities regulations.
+
+VC funds also get audited. Annual audits by accounting firms. LP due diligence before commitments. Sometimes regulatory audits. Auditors need historical data, audit trails, source documentation, and process documentation. This isn't optional, but the level of rigor varies by fund size and structure.
+
+In your first month, have explicit conversations: "What data can never leave our systems?" "What are our confidentiality obligations?" "What's our risk tolerance around third-party tools?" "What audit requirements do we have?" Review the actual LP agreements. Understand the constraints, but also understand where there's flexibility.
+
+The trap is being so paranoid about confidentiality that you can't build anything useful. No third-party tools means no productivity. No AI means no automation. No integrations means manual processes everywhere. That's not the answer either.
+
+Find the balance your partnership is comfortable with. Maybe you can use AI APIs for non-sensitive tasks but not for deal flow analysis. Maybe you can use cloud logging with proper data filtering. Maybe you use third-party tools but with specific data exclusions. The key is understanding the risks you're putting the firm at, getting explicit approval for your approach, and documenting the decisions.
+
+Build for both confidentiality and auditability where it matters. Role-based access control. Audit logs. Data encryption at rest. Version history on financial data. Soft deletes, not hard deletes. But don't go overboard on things that don't matter. Document your processes for the things that need documentation.
+
+It's not your call what gets shared with whom. But it is your responsibility to understand the boundaries, propose solutions that work within them, and make the tradeoffs explicit.
+
+<Tip>
+**Author Note: Work with compliance, don't fight it**
+
+At a small fund, there's an advantage: you often *are* compliance. You get to make the rules. At larger funds (or funds that are part of larger organizations), you need to build strong relationships with the CISO and internal IT teams.
+
+If you're running fast and want to try the latest tools, building trust with compliance is critical to moving quickly. Figure out what's important to them. Pick your battles. But most importantly, collaborate with them rather than maintaining the usual "devs vs. compliance" battle that persists at most companies. They're usually great people who want to help, not block you.
+</Tip>
+
+## Mistake #6: Building in a Vacuum
+
+You spend three months building a beautiful portfolio dashboard. You've thought of everything. Custom visualizations. Drill-down capabilities. Export features. It's elegant. It's fast. It's well-architected. You're proud.
+
+You demo it to the partners. They look at it. "This is nice," one says. "But it's not what we need." They wanted something completely different. You built in isolation without regular feedback. Three months of work that missed the mark.
+
+You wanted to surprise them with a finished product. You were embarrassed to show ugly work-in-progress. You thought you understood the requirements from those initial conversations. The partners are busy with deals and you didn't want to bother them with constant check-ins. You're used to longer release cycles from your previous job where you'd ship quarterly.
+
+But internal tools need constant feedback. Partners are experts at investing, not at articulating product requirements. They think in terms of outcomes and workflows, not features and data models. Requirements evolve as they start using early versions and realize what actually matters in practice. Workflows evolve as the fund grows. Your initial understanding is always incomplete, no matter how many questions you asked. This isn't a failure on anyone's part. It's just how product development works when you're solving complex, nuanced problems.
+
+The cost of building wrong is severe. Three months of wasted time. Loss of trust (now they doubt you understand their needs). Missed opportunity cost (you could have been building the right thing). Technical debt from choosing the wrong architecture for the wrong problem.
+
+Show your work weekly, even if it's ugly and incomplete. Get feedback on direction, not polish. "Here's what I'm thinking for the deal flow view. Does this make sense?" Start with wireframes. Sketch the UI in Figma or on paper before writing code. Get sign-off on the concept, then build it.
+
+Ship incrementally. Build the simplest possible version first. Get it in their hands. Learn what's wrong. Iterate based on real usage, not hypothetical requirements.
+
+Create feedback loops. Weekly demos to the team. A Slack channel for feature requests. Regular one-on-ones with heavy users. Usage analytics showing what features actually get used. Embrace being wrong: "I built this based on what I thought you needed. What's wrong with it?" "Here are three options. Which direction feels right?" "This is a prototype to test the concept."
+
+The right cadence: daily async updates on what you're working on. Weekly, show progress and get feedback on direction. Bi-weekly, demo working features to the full team. Monthly, review the roadmap and priorities to make sure you're still building the right things.
+
+<Tip>
+**Author Note: Embedding with the business**
+
+Building in a vacuum is a huge problem at Inflection because we're remote. We try to have dedicated product sessions every six weeks, but it's still a challenge.
+
+A better model was at EQT, where we had one of the deal team members work as a product manager for Motherbrain during the rollout to the Private Equity organization. Working closely with the Deal Team and Digi Team in Motherbrain Labs was invaluable for quickly iterating on projects.
+
+The more time you can steal from the investors, the better. But keep in mind: this is often a +1 activity for them, not part of their job description. They're doing this on top of their actual work, so make their time count.
+</Tip>
+
+## Mistake #7: Treating Investors Like Engineers
+
+You're in a partner meeting presenting your solution. "We'll use a denormalized data model with materialized views for performance," you explain. The partners nod politely. The conversation moves on quickly. You realize they're not engaging with the technical details because those aren't the details that matter to them.
+
+Or you sit down with a partner expecting them to write detailed requirements with acceptance criteria, like product managers do. They describe the outcome they want: "I want better deal tracking." You ask for more specifics about fields and workflows. The conversation stalls. You're speaking different languages.
+
+You're used to working with other engineers where technical explanations are how you communicate. You expect someone to write specs and acceptance criteria because that's how product development works at tech companies. But investors are experts at evaluating companies and making investment decisions. Their expertise is in understanding markets, founders, and business models, not in articulating software requirements.
+
+Investors think in outcomes, not implementations. "I want to see which deals are getting stale." "I need to prepare for quarterly LP calls." "I can't remember who introduced this company." The value is in solving the problem, not in how you solve it technically. They trust you to make the technical decisions.
+
+Translate technical decisions into business value. Don't say "I'll implement real-time sync with a WebSocket connection." Say "The data will update immediately when anyone makes changes." Show, don't tell. Don't explain the architecture. Show a working prototype. Let them experience the solution.
+
+Ask outcome-focused questions. Not "What fields should be in the Deal model?" Ask "What do you need to know about a deal to make a decision?" Their requirements come as business needs, not technical specifications. Extract requirements through conversation and observation. Build something, show it, refine it based on how they actually use it.
+
+Be the translator. They describe the business problem: "I want better deal tracking." You translate that into technical requirements: deal stage visibility, activity history, and reminders. You build that. You show it. You adjust based on their feedback. This is your expertise. This is why they hired you.
+
+There are exceptions. With the CFO or fund administrator, you can get technical. They understand data, processes, and compliance. Technical discussions are productive. They can help specify requirements. With engineers you hire later, technical depth is expected. Implementation discussions are valuable. Architecture reviews are helpful. But with GPs? Focus on outcomes.
+
+<Tip>
+**Author Note: Wear the product hat**
+
+This has been a big learning for me being the only engineer at Inflection: you need to wear the product hat, probably more than the engineering hat. Be really great at showing new features, but also explaining when and how to use them. Write documentation. Set metrics and follow up on those metrics. Kill what isn't working.
+
+You own the outcomes, not just the code. That's the real job.
+</Tip>
+
+## The Bottom Line
+
+These seven mistakes are common and understandable. Every technical person joining a VC fund faces some version of these challenges. The difference between success and frustration isn't talent or experience. It's knowing the mistakes exist and planning accordingly.
+
+Before you write any code, spend one to three months understanding the fund. Align explicitly on buy versus build strategy. Be realistic about what you can accomplish with available resources. Start simple and add complexity only when you have specific problems to solve. Understand data sensitivity and confidentiality from day one. Build for auditability, not just functionality. Get feedback early and often. Communicate in outcomes, not technical implementations.
+
+Don't jump straight into building. Don't assume you know what's needed based on interviews alone. Don't over-engineer for hypothetical scale. Don't expose confidential data through modern development practices. Don't ignore compliance requirements until audit season. Don't build in a vacuum for months without feedback. Don't expect detailed specifications from non-technical partners. Don't use technical jargon when discussing solutions with GPs.
+
+The mistakes aren't failures. They're learning opportunities if you catch them early. Most developers make at least half of these mistakes in their first year. The goal isn't perfection. The goal is awareness and course correction.
+
+You've now learned the fundamentals of how VC works, how to analyze your specific fund, and the common mistakes to avoid. In Part 2, we'll move from understanding VC to actually building software for it, starting with the most important technical decision: how to model VC data.

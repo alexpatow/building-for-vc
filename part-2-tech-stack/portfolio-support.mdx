@@ -1,0 +1,103 @@
+---
+title: "Portfolio Support"
+description: "Understanding what portfolio support actually looks like, what can and can't be automated, and why strategy matters before building tools."
+---
+
+## Overview
+
+Portfolio support is where many VCs want to differentiate. The pitch is compelling: we don't just write checks, we help our portfolio companies succeed. We provide resources, connections, and tools that make founders more likely to build successful companies.
+
+Technology and data can help with some of this. But portfolio support is fundamentally different from the other parts of the VC tech stack we've covered. Research platforms, sourcing tools, CRMs, and fund operations are infrastructure that supports your investment process. Portfolio support tools are meant to help your founders run their companies better.
+
+The challenge is that most portfolio support doesn't fit into repeatable products. Every company has different needs. What helps one founder find customers might be irrelevant to another. The patterns that justify building software (doing the same thing repeatedly, at scale, with clear value) often don't apply to portfolio support.
+
+This chapter covers what portfolio support actually looks like, what can and can't be automated, and why you should start with small projects before building platforms. More importantly, it covers why you need to figure out your strategy around portfolio support before committing engineering resources.
+
+## What VCs Actually Help With
+
+When VCs talk about portfolio support, they usually mean a handful of core areas. Some of these can be enhanced with technology and data. Others are fundamentally relationship-driven and hard to automate.
+
+**Talent**: Helping portfolio companies hire key people. This is the most common area where VCs add value. You might maintain a network of executives and operators, make introductions to candidates, or help with recruiting strategy. Technology can help here: tracking talent networks, surfacing relevant candidates, managing introduction workflows. But the core value is still your personal network and ability to sell candidates on the opportunity.
+
+**Fundraising help**: Supporting portfolio companies as they raise their next round. Introducing them to other investors, helping them prepare materials, coaching them through the process. Some of this can be systematized: maintaining investor relationship data, tracking which investors invest in which spaces, understanding optimal timing. But the actual value is your relationships with other investors and your judgment about fundraising strategy.
+
+**Customer discovery**: Helping portfolio companies identify potential customers, especially for B2B companies. You can use datasets from PitchBook, LinkedIn, and other sources to identify companies that fit your portfolio company's ideal customer profile. The portfolio company still needs to do the actual sales work, but you can give them a targeted list of prospects rather than having them start from scratch. This is similar to sourcing but for finding customers instead of finding investments.
+
+**Exit planning**: Helping companies think about acquisition opportunities or IPO readiness. Tracking potential acquirers, understanding market dynamics, making introductions to bankers or other companies. Some data and analysis can support this, but it's fundamentally about relationships and judgment.
+
+**What's hard to automate**: Strategic advice, board participation, product feedback, go-to-market strategy. These require deep context about the specific company, market understanding, and judgment that comes from experience. Technology doesn't help much here. This is where being a good board member matters, not being good at building data tools.
+
+The key insight is that technology can enhance the connection-making and information-organizing parts of portfolio support. It can't replace the relationships, judgment, and specific expertise that make portfolio support actually valuable.
+
+## The Project vs. Product Problem
+
+Most portfolio support work doesn't fit into repeatable products. This is the fundamental challenge that makes it different from other parts of your tech stack.
+
+**Why products work elsewhere**: Your CRM is a product because every fund tracks relationships and deals the same way. Fund operations software is a product because every fund needs to manage capital calls and LP reporting. The workflows are similar enough across users that building a product makes sense.
+
+**Why portfolio support is different**: Every company has different needs at different times. A deep tech hardware company needs help hiring mechanical engineers and navigating government contracts. A consumer social app needs help with growth marketing and app store optimization. A B2B SaaS company needs help with enterprise sales. There's no common workflow or repeatable pattern.
+
+You can't build "the portfolio support platform" because there's no single thing that all portfolio companies need. What you end up with are projects. One-off tools or analyses that help specific companies with specific problems.
+
+**What this means in practice**: When a portfolio company asks for help finding enterprise customers, you might build a quick analysis of potential customers in their space. When another company is hiring a CTO, you might pull together data on relevant candidates from your network. These are valuable, but they're projects, not products. The next company will have different needs.
+
+The implication is that you should be very careful about investing significant engineering time in portfolio support platforms. You'll likely build something that helps 2-3 companies but doesn't generalize. Meanwhile, you could have been improving your research platform or deal flow tools that help your entire investment process.
+
+## Start Small and Validate
+
+The biggest mistake funds make with portfolio support is building platforms before validating that founders actually want them.
+
+**The pattern**: A fund decides they want to differentiate on portfolio support. They imagine a platform where founders can find candidates, get customer intros, access market data, connect with each other. They spend six months building it. Founders don't use it. The reasons vary: it doesn't solve a painful enough problem, founders already have other solutions, the UX isn't good enough to displace existing tools, or the value proposition isn't clear.
+
+You've wasted engineering time. More importantly, you've wasted founder time asking them to test and give feedback on something that doesn't help them.
+
+**Start with projects instead**: When a founder asks for help, solve that specific problem. Build a lightweight tool or analysis. See if they use it. See if other founders have the same need. If you do the same type of project 5-10 times, then maybe it's worth building a product.
+
+This is the opposite of how you'd approach building internal tools. For research platforms or deal flow management, you can design the system upfront because you understand your own workflow. For portfolio support, you're building for your founders' workflows, which are diverse and changing. You need validation before committing to products.
+
+## Different Technology Strategies for Portfolio Support
+
+Funds approach technology and data for portfolio support very differently. There's no consensus on what the right strategy is. Understanding the range of approaches helps you figure out where you want to be.
+
+**No technology investment**: Many funds, including large ones, explicitly don't invest engineering or data resources in portfolio support. The reasoning is that it doesn't scale and they have limited resources. They'd rather focus their data and engineering teams on research platforms, deal flow tools, and fund operations, things that directly improve their investment process. This is a legitimate strategy that lets you focus limited technical resources where they create the most leverage.
+
+**Opportunistic projects**: Help with specific data or technology projects when founders ask, but don't build systematic infrastructure. If a portfolio company needs customer discovery help, you might pull together a prospect list. If another needs market analysis, you might do that analysis. But you're not building platforms or repeatable tools. This is where most funds with data teams end up. You use your technical capabilities to help when it makes sense, but you don't commit to systematic portfolio support.
+
+**Platform-driven support**: Make portfolio support a core part of your value proposition and invest significant resources (people and technology) in it. YC is the extreme version: their portfolio support infrastructure (Bookface for founder connections, Work at a Startup for talent, Startup School) is as important as their capital. This requires real commitment: dedicated platform teams, engineering resources, and making it central to your strategy. Only makes sense if you have the scale, community, and strategic focus to make it work.
+
+**Strategic technology investment**: Focus on specific high-value areas where technology creates real leverage. Maybe you build tools for customer discovery because many of your B2B portfolio companies need that. Or you build recruiting workflows because you invest heavily in helping portfolio companies hire. This is selective: you identify areas where technology helps repeatedly and invest there, but you don't try to build comprehensive portfolio support infrastructure.
+
+**Example of platform approach**: YC's Bookface is a social network for YC founders. They can ask questions, make introductions, find candidates, get advice from other founders. It works because YC has critical mass (thousands of founders) and strong culture (founders want to help each other). Building something like this only makes sense if you have similar scale and community. For most funds, the effort wouldn't be justified.
+
+## Figure Out Your Strategy First
+
+Before you build anything for portfolio support, be explicit about your strategy. What will you do? What won't you do? Why?
+
+**Questions to answer**:
+- Is portfolio support core to our value proposition or supplementary?
+- Do we have the resources (people, time, network) to deliver meaningful support?
+- What specific types of support can we actually provide better than founders could get elsewhere?
+- Will data and technology genuinely make our support more valuable, or are we building because it sounds good?
+- If our engineering time is limited, will we get more value from portfolio support or from improving our internal tools?
+
+## Real Example: What Actually Gets Used
+
+<Tip>
+**Author Note: Portfolio Support Projects**
+
+At Inflection, we've focused portfolio support on two areas: hiring support and customer discovery. When portfolio companies need help finding talent or when B2B companies need to identify potential customers, we can pull together prospect lists from datasets.
+
+What's notable is that these have all been projects, not products. We've never built a repeatable tool that multiple portfolio companies use regularly. Every request is different, that's ok, it's fun to work with the founders.
+</Tip>
+
+## The Bottom Line
+
+Portfolio support is fundamentally different from other parts of the VC tech stack. Most of it doesn't fit into repeatable products. Every company has different needs at different times.
+
+Start with projects, not platforms. When a founder asks for help, solve that specific problem. If you solve the same problem repeatedly, then consider whether a product makes sense. But don't build portfolio support infrastructure before validating that founders actually need it. You'll waste your time and theirs.
+
+More importantly, figure out your strategy first. Some funds don't do systematic portfolio support at all, and that's fine. Others make it central to their value proposition with dedicated teams and resources. Most are somewhere in the middle. Be explicit about where you are and align your engineering resources accordingly.
+
+If your goal is to build data and technology infrastructure for your fund, you'll likely get more value from improving your research, deal flow, or operations tools than from building portfolio support platforms. Portfolio support is where human judgment, relationships, and specific expertise matter most. Technology can enhance these things at the margins, but it can't replace them.
+
+In the next chapter, we'll look at fundraising tools, which help you raise your next fund and manage LP relationships.

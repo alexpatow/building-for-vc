@@ -1,97 +1,86 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Building for Venture Capital"
+description: "A technical guide to building technology for VC funds - from understanding the domain to shipping production systems."
 ---
 
-## Setting up
+## Welcome
 
-Get your documentation site up and running in minutes.
+This book is for technical people building software for venture capital funds: data engineers, software engineers, CTOs, and technical founders creating tools for the VC ecosystem.
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
+It's about understanding how VC works, analyzing your specific fund's needs, and building the right technology without common mistakes. It combines domain knowledge with practical technical guidance from real experience at funds like Inflection and EQT.
 
-## Make it yours
+## What This Book Covers
 
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
-  </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
-  </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
-  </Card>
-</Columns>
-
-## Create beautiful pages
-
-Everything you need to create world-class documentation.
-
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
-
-## Need inspiration?
+The book is organized into three parts:
 
 <Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
+  title="Part 1: Understanding VC"
+  icon="building-columns"
+  href="/part-1-understanding-vc/what-is-a-vc-fund"
 >
-  Browse our showcase of exceptional documentation sites.
+  Learn how venture capital funds actually work, understand your specific fund's needs, and avoid common mistakes developers make when starting at a fund.
 </Card>
+
+<Card
+  title="Part 2: The VC Tech Stack"
+  icon="layer-group"
+  color="#4B5563"
+>
+  Explore the technology landscape at VC funds - what tools matter, when to build versus buy, and real examples from working funds. (Coming soon)
+</Card>
+
+<Card
+  title="Part 3: Technical Foundations"
+  icon="code"
+  color="#4B5563"
+>
+  Deep dives into data providers, modeling, entity resolution, warehousing, integrations, security, and emerging trends like MCP and AI agents. (Coming soon)
+</Card>
+
+## Who This Is For
+
+**You should read this if you:**
+- Just joined a VC fund as an engineer or CTO
+- Are building tools or infrastructure for venture capital
+- Want to understand how VC funds operate from a technical perspective
+- Need practical guidance on data modeling, integrations, and architecture for VC
+
+**This book is not:**
+- An introduction to venture capital investing
+- A guide to becoming a VC or raising money
+- Generic startup or tech company advice
+
+## Getting Started
+
+<CardGroup cols={2}>
+  <Card
+    title="Start with Part 1"
+    icon="book-open"
+    href="/part-1-understanding-vc/what-is-a-vc-fund"
+  >
+    Begin with the fundamentals of how VC funds work - essential context before building anything.
+  </Card>
+  <Card
+    title="Quick Reference"
+    icon="bolt"
+    href="/quickstart"
+  >
+    Skip to specific topics or use this as a reference guide if you're already familiar with VC basics.
+  </Card>
+</CardGroup>
+
+## About the Author
+
+Alex Patow is a technical leader with experience building infrastructure at venture capital and private equity funds, including Inflection and EQT. This book distills lessons from building real systems for real funds, including both successes and expensive mistakes.
+
+The book reflects an opinionated, practical approach based on what actually works in production, not theoretical best practices that look good on paper but fail in reality.
+
+## How to Read This Book
+
+If you're new to VC, read Part 1 sequentially to build foundational understanding. If you're building specific features, jump to relevant chapters in Parts 2 and 3.
+
+Each chapter is self-contained but builds on concepts from earlier chapters. Code examples, real-world cases, and architectural decisions are included throughout.
+
+<Note>
+This book is continuously updated as the VC technology landscape evolves. The principles remain constant, but specific tools and recommendations reflect current best practices.
+</Note>

@@ -1,0 +1,396 @@
+---
+title: "Data Modeling for Venture Capital"
+description: "How to structure VC data, the critical distinction between companies and deals, and practical patterns for modeling the investment lifecycle."
+---
+
+## Overview
+
+How you model your data determines what questions you can answer, how fast you can build new features, and whether your systems can adapt as your fund's needs evolve. Good data modeling makes everything easier. Bad data modeling creates technical debt that slows you down for years.
+
+VC data modeling has specific challenges. Companies change constantly (funding rounds, employee growth, pivots). Your relationship with companies evolves through multiple stages (sourcing, diligence, investment, portfolio monitoring). People move between companies, have overlapping experiences, and maintain networks that matter for deal flow. Data comes from multiple sources with conflicting information. And you need to track history because understanding what you knew when you made an investment decision is important for learning from outcomes.
+
+This chapter covers how to model venture capital data: the core entities and their relationships, the critical distinction between companies and deals, how to handle temporal data that changes over time, and how to structure your data warehouse using dbt to manage complexity as you add more data sources.
+
+The focus is on practical patterns that work for VC funds, not abstract database theory. These patterns come from building real systems at Inflection and dealing with messy, real-world data from multiple vendors.
+
+## Core Entities and Relationships
+
+Your data model will vary based on what you're building (CRM, research platform, portfolio dashboard), but most VC systems share common entities.
+
+**Companies**
+
+The companies you're tracking: startups you might invest in, portfolio companies, competitors, acquirers. Core attributes include name, description, website, founding date, location, sector, and stage.
+
+Companies are the center of your data model. Most other entities relate to companies in some way.
+
+**Deals**
+
+Your fund's relationship with a company. This is separate from the company itself (covered in detail in the next section). A deal represents an investment opportunity: you sourced Company X, you're in diligence, you invested, you passed.
+
+One company can have multiple deals. You might pass on their seed round, then invest in their Series A. Each is a separate deal.
+
+**People**
+
+Founders, executives, employees. People you've met, people at companies you're tracking, people at portfolio companies. Core attributes include name, email, LinkedIn URL, current company, current role.
+
+People are connected to companies through roles (covered below). The same person might work at multiple companies over time or even simultaneously (advisor roles, board seats).
+
+**Roles**
+
+The connection between people and companies. A role captures: this person works at this company in this capacity during this time period. Essential for tracking company history and founder backgrounds.
+
+Model roles as a separate entity rather than embedding them in the people or companies table. This lets you track full history: a founder worked at Google (2018-2020), then started Company X (2020-present), while also advising Company Y (2021-present).
+
+**Education**
+
+Where people went to school, what they studied, when. Similar to roles, model this separately so you can capture multiple degrees and overlapping education (joint degrees, part-time programs).
+
+This matters for analysis: which universities produce the most founders in your focus areas? Do Stanford CS grads in your pipeline perform differently than MIT grads? You need structured education data to answer these questions.
+
+**Funding Rounds**
+
+Capital raised by companies: seed, Series A, Series B, etc. Attributes include round type, amount raised, valuation (pre and post), date announced, date closed, lead investors, participating investors.
+
+Funding rounds are messy in early-stage VC. Not every company announces rounds. SAFE notes are common but often unreported. Data vendors have incomplete information. Your data model needs to handle this uncertainty (covered in "Dealing with Messy Reality" below).
+
+**Investors and Funds**
+
+Other VC firms, angels, corporate investors who participate in rounds. You care about investors for co-investment patterns, warm intro paths, and understanding who's active in your sectors.
+
+**Critical: Model the hierarchy as Investor → Fund → Funding Round**, not just Investor → Funding Round. Here's why this matters:
+
+One investor (the firm) can have multiple funds. Sequoia Capital has multiple funds. a16z has multiple funds. Your own firm probably has multiple funds (Fund I, Fund II, etc.). When tracking who invested in a company, you need to know which specific fund made the investment, not just which firm.
+
+This matters because different funds from the same investor can make different investment decisions. Inflection Mercury Fund might pass on a deal while Inflection Mars Fund invests. If you model this as just "Inflection invested," you lose critical information.
+
+```sql
+-- Investors table (the firms)
+CREATE TABLE investors (
+  id UUID PRIMARY KEY,
+  name TEXT NOT NULL, -- "Sequoia Capital"
+  type TEXT, -- VC, Angel, Corporate
+  headquarters TEXT,
+  focus_areas TEXT[]
+);
+
+-- Funds table (specific funds within firms)
+CREATE TABLE funds (
+  id UUID PRIMARY KEY,
+  investor_id UUID REFERENCES investors(id),
+  name TEXT NOT NULL, -- "Sequoia Capital Fund XIV"
+  vintage_year INTEGER,
+  fund_size NUMERIC,
+  status TEXT -- Active, Deployed, Closed
+);
+
+-- Funding round participations (which funds invested in which rounds)
+CREATE TABLE funding_round_participants (
+  id UUID PRIMARY KEY,
+  funding_round_id UUID REFERENCES funding_rounds(id),
+  fund_id UUID REFERENCES funds(id), -- Links to specific fund, not just investor
+  amount_invested NUMERIC,
+  is_lead BOOLEAN
+);
+```
+
+Some data providers (some are better at this than others) provide fund-level detail. When available, capture it. When it's not available (data provider only knows "Sequoia invested" but not which Sequoia fund), you can create a placeholder fund or link directly to the investor, but structure your schema to support fund-level data when you have it.
+
+This distinction has bitten many VC data systems. Get it right from the start.
+
+**LPs (Limited Partners)**
+
+The individuals and institutions who invest in your fund. If you're building fund operations tools or LP portals, you need LP entities with PII (names, addresses, tax information, investment amounts, distributions received).
+
+**LPs can be either individuals or institutions**, which creates modeling headaches. You might have HNWIs (high net worth individuals) who are people, and institutional LPs (pension funds, endowments, family offices, fund of funds) which are organizations. These have different attributes:
+
+- **Individual LPs**: Personal name, SSN/tax ID, home address, bank account for distributions
+- **Institutional LPs**: Organization name, EIN, authorized signatories, wire instructions, contact people
+
+You can model this with a type field and nullable columns, or with separate tables for individual vs. institutional LPs linked through a common LP identifier. Either works, choose based on whether you need to query across both types frequently (single table with type) or whether they're managed separately (separate tables).
+
+The list above isn't exhaustive. Depending on what you're building, you might also model: board seats, advisors, customers (for B2B portfolio companies), competitors, acquisitions, exits, fund entities (if you manage multiple funds), and more. Start with the entities your application actually needs, not a comprehensive schema you think you might need someday.
+
+## Companies vs. Deals: The Critical Distinction
+
+The most important modeling decision in VC systems is separating companies from deals.
+
+**A company is an entity that exists independently of your fund.** Stripe is a company. It has founders, funding rounds, employees, a product, customers. Stripe exists whether or not your fund ever talks to them.
+
+**A deal is your fund's relationship with a company.** You sourced Stripe, you met with the founders, you decided to invest (or pass), you negotiated terms, you closed the investment. The deal represents your fund's interaction with that company.
+
+**Why separate them?**
+
+Your fund can have multiple deals with the same company. You might:
+- Pass on their seed round (Deal 1: Status = Passed)
+- Invest in their Series A two years later (Deal 2: Status = Closed)
+- Consider a follow-on in their Series B (Deal 3: Status = In Diligence)
+
+Each deal has different properties: deal source, who at your fund is leading it, what stage it's at, when you first talked to them, what your investment thesis was, what terms you negotiated. These properties belong to the deal, not the company.
+
+Meanwhile, company properties (employee count, funding history, product description) are shared across all deals. If you update Stripe's employee count, that change applies regardless of which deal you're looking at.
+
+**In practice, this means separate tables:**
+
+```sql
+-- Companies table
+CREATE TABLE companies (
+  id UUID PRIMARY KEY,
+  name TEXT NOT NULL,
+  website TEXT,
+  description TEXT,
+  founded_date DATE,
+  location TEXT,
+  sector TEXT,
+  stage TEXT,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+);
+
+-- Deals table
+CREATE TABLE deals (
+  id UUID PRIMARY KEY,
+  company_id UUID REFERENCES companies(id), -- Foreign key to company
+  deal_name TEXT, -- "Stripe Series A"
+  status TEXT, -- Sourced, Meeting, Diligence, IC, Term Sheet, Closed, Passed
+  source TEXT, -- How we found this company (warm intro, Harmonic, conference)
+  lead_investor UUID REFERENCES people(id), -- Who at our fund is leading
+  initial_contact_date DATE,
+  last_activity_date DATE,
+  investment_amount NUMERIC,
+  ownership_percentage NUMERIC,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+);
+```
+
+When you query deals, you join to companies to get company information. When you're analyzing companies (building market maps, tracking sectors), you query companies directly without caring about deals.
+
+This separation is fundamental to building VC software that works. If you try to embed deals into the companies table or vice versa, you'll create a mess that's hard to query and impossible to extend. As emphasized in Chapter 7 on CRM, this distinction is one of the most important architectural decisions you'll make.
+
+## Dealing with Messy Reality
+
+VC data is messy. Your data model needs to account for this rather than assuming perfect information.
+
+**Don't assume GPs make one investment per company**
+
+As covered above, model deals separately from companies. Your fund might invest multiple times, or pass then later invest, or invest then later decline a follow-on. The data model needs to support multiple deals per company.
+
+**Don't assume perfect funding round data**
+
+Early-stage companies raise money in ways that aren't always captured in data sources. SAFE notes, convertible notes, rolling closes, stealth rounds. Crunchbase and PitchBook miss things, especially for pre-seed and seed companies.
+
+Your data model should allow for:
+- Unknown or estimated funding amounts
+- Approximate dates (Q2 2024, not a specific day)
+- Rounds that might not exist (rumored but unconfirmed)
+- Multiple rounds of the same type (Seed, Seed Extension, Seed II)
+
+Don't build validation rules that enforce "Series B must come after Series A" or "funding amounts must be known." Real companies break these rules constantly.
+
+**People have overlapping experiences and education**
+
+Founders often work multiple jobs simultaneously: running their startup while advising other companies, sitting on boards, teaching part-time. They pursue education while working: part-time MBAs, executive programs, online courses.
+
+This is why roles and education must be separate tables with start and end dates, not single fields in the people table. You need to capture overlapping time periods.
+
+```sql
+-- Roles table (separate from people and companies)
+CREATE TABLE roles (
+  id UUID PRIMARY KEY,
+  person_id UUID REFERENCES people(id),
+  company_id UUID REFERENCES companies(id),
+  title TEXT,
+  role_type TEXT, -- Employee, Founder, Advisor, Board Member
+  start_date DATE,
+  end_date DATE, -- NULL if current
+  is_current BOOLEAN,
+  created_at TIMESTAMP
+);
+
+-- Education table (separate from people)
+CREATE TABLE education (
+  id UUID PRIMARY KEY,
+  person_id UUID REFERENCES people(id),
+  institution TEXT,
+  degree TEXT, -- BS, MS, MBA, PhD
+  field_of_study TEXT,
+  start_date DATE,
+  end_date DATE,
+  created_at TIMESTAMP
+);
+```
+
+With this structure, you can query "show me all founders who worked at Google" (join people → roles → companies where company = Google and role_type = Employee). You can analyze "which schools produce the most founders in fintech" (join people → roles → companies → education, filter for fintech sector and founder roles).
+
+If you tried to store current role and education as fields in the people table, you'd lose history and couldn't answer these questions.
+
+## Temporal Data and History
+
+Companies change constantly. Employee count grows. Funding rounds happen. Valuations change. Products pivot. You need to decide what history to keep and how to model it.
+
+**Start with append-only tables**
+
+The simplest approach: never update or delete data. When you get new information about a company, append a new row with a timestamp. This creates an audit trail of every change.
+
+```sql
+-- Append-only company data from PitchBook
+CREATE TABLE pitchbook_company_changes (
+  id UUID PRIMARY KEY,
+  company_id UUID,
+  fetched_at TIMESTAMP, -- When we got this data
+  raw_json JSONB, -- Raw response from PitchBook API
+  name TEXT,
+  description TEXT,
+  employee_count INTEGER,
+  funding_total NUMERIC,
+  -- ... other fields
+  created_at TIMESTAMP
+);
+```
+
+Every time you fetch company data from PitchBook (daily, weekly, or on-demand), you insert a new row. You never update existing rows. This preserves full history: you can see what PitchBook reported about a company on any date.
+
+**Use dbt to transform to latest values**
+
+Append-only tables are great for history but inconvenient to query. You usually want the latest information, not every historical value.
+
+Use dbt (covered in Chapter 18) to transform append-only staging tables into intermediate tables with current values:
+
+```sql
+-- dbt model: models/intermediate/pitchbook_companies.sql
+-- Gets the latest record per company from append-only staging data
+
+SELECT DISTINCT ON (company_id)
+  company_id,
+  name,
+  description,
+  employee_count,
+  funding_total,
+  fetched_at
+FROM {{ ref('pitchbook_company_changes') }}
+ORDER BY company_id, fetched_at DESC
+```
+
+Now you have both: `pitchbook_company_changes` (full history) and `pitchbook_companies` (latest values). Applications usually query the latest values table. When you need to analyze "how did this company change over time?" you go back to the append-only table or create a custom table for those types of queries.
+
+**What history actually matters**
+
+Storage is cheap these days. Rather than deciding what history to keep and what to discard, it's often simpler to just keep everything in your append-only staging tables. A year of daily company snapshots for thousands of companies costs pennies in Postgres or cloud data warehouse storage.
+
+The practical considerations are query performance and data warehouse costs (if you're using Snowflake or BigQuery where you pay per query). But even there, you're usually querying the transformed and materialized "latest values" tables, not the full historical append-only tables.
+
+**Keep all history in staging tables.** When you need to analyze "how did this company change over time?" you have the data. When you don't need it, you're not querying it, so it doesn't cost anything. This is simpler than trying to decide upfront what historical data might be valuable someday.
+
+The main exception: if you're storing truly high-volume data (real-time metrics, streaming data, logs), you might need retention policies. But for standard VC data (company attributes, funding rounds, people roles), just keep it all.
+
+## The dbt Approach to Data Modeling
+
+As you add more data sources (PitchBook, LinkedIn, Harmonic, your CRM, scraped data), your data model needs structure to stay manageable. Follow dbt's layered approach: staging → intermediate → marts.
+
+**Staging: Raw data to columns**
+
+Staging models take raw JSON or CSV data from external sources and convert it to structured columns. These are append-only: every fetch creates new rows. Minimal transformation, just making the data queryable.
+
+```sql
+-- models/staging/pitchbook/stg_pitchbook__company_changes.sql
+-- Takes raw JSON from PitchBook API, extracts fields
+
+SELECT
+  raw_json->>'id' AS external_id,
+  (raw_json->>'name')::text AS name,
+  (raw_json->>'description')::text AS description,
+  (raw_json->>'employeeCount')::integer AS employee_count,
+  (raw_json->>'fundingTotal')::numeric AS funding_total,
+  fetched_at,
+  created_at
+FROM raw_pitchbook_data
+```
+
+One staging model per source table. If you're pulling from PitchBook, LinkedIn, and Harmonic, you have separate staging models for each.
+
+**Intermediate: Latest values per source**
+
+Intermediate models take staging data and get the latest value per entity. These are still source-specific: `pitchbook_companies`, `linkedin_companies`, `harmonic_companies`.
+
+```sql
+-- models/intermediate/pitchbook_companies.sql
+SELECT DISTINCT ON (external_id)
+  external_id,
+  name,
+  description,
+  employee_count,
+  funding_total,
+  fetched_at AS pitchbook_updated_at
+FROM {{ ref('stg_pitchbook__company_changes') }}
+ORDER BY external_id, fetched_at DESC
+```
+
+Intermediate models can also do joins, calculations, and business logic that's specific to understanding that source's data. But they don't combine sources yet.
+
+**Marts: Combined for specific use cases**
+
+Mart models combine data from multiple sources for specific analyses or applications. This is where you deal with conflicting information from different vendors.
+
+**Option 1: Make hierarchical choices**
+
+Decide which source wins for each field, based on your assessment of data quality (covered in Chapter 17):
+
+```sql
+-- models/marts/companies_enriched.sql
+-- Combines multiple sources, choosing best value for each field
+
+SELECT
+  c.id,
+  COALESCE(pb.name, li.name, c.name) AS name,
+  pb.description AS description, -- PitchBook best for descriptions
+  li.employee_count AS employee_count, -- LinkedIn best for headcount
+  pb.funding_total AS funding_total, -- PitchBook best for funding
+  c.website,
+  c.sector
+FROM companies c
+LEFT JOIN pitchbook_companies pb ON c.pitchbook_id = pb.external_id
+LEFT JOIN linkedin_companies li ON c.linkedin_id = li.external_id
+```
+
+This approach gives downstream applications a single "best available" value for each field. Simpler to use, but you lose information about where data came from and what alternatives existed.
+
+**Option 2: Keep multiple columns**
+
+Store data from each source in separate columns and let applications decide which to use:
+
+```sql
+-- models/marts/companies_enriched.sql
+-- Keeps separate columns for each source
+
+SELECT
+  c.id,
+  c.name,
+  pb.description AS description_pitchbook,
+  li.description AS description_linkedin,
+  pb.employee_count AS employee_count_pitchbook,
+  li.employee_count AS employee_count_linkedin,
+  pb.funding_total AS funding_total_pitchbook,
+  pb.updated_at AS pitchbook_updated_at,
+  li.updated_at AS linkedin_updated_at
+FROM companies c
+LEFT JOIN pitchbook_companies pb ON c.pitchbook_id = pb.external_id
+LEFT JOIN linkedin_companies li ON c.linkedin_id = li.external_id
+```
+
+This preserves all information and lets applications make context-specific choices (use the most recent data, or prefer a specific source for certain use cases). More flexible, but more complex for downstream code to handle.
+
+**Which approach to use?**
+
+For most fields, make hierarchical choices in the mart. It's simpler and good enough. For fields where you genuinely need to see multiple sources (descriptions from different vendors sometimes emphasize different aspects of what a company does), keep separate columns.
+
+Don't try to keep separate columns for everything. Your queries become unmanageable and applications get confused about which field to use. Pick the fields where multiple perspectives actually matter.
+
+## The Bottom Line
+
+Accept that VC data is messy: multiple investments per company, imperfect funding data, overlapping experiences. Your data model should handle uncertainty and incomplete information.
+
+Use append-only staging tables (storage is cheap), transform through dbt to get latest values, combine sources in marts. Follow dbt's layered approach: staging → intermediate → marts.
+
+Start with what you actually need. Don't model everything upfront. Add entities as your systems grow.
+
+In the next chapter, we'll cover more advanced entity resolution: matching the same company across different data sources when they use different names, formats, and identifiers.

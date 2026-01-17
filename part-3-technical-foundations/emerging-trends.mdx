@@ -1,0 +1,232 @@
+---
+title: "Emerging Trends"
+description: "LLMs, MCP for connecting AI to internal data, agent orchestration, data extraction, file-native agents, and what hype to ignore."
+---
+
+## Overview
+
+Large language models are the most significant technology shift for VC infrastructure in the past decade. They've changed how you build tools, how you extract information from documents, how you analyze companies, and how fast you can ship features as a solo developer. If you're building VC technology in 2026 without using LLMs, you're working at a significant disadvantage.
+
+But LLMs are becoming baseline, not cutting-edge. Every fund is using ChatGPT. Every engineer is using Claude Code or Cursor. The competitive advantage isn't that you're using LLMs, it's how you're using them and what you're building on top of them.
+
+This chapter covers emerging trends that matter for VC technology: connecting AI to your internal data through MCP, the evolution from single coding sessions to orchestrated agent workflows, using LLMs for data extraction, why file-native agents are replacing RAG systems, and what hype to ignore. The focus is on practical developments that will change how you build over the next 1-2 years, not speculative futurism.
+
+## MCP: Connecting AI to Your Internal Data (or Just Use CLI Tools)
+
+Model Context Protocol (MCP) is Anthropic's standard for connecting AI assistants to data sources. Instead of copy-pasting data into Claude or building custom integrations for every tool, you build MCP servers that expose your data in a standardized way. Claude Code (and other MCP-compatible tools) can then query your internal systems directly.
+
+**That's the official story. Here's the alternative take:** Some developers argue MCPs are unnecessary abstraction and you should just write CLI tools instead. Claude Code can already execute bash commands and call CLI tools. A simple CLI script that queries your database or CRM is more universal than an MCP server (works with any tool that can run bash), simpler to build (no SDK required), and easier to maintain.
+
+The debate is ongoing, and it's not clear which approach will win. For now, here's practical guidance: if you're building something simple (query your database, fetch data from your CRM), start with a CLI tool. If you need features MCP provides (structured resources, interactive prompts, complex tooling), build an MCP server. Both approaches work for connecting AI to your internal data.
+
+**Why this matters for VC funds**
+
+You have valuable data scattered across systems: companies in your CRM, research in your data warehouse, portfolio metrics in various dashboards, memos in Google Docs or Notion. When you're building features or analyzing data, you currently need to manually pull information from each system, paste it into prompts, and context-switch constantly.
+
+MCP servers let AI tools access this data directly. You can ask Claude Code "show me all Series A companies in fintech we've talked to in the last 6 months" and it queries your CRM through an MCP server. You can ask "what are the latest metrics for our portfolio companies?" and it pulls from your data warehouse. The AI has the same access to data that you do, without you needing to be the intermediary.
+
+**The broader trend: Connecting AI to internal data**
+
+Whether through MCP servers, CLI tools, or other approaches, the key insight is that AI tools become dramatically more useful when they can access your internal data directly. Instead of being a general-purpose assistant, they become specialized tools that understand your fund's portfolio, pipeline, and research.
+
+This could mean:
+- Querying your CRM to find companies or check deal status
+- Running SQL against your data warehouse to analyze portfolio performance
+- Searching through investment memos and research to find relevant context
+- Pulling metrics from portfolio company dashboards
+
+The mechanism (MCP vs. CLI vs. something else) matters less than the outcome: AI tools that can answer questions about your fund's specific data without you manually feeding them information.
+
+**LLM providers moving up the stack**
+
+This trend represents LLM providers (Anthropic, OpenAI, etc.) moving beyond just providing model APIs to building full development environments with data access. Claude Code isn't just a better coding assistant - it's becoming a platform for building and using internal tools.
+
+Watch this space. The tooling will evolve, standards may change, but the direction is clear: AI tools will increasingly integrate with your internal systems rather than operating in isolation.
+
+## AI-Assisted Development: From Sessions to Orchestration
+
+Claude Code and Cursor have already changed how you build software. You can implement features in hours that previously took days. You can build entire applications as a solo developer that previously required small teams. This is the current state, and it's already transformative.
+
+But we're at the beginning, not the end, of AI-assisted development.
+
+**Current state: Single session, single developer**
+
+Today, you start a Claude Code session, describe what you want to build, and Claude helps you write code, debug issues, and ship features. When the session ends (or you hit context limits), you start fresh. You're still fundamentally working alone, just with a very capable assistant.
+
+This is already powerful. As covered in Chapter 13, choosing popular technology stacks (Next.js, TypeScript) means AI coding tools work better and you ship faster. But there are limits: complex features that span multiple services, background work that takes hours to run, coordinating changes across many files.
+
+**Near future: Agent orchestration**
+
+The next evolution is multiple AI agents working in parallel on the same codebase through git worktrees. Instead of one Claude Code session, you might have ten agents simultaneously:
+- Agent 1 implements the frontend UI for a new feature
+- Agent 2 builds the backend API endpoints
+- Agent 3 writes tests for both
+- Agent 4 updates documentation
+- Agent 5 handles database migrations
+- Agents 6-10 work on related features or refactoring
+
+Each agent works in its own git worktree (a separate working directory pointing to a different branch). They can work independently without conflicts. When agents finish their work, they create PRs that you review and merge. The agents coordinate through the git repository: they see each other's changes, can pull updates, and understand the evolving codebase.
+
+This isn't science fiction. The building blocks exist: git worktrees are a standard git feature, Claude Code can already work with git, and orchestration systems are being built. This will likely be production-ready within 1-2 years.
+
+**What this means for VC tech**
+
+Solo developers will be able to build and maintain even more ambitious systems. Building a research platform that currently takes you 3 months might take 2 weeks with orchestrated agents. Maintaining multiple internal tools that currently requires your full attention becomes more manageable when agents handle routine updates and testing.
+
+You don't need to do anything now except be aware this is coming. When agent orchestration tools mature, the same principles from Chapter 13 apply: use boring, proven technology that AI tools understand. Use TypeScript and Next.js. Structure your code clearly. Write good documentation. These practices make both current AI tools and future agent orchestration more effective.
+
+## LLM-Powered Data Extraction
+
+One of the most immediately useful applications of LLMs in VC infrastructure is extracting structured data from unstructured sources. Pitch decks, meeting notes, company websites, PDFs, transcripts - all contain valuable information that traditionally required manual data entry or fragile regex/NLP scripts to extract.
+
+LLMs are dramatically better at this than traditional approaches.
+
+**What works well**
+
+**Extracting metrics and facts from pitch decks**: Upload a pitch deck PDF, ask an LLM to extract revenue, growth rate, team size, funding history, and market size. The LLM can handle different formats, varying layouts, and implicit information that traditional parsing would miss.
+
+**Structuring meeting notes**: Feed meeting transcripts (from Granola, Otter, or similar tools) to an LLM and extract: companies discussed, people mentioned, follow-up actions, investment signals (positive or negative), next steps. This can automatically update your CRM with richer context than just "meeting happened."
+
+**Company information from websites**: Point an LLM at a company website and extract: what the company does, who the founders are, where they're based, what stage they're at, who their customers are. Better than scraping specific HTML elements (which break when websites change) because LLMs understand content semantically.
+
+**Standardizing data from multiple sources**: Different data vendors format information differently. LLMs can normalize data from PitchBook, LinkedIn, Crunchbase into consistent formats, handling variations in date formats, currency, company names, and other inconsistencies.
+
+**Example: At Inflection, we use Mistral for PDF reading**
+
+When processing pitch decks or investment memos, we use Mistral's PDF capabilities to extract structured data. The workflow:
+1. Upload PDF to Mistral API
+2. Prompt: "Extract the following information from this pitch deck: company name, founders, revenue (if disclosed), team size, funding raised to date, funding amount being raised, use of funds, key metrics."
+3. Request response as JSON with specific schema
+4. Validate with Pydantic or Zod (as covered in Chapter 20)
+5. Load extracted data into database or CRM
+
+This works well because Mistral (and other LLMs with document understanding) can handle varying document formats, understand context (distinguishing "funding raised to date" from "funding amount being raised"), and return structured output.
+
+**What to watch out for**
+
+**Hallucination**: LLMs sometimes generate plausible-sounding information that isn't in the source document. Always validate extracted data, especially for critical fields like funding amounts or valuations. Use confidence scores if the API provides them, and flag uncertain extractions for human review.
+
+**Consistency**: The same document processed multiple times might yield slightly different extractions (especially for ambiguous information). If you need perfect consistency, consider extracting once and storing the result, rather than re-extracting on demand.
+
+**Cost**: LLM APIs charge per token. Processing large documents (100-page due diligence reports) can get expensive quickly. Consider whether you need to extract from the entire document or if you can extract from specific sections.
+
+**When to use LLMs vs. traditional extraction**
+
+If the data format is completely consistent and you have hundreds of thousands of documents, traditional parsing (regex, NLP libraries) might be cheaper. But for most VC use cases - varied document formats, relatively small volumes (hundreds to thousands of documents), need for semantic understanding - LLMs are the right choice.
+
+## File-Native Agents: Beyond RAG and Knowledge Graphs
+
+For the past two years, the standard approach to helping AI systems work with large document collections has been RAG (Retrieval Augmented Generation): chunk documents into pieces, embed them as vectors, store in a vector database, retrieve relevant chunks based on query similarity, stuff them into context.
+
+This approach is becoming obsolete.
+
+**Why RAG was necessary**
+
+RAG existed as a workaround for limited context windows. If you could only fit 8K or 32K tokens into context, you couldn't give an AI access to hundreds of documents. So you chunked documents, embedded them, and retrieved only the most relevant pieces for each query.
+
+Knowledge graphs were a similar workaround: extract entities and relationships, build a structured graph, query it to find relevant information. Both approaches created intermediate representations (vectors, graphs) because we couldn't work with documents directly.
+
+**What changed**
+
+Context windows are now large enough (200K+ tokens for Claude) and getting larger. AI agents have file system access and can use tools (grep, specialized readers). Context compaction techniques let agents maintain understanding across indefinitely long sessions.
+
+This means agents can work with files directly, like humans do. No chunking, no embedding, no graph extraction. Just "here's a folder of investment memos, analyze the fintech companies we've evaluated."
+
+**File-native agents: Documents stay as documents**
+
+Instead of transforming documents into vectors or graphs, file-native agents:
+1. Have direct access to files in their native formats (PDFs, markdown, spreadsheets)
+2. Use tools to search and analyze (grep for keywords, specialized readers for PDFs)
+3. Maintain context through compaction (file system holds artifacts, compacted context holds insights)
+
+The key insight: files work because they're a shared abstraction. They're not optimal for agents or humans individually, but they're common ground both can navigate. This shared interface enables collaboration. If you create agent-only structures (vector databases, proprietary knowledge graphs), you break the collaborative aspect.
+
+**What this means for VC infrastructure**
+
+Don't build complex RAG systems for your internal documents. Don't extract entities from investment memos and build knowledge graphs. These are solutions to problems that no longer exist.
+
+Instead:
+- Store research as markdown files in git repositories
+- Give AI agents file system access to these repositories
+- Let agents use grep, read files, and search naturally
+- Focus on context compaction and session management, not retrieval algorithms
+
+If you're using a tool like Claude Code, it already works this way. It has file access, uses grep and other tools, and manages context effectively. You don't need to build additional infrastructure.
+
+**The one exception: External vendor data**
+
+For large external datasets (all companies from PitchBook, millions of records), traditional database queries are still appropriate. File-native agents are for documents and internal research, not for structured data at scale. Continue using your data warehouse and SQL for that use case (as covered in Chapter 18).
+
+**What about existing RAG systems?**
+
+If you already built a RAG system for your investment memos or research, you don't need to immediately rip it out. But when you're building new features or reconsidering your architecture, default to file-native approaches. They're simpler, more maintainable, and work better with modern AI tools.
+
+## What to Ignore
+
+With all the hype around AI, it's easy to waste time on things that don't matter for VC infrastructure. Here's what to ignore:
+
+**Don't fine-tune models**
+
+Foundation models (Claude, GPT-4) are good enough for every VC use case. Extracting data from pitch decks, analyzing companies, helping with code, answering questions about your portfolio - all work fine with base models and good prompts.
+
+Fine-tuning requires training data (thousands of examples), evaluation infrastructure, ongoing maintenance as models improve, and rarely produces meaningfully better results for VC tasks. It's solving a problem you don't have.
+
+**Don't add AI features just to say you have AI**
+
+Build features that solve actual problems. If the best solution uses LLMs, great. If it doesn't, don't force it. "AI-powered market maps" that are just LLM-generated text aren't better than human-curated market maps. "AI deal scoring" that's just prompting Claude with company data isn't better than GP judgment informed by structured data.
+
+Use AI where it creates real leverage: extracting information from documents, generating first drafts that humans edit, processing large volumes of unstructured data, helping engineers build faster. Don't use it for theater.
+
+**AGI timelines don't matter for your job**
+
+Whether AGI arrives in 3 years or 30 years doesn't change what you should build today. You're building tools for investment teams to evaluate companies, track portfolios, and make decisions. These tools need to work now and be maintainable by humans.
+
+Focus on shipping useful features, not preparing for artificial superintelligence.
+
+**Model selection is simpler than you think**
+
+Use Claude Sonnet for most tasks (coding, analysis, data extraction, general use). Use Claude Opus for tasks requiring deeper reasoning (complex due diligence analysis, thesis development, strategic planning).
+
+Don't spend time comparing dozens of models, building complex routing systems, or optimizing for tiny cost differences. Claude Sonnet is $3 per million input tokens. Unless you're processing billions of tokens, the cost differences between models are irrelevant compared to your engineering time.
+
+The model quality gap between leading providers (Anthropic, OpenAI) is small and getting smaller. Pick one (we recommend Claude for reasons beyond just model quality: Claude Code, MCP, better tool use), stick with it, and focus on building features rather than optimizing model selection.
+
+## Staying Current
+
+Technology for VC infrastructure evolves quickly. What's cutting-edge today becomes baseline within months. Here's how to stay up to date without spending all your time chasing trends:
+
+**General tech communities**
+
+- **X**: Follow engineers building in the AI space, VC tech practitioners, and companies building tools for VCs. The signal-to-noise ratio is low, but you'll see emerging tools and approaches before they're widely adopted.
+
+- **Hacker News**: The Show HN section surfaces new tools and libraries. The comments often contain practical wisdom from people who've tried things in production. Good for understanding what's actually working versus what's just hype.
+
+**VC-specific resources**
+
+- **[Data Driven VC](https://datadrivenvc.io/)**: Community and resources specifically for people building data infrastructure at VC funds. Real practitioners discussing real problems. Much better signal than general tech communities for VC-specific challenges.
+
+- **[Vestberry VC Day](https://vcday.vestberry.com/)**: Conferences focused on VC operations and technology. Good for understanding what larger funds are building and what tools are emerging in the ecosystem.
+
+**The balance: Follow loosely, adopt carefully**
+
+Don't try to implement every new tool or technique you see. Most trends don't matter for your fund. Follow these resources to build context about what's possible and what direction the industry is moving, but only adopt new approaches when they solve actual problems you're experiencing.
+
+The goal isn't to use the latest technology. It's to build tools that help your fund invest better. Sometimes that means adopting new approaches early. More often it means sticking with proven technology and focusing on execution.
+
+## The Bottom Line
+
+LLMs have fundamentally changed how you build VC technology, but they're becoming baseline rather than differentiating. The competitive advantage is how you integrate AI into your workflows, not that you're using AI.
+
+Connect AI tools to your internal data, whether through MCP servers, CLI tools, or other approaches. The mechanism matters less than the outcome: AI that can query your CRM, data warehouse, and research directly.
+
+Understand where AI-assisted development is heading: from single sessions to orchestrated agents working in parallel through git worktrees. Prepare by using technology stacks AI tools understand (TypeScript, Next.js, clear code structure) and writing good documentation.
+
+Use LLMs for data extraction from unstructured sources (pitch decks, websites, meeting notes). This works well and saves significant time. Watch for hallucination and validate extracted data. At Inflection, we use Mistral for PDF reading.
+
+Skip building RAG systems for internal documents. File-native agents with large context windows and file system access work better. Store research as files, give agents file access, let them use tools naturally. Focus on context compaction, not retrieval algorithms.
+
+Ignore the hype: don't fine-tune models, don't add AI for theater, don't worry about AGI timelines, and don't overcomplicate model selection. Just use Claude Sonnet for most things and Opus when you need deeper reasoning.
+
+The next 1-2 years will bring better tooling for agent orchestration, more mature MCP ecosystems, and continued improvements in model capabilities. But the fundamentals won't change: use AI where it creates real leverage, integrate it into actual workflows, and focus on solving problems rather than using the latest technology for its own sake.
+
+In the final chapter, we'll wrap up with principles that matter across everything we've covered: how to think about building technology for venture capital, what makes VC infrastructure different from other domains, and parting advice for practitioners.
