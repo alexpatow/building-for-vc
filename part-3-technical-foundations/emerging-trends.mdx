@@ -53,7 +53,7 @@ But we're at the beginning, not the end, of AI-assisted development.
 
 Today, you start a Claude Code session, describe what you want to build, and Claude helps you write code, debug issues, and ship features. When the session ends (or you hit context limits), you start fresh. You're still fundamentally working alone, just with a very capable assistant.
 
-This is already powerful. As covered in Chapter 13, choosing popular technology stacks (Next.js, TypeScript) means AI coding tools work better and you ship faster. But there are limits: complex features that span multiple services, background work that takes hours to run, coordinating changes across many files.
+This is already powerful. As covered in [Choosing Your Stack](/part-3-technical-foundations/choosing-your-stack), choosing popular technology stacks (Next.js, TypeScript) means AI coding tools work better and you ship faster. But there are limits: complex features that span multiple services, background work that takes hours to run, coordinating changes across many files.
 
 **Near future: Agent orchestration**
 
@@ -73,7 +73,7 @@ This isn't science fiction. The building blocks exist: git worktrees are a stand
 
 Solo developers will be able to build and maintain even more ambitious systems. Building a research platform that currently takes you 3 months might take 2 weeks with orchestrated agents. Maintaining multiple internal tools that currently requires your full attention becomes more manageable when agents handle routine updates and testing.
 
-You don't need to do anything now except be aware this is coming. When agent orchestration tools mature, the same principles from Chapter 13 apply: use boring, proven technology that AI tools understand. Use TypeScript and Next.js. Structure your code clearly. Write good documentation. These practices make both current AI tools and future agent orchestration more effective.
+You don't need to do anything now except be aware this is coming. When agent orchestration tools mature, the same principles from [Choosing Your Stack](/part-3-technical-foundations/choosing-your-stack) apply: use boring, proven technology that AI tools understand. Use TypeScript and Next.js. Structure your code clearly. Write good documentation. These practices make both current AI tools and future agent orchestration more effective.
 
 ## LLM-Powered Data Extraction
 
@@ -97,7 +97,7 @@ When processing pitch decks or investment memos, we use Mistral's PDF capabiliti
 1. Upload PDF to Mistral API
 2. Prompt: "Extract the following information from this pitch deck: company name, founders, revenue (if disclosed), team size, funding raised to date, funding amount being raised, use of funds, key metrics."
 3. Request response as JSON with specific schema
-4. Validate with Pydantic or Zod (as covered in Chapter 20)
+4. Validate with Pydantic or Zod (as covered in [Integrations and APIs](/part-3-technical-foundations/integrations-and-apis))
 5. Load extracted data into database or CRM
 
 This works well because Mistral (and other LLMs with document understanding) can handle varying document formats, understand context (distinguishing "funding raised to date" from "funding amount being raised"), and return structured output.
@@ -155,7 +155,7 @@ If you're using a tool like Claude Code, it already works this way. It has file 
 
 **The one exception: External vendor data**
 
-For large external datasets (all companies from PitchBook, millions of records), traditional database queries are still appropriate. File-native agents are for documents and internal research, not for structured data at scale. Continue using your data warehouse and SQL for that use case (as covered in Chapter 18).
+For large external datasets (all companies from PitchBook, millions of records), traditional database queries are still appropriate. File-native agents are for documents and internal research, not for structured data at scale. Continue using your data warehouse and SQL for that use case (as covered in [Data Warehousing](/part-3-technical-foundations/data-warehousing)).
 
 **What about existing RAG systems?**
 

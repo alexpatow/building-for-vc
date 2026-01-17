@@ -58,7 +58,7 @@ This is a starting point, not a comprehensive list. Many providers fall into mul
 
 **General guidance on choosing vendors:**
 - Start with what your fund actually needs (don't subscribe to everything)
-- Test accuracy with your portfolio companies (Chapter 17)
+- Test accuracy with your portfolio companies ([Data Quality](/part-3-technical-foundations/data-quality))
 - Consider whether you need comprehensive coverage or can start smaller
 - Factor in API access, documentation quality, and support
 
@@ -77,9 +77,9 @@ Most modern vendors provide REST APIs. You authenticate with an API token, make 
 - Can build interactive features (search, live updates)
 
 **Considerations:**
-- Rate limits (covered in Chapter 20)
+- Rate limits (covered in [Integrations and APIs](/part-3-technical-foundations/integrations-and-apis))
 - Per-request or per-entity costs (each API call might cost money)
-- Need to handle failures, retries, validation (Chapter 20)
+- Need to handle failures, retries, validation ([Integrations and APIs](/part-3-technical-foundations/integrations-and-apis))
 - API schemas change over time
 
 **File-based delivery**
@@ -139,7 +139,7 @@ Not all data providers are equally accurate or comprehensive. Quality varies sig
 
 **Accuracy vs speed tradeoffs**
 
-As covered in Chapter 17, some vendors prioritize accuracy (verify information before publishing, resulting in lag), others prioritize speed (publish quickly, may have more errors). PitchBook is accurate but slow. Signal providers are fast but incomplete.
+As covered in [Data Quality](/part-3-technical-foundations/data-quality), some vendors prioritize accuracy (verify information before publishing, resulting in lag), others prioritize speed (publish quickly, may have more errors). PitchBook is accurate but slow. Signal providers are fast but incomplete.
 
 Choose based on your use case. For LP reporting or board materials, use accurate vendors. For early sourcing signals, speed matters more than perfection.
 
@@ -209,7 +209,7 @@ Data vendors update their APIs more often than you'd expect. They rename fields,
 
 Pay attention to vendor communications. They usually announce breaking changes weeks in advance via email or their changelog. Set up notifications so you see these announcements. Budget time to update your integrations when schemas change.
 
-Use validation (Zod, Pydantic - covered in Chapter 20) to catch schema changes early. When a vendor changes their API, your validation will fail and alert you immediately, rather than silently corrupting your data.
+Use validation (Zod, Pydantic - covered in [Integrations and APIs](/part-3-technical-foundations/integrations-and-apis)) to catch schema changes early. When a vendor changes their API, your validation will fail and alert you immediately, rather than silently corrupting your data.
 
 **Collaborate with newer vendors**
 
