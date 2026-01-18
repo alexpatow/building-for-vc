@@ -1,0 +1,145 @@
+---
+title: "Resources"
+description: "Curated tools, guides, research, and references for building VC infrastructure"
+mode: "center"
+---
+
+A curated collection of resources for engineers, data people, and technical operators building technology at venture capital funds.
+
+---
+
+## Online Communities
+
+<CardGroup cols={1}>
+  <Card title="Data Driven VC" icon="chart-line" href="https://datadrivenvc.io/">
+    Community and resources for data-driven venture capital practitioners. Newsletters, events, and
+    insights on applying data science to VC.
+  </Card>
+</CardGroup>
+
+---
+
+## Newsletters
+
+Stay updated with insights on data-driven VC, infrastructure building, and technology in venture capital.
+
+<CardGroup cols={2}>
+  <Card title="Data Driven VC" icon="envelope" href="https://substack.com/@datadrivenvc">
+    Weekly newsletter at the intersection of venture capital and data. 35,000+ subscribers from
+    firms like a16z, Accel, Index, and Sequoia. By Andre Retterath (Earlybird VC).
+  </Card>
+  <Card title="Inflection - svrgn" icon="envelope" href="https://svrgn.substack.com/">
+    On engineering moonshots and deep technology. Occasional posts by Alex Patow about Inflection's
+    tooling and infrastructure.
+  </Card>
+  <Card title="AVC" icon="envelope" href="https://paragraph.com/avc.eth">
+    Fred Wilson's perspectives on venture capital and technology. Occasional posts about tech's role
+    in the VC industry.
+  </Card>
+  <Card title="Level Ventures" icon="envelope" href="https://levelvc.substack.com/">
+    Data-driven perspectives on venture capital from an LP point of view.
+  </Card>
+</CardGroup>
+
+---
+
+## Books
+
+Essential reading for understanding venture capital from both operational and technical perspectives.
+
+| Title                                             | Author(s)                   | Why Read It                                                                                                    |
+| ------------------------------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **The Business of Venture Capital** (3rd Edition) | Mahendra Ramsinghani        | Comprehensive overview of fund structures, legal frameworks, and the LP-GP relationship                        |
+| **Venture Deals**                                 | Brad Feld & Jason Mendelson | Essential reading on how VC deals work: term sheets, negotiations, and deal mechanics                          |
+| **Secrets of Sand Hill Road**                     | Scott Kupor                 | Inside look at how VC firms operate from a16z's COO                                                            |
+| **The First 90 Days**                             | Michael D. Watkins          | Critical strategies for successfully transitioning into a new role, especially valuable when joining a VC fund |
+
+---
+
+## Research Papers
+
+Academic research on applying machine learning and data science to venture capital.
+
+<AccordionGroup>
+  <Accordion title="Machine Learning for VC">
+    **Investment Sourcing & Prediction**
+
+    - [Beyond Gut Feel: Using Time Series Transformers to Find Investment Gems](https://arxiv.org/abs/2309.16888) — Transformer-based time series classification for predicting successful VC and Growth Capital investments by analyzing financial patterns. From EQT's Motherbrain team.
+
+    **Company Classification & Similarity**
+
+    - [CompanyKG: A Large-Scale Heterogeneous Graph for Company Similarity Quantification](https://arxiv.org/abs/2306.10649) — Knowledge graph with 1.17M companies and 51M weighted edges representing business relationships. First large-scale dataset from a real investment platform for measuring company similarity. Featured in this book's [Knowledge Graphs](/guide/part-3-technical-foundations/knowledge-graphs) chapter.
+
+    - [Prompt Tuned Embedding Classification for Multi-Label Industry Sector Allocation](https://arxiv.org/abs/2309.12075) — Efficient fine-tuning method (PTEC) for multi-label company classification using LLMs. Addresses limitations of text-to-text approaches in generating valid labels with confidence scores.
+
+    - [A Scalable and Adaptive System to Infer the Industry Sectors of Companies](https://arxiv.org/abs/2306.03313) — Production system for automatically classifying companies into industry sectors using prompt + model tuning of generative language models. Deployed for PE professionals at scale.
+
+    **Literature Reviews**
+
+    - [Using Deep Learning to Find the Next Unicorn: A Practical Synthesis](https://arxiv.org/abs/2210.14195) — Comprehensive literature review synthesizing deep learning methodologies for startup evaluation across the entire ML lifecycle. First comprehensive synthesis of DL approaches for VC investment decisions.
+
+  </Accordion>
+
+  <Accordion title="VC Decision-Making & Biases">
+    - [Machine Learning About Venture Capital Choices](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4035930) — Analyzes VC investment decisions through predictive modeling using French administrative data. Finds that VCs overweight entrepreneur characteristics (elite schools, gender, location) relative to their actual impact on performance, contributing to industry narrowness. By Victor Lyonnet and Léa H. Stern.
+
+    - [Venture Capital Start-up Selection](https://bfi.uchicago.edu/wp-content/uploads/2025/03/BFI_WP_2025-38.pdf) — Studies 8,000+ sourced deals from one early-stage VC. Finds VCs overweight team factors in initial decisions despite market and product being better predictors of long-term success (funding >$10M+). Team explains initial $1M+ funding but not larger outcomes. By Young Soo Jang and Steven N. Kaplan (NBER Working Paper, Feb 2025).
+
+    - [Venture Capitalists' Decision-Making Under Changing Resource Availability](https://repository.upenn.edu/handle/20.500.14332/60297) — Qualitative study examining how VCs' evaluative criteria shift during economic changes and resource scarcity. Based on interviews with 14 Bay Area VCs, explores objective vs. subjective selection criteria and whether VCs act as responsible fiduciaries under different market conditions. By Noah Pettit (UPenn EdD Dissertation, 2024).
+
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+  More papers coming soon. If you have suggestions, please [open an
+  issue](https://github.com/alexpatow/building-for-vc/issues).
+</Note>
+
+---
+
+## Open Source Projects
+
+Tools and projects from the VC tech community.
+
+<CardGroup cols={2}>
+  <Card title="attio-mcp" icon="plug" href="https://github.com/redriverwest/attio-mcp">
+    MCP server for Attio CRM integration
+  </Card>
+  <Card title="ddvc-hackathon" icon="code" href="https://github.com/redriverwest/ddvc-hackathon">
+    Projects from the Data Driven VC hackathon
+  </Card>
+</CardGroup>
+
+---
+
+## Conferences & Events
+
+<CardGroup cols={2}>
+  <Card
+    title="DDVC Summit 2026"
+    icon="calendar"
+    href="https://datadrivenvc.io/events/virtual-ddvc-summit-2026"
+  >
+    Virtual summit for data-driven VC practitioners
+  </Card>
+  <Card title="VC Day by Vestberry" icon="calendar" href="https://vcday.vestberry.com/">
+    Conference focused on VC operations and technology
+  </Card>
+</CardGroup>
+
+---
+
+## Hiring
+
+Building a VC tech team? Looking for your next role in VC infrastructure?
+
+<Info>
+  If you're hiring in this space, reach out to [Alex](https://www.linkedin.com/in/alexpatow/) —
+  happy to add opportunities here.
+</Info>
+
+---
+
+## Contribute
+
+Have a resource to add? [Open an issue](https://github.com/alexpatow/building-for-vc/issues) or [submit a PR](https://github.com/alexpatow/building-for-vc/pulls).

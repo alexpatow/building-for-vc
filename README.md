@@ -31,11 +31,14 @@ This will start a local development server at `http://localhost:3000`.
 ```
 building-for-vc/
 ├── docs.json                        # Navigation and theme configuration
-├── index.mdx                        # Homepage
-├── quickstart.mdx                   # Reading guide
-├── part-1-understanding-vc/
-├── part-2-tech-stack/
-└── part-3-technical-foundations/
+├── guide/                           # Main guide content
+│   ├── index.mdx                    # Homepage
+│   ├── quickstart.mdx               # Reading guide
+│   ├── part-1-understanding-vc/
+│   ├── part-2-tech-stack/
+│   └── part-3-technical-foundations/
+└── resources/                       # Tools, templates, and references
+    └── index.mdx
 ```
 
 ## Content Format

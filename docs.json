@@ -19,55 +19,67 @@
     "tabs": [
       {
         "tab": "Guide",
+        "icon": "book-open",
         "groups": [
           {
             "group": "Introduction",
-            "pages": ["index", "quickstart"]
+            "pages": ["guide/index", "guide/quickstart"]
           },
           {
             "group": "Part 1: Understanding VC",
             "pages": [
-              "part-1-understanding-vc/what-is-a-vc-fund",
-              "part-1-understanding-vc/understanding-your-vc-fund",
-              "part-1-understanding-vc/common-mistakes"
+              "guide/part-1-understanding-vc/what-is-a-vc-fund",
+              "guide/part-1-understanding-vc/understanding-your-vc-fund",
+              "guide/part-1-understanding-vc/common-mistakes"
             ]
           },
           {
             "group": "Part 2: The VC Tech Stack",
             "pages": [
-              "part-2-tech-stack/introduction",
-              "part-2-tech-stack/research-platforms",
-              "part-2-tech-stack/sourcing-tools",
-              "part-2-tech-stack/crm-and-deal-flow",
-              "part-2-tech-stack/fund-operations",
-              "part-2-tech-stack/portfolio-support",
-              "part-2-tech-stack/fundraising",
-              "part-2-tech-stack/website-and-external-presence",
-              "part-2-tech-stack/putting-it-together"
+              "guide/part-2-tech-stack/introduction",
+              "guide/part-2-tech-stack/research-platforms",
+              "guide/part-2-tech-stack/sourcing-tools",
+              "guide/part-2-tech-stack/crm-and-deal-flow",
+              "guide/part-2-tech-stack/fund-operations",
+              "guide/part-2-tech-stack/portfolio-support",
+              "guide/part-2-tech-stack/fundraising",
+              "guide/part-2-tech-stack/website-and-external-presence",
+              "guide/part-2-tech-stack/putting-it-together"
             ]
           },
           {
             "group": "Part 3: Technical Foundations",
             "pages": [
-              "part-3-technical-foundations/choosing-your-stack",
-              "part-3-technical-foundations/data-providers",
-              "part-3-technical-foundations/data-modeling",
-              "part-3-technical-foundations/entity-resolution",
-              "part-3-technical-foundations/data-quality",
-              "part-3-technical-foundations/data-warehousing",
-              "part-3-technical-foundations/knowledge-graphs",
-              "part-3-technical-foundations/integrations-and-apis",
-              "part-3-technical-foundations/security-and-compliance",
-              "part-3-technical-foundations/emerging-trends",
-              "part-3-technical-foundations/final-thoughts"
+              "guide/part-3-technical-foundations/choosing-your-stack",
+              "guide/part-3-technical-foundations/data-providers",
+              "guide/part-3-technical-foundations/data-modeling",
+              "guide/part-3-technical-foundations/entity-resolution",
+              "guide/part-3-technical-foundations/data-quality",
+              "guide/part-3-technical-foundations/data-warehousing",
+              "guide/part-3-technical-foundations/knowledge-graphs",
+              "guide/part-3-technical-foundations/integrations-and-apis",
+              "guide/part-3-technical-foundations/security-and-compliance",
+              "guide/part-3-technical-foundations/emerging-trends"
             ]
+          },
+          {
+            "group": "Conclusion",
+            "pages": ["guide/final-thoughts"]
+          }
+        ]
+      },
+      {
+        "tab": "Resources",
+        "icon": "folder-open",
+        "groups": [
+          {
+            "group": "Resources",
+            "pages": ["resources/index"],
+            "expanded": false
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": []
-    }
+    ]
   },
   "navbar": {
     "links": [
