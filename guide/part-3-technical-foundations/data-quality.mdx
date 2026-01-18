@@ -64,7 +64,7 @@ Use this analysis to pick your authoritative source for each type of data. Don't
 
 **Pick one source per use case**
 
-As covered in [Entity Resolution](/part-3-technical-foundations/entity-resolution) (Entity Resolution), the best way to avoid data quality problems is to not merge sources when you don't need to. If you're analyzing total funding in a market, pick PitchBook and use only that. Don't try to combine PitchBook, signal providers, and your CRM. The entity resolution required to merge them creates new opportunities for errors, and you probably won't get meaningfully better data.
+As covered in [Entity Resolution](/guide/part-3-technical-foundations/entity-resolution) (Entity Resolution), the best way to avoid data quality problems is to not merge sources when you don't need to. If you're analyzing total funding in a market, pick PitchBook and use only that. Don't try to combine PitchBook, signal providers, and your CRM. The entity resolution required to merge them creates new opportunities for errors, and you probably won't get meaningfully better data.
 
 Only combine sources when each provides unique value. If you need funding data (PitchBook) and employee counts (LinkedIn) and qualitative notes (your CRM) for the same companies, then yes, merge them. But if you just need funding data, stick with one source.
 

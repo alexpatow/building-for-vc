@@ -8,7 +8,7 @@
     "prepare": "simple-git-hooks"
   },
   "simple-git-hooks": {
-    "pre-commit": "bun run format:check"
+    "pre-commit": "bun run format"
   },
   "devDependencies": {
     "mint": "^4.2.284",

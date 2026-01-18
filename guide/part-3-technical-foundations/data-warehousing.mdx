@@ -122,7 +122,7 @@ The right way to structure data in your warehouse follows [dbt best practices](h
 
 **Incremental models**: For large tables with historical data (every deal flow snapshot, every change in company data), use incremental models that only process new or changed data rather than rebuilding the entire table. This keeps transformations fast as data grows.
 
-**Tests**: Define tests in dbt for data quality (uniqueness, not null, relationships between tables, custom validations). These run automatically and alert you when data breaks, similar to what we covered in [Data Quality](/part-3-technical-foundations/data-quality) on data quality.
+**Tests**: Define tests in dbt for data quality (uniqueness, not null, relationships between tables, custom validations). These run automatically and alert you when data breaks, similar to what we covered in [Data Quality](/guide/part-3-technical-foundations/data-quality) on data quality.
 
 **Documentation**: Document your models, columns, and business logic in dbt. It generates a website showing your entire data model, lineage graphs (which models depend on which), and descriptions of what everything means. This is essential as your warehouse grows and new people need to understand the data.
 

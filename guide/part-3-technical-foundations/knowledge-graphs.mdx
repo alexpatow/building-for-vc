@@ -82,7 +82,7 @@ An emerging application of knowledge graphs in VC is GraphRAG (Graph Retrieval-A
 4. Provides both the graph structure and the documents to the LLM
 5. The LLM generates an answer informed by both textual content and relationship structure
 
-**Implementation considerations**: GraphRAG requires both a knowledge graph infrastructure and an LLM integration. You need clean entity resolution (covered in [Entity Resolution](/part-3-technical-foundations/entity-resolution)) so the graph accurately represents reality. You need good data quality so the LLM doesn't hallucinate based on incorrect relationships. And you need to decide whether GraphRAG's benefits justify the additional complexity over simpler RAG approaches.
+**Implementation considerations**: GraphRAG requires both a knowledge graph infrastructure and an LLM integration. You need clean entity resolution (covered in [Entity Resolution](/guide/part-3-technical-foundations/entity-resolution)) so the graph accurately represents reality. You need good data quality so the LLM doesn't hallucinate based on incorrect relationships. And you need to decide whether GraphRAG's benefits justify the additional complexity over simpler RAG approaches.
 
 For most funds, this is still emerging territory. Traditional RAG systems work well for searching documents and research. GraphRAG becomes valuable when relationship-based reasoning is critical to answering questions. If you're already building a knowledge graph for market mapping or competitor analysis, adding GraphRAG capabilities might be a natural extension. But don't build a knowledge graph just to enable GraphRAG unless you have validated that relationship-based retrieval solves problems traditional search doesn't.
 

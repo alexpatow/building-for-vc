@@ -47,7 +47,7 @@ This isn't the only viable stack. But it's the right default for most VC tools, 
 
 **Shadcn provides good-enough UI components**. VCs aren't evaluating your tools based on design polish. They care about functionality and insights. Shadcn gives you professional-looking components that work well without hiring a designer. Your GPs will never complain that you used Shadcn instead of a custom design system.
 
-**Postgres is the right database for most VC tools**. It's relational (your data is structured: companies, deals, people, relationships), it's mature, it scales far beyond what you'll need, and as covered in [Data Warehousing](/part-3-technical-foundations/data-warehousing), it's adequate as a data warehouse for small to mid-size funds before you need Snowflake or BigQuery.
+**Postgres is the right database for most VC tools**. It's relational (your data is structured: companies, deals, people, relationships), it's mature, it scales far beyond what you'll need, and as covered in [Data Warehousing](/guide/part-3-technical-foundations/data-warehousing), it's adequate as a data warehouse for small to mid-size funds before you need Snowflake or BigQuery.
 
 **Vercel deployment means zero DevOps**. You push to git, Vercel builds and deploys, you get a URL. No Docker, no Kubernetes, no CI/CD configuration, no server management. For internal tools where you're the only developer, eliminating DevOps overhead is essential.
 
@@ -90,7 +90,7 @@ The default stack for us is TypeScript, but you can't escape Python entirely at 
 
 **Data analysis and exploration**. When a GP asks "how many Series A companies in fintech raised in the last 6 months?", you open a Jupyter or Hex notebook, write SQL to pull data from your warehouse, and use pandas to analyze it. Python notebooks are the standard for ad-hoc data work. TypeScript isn't competitive here.
 
-**Data transformations in the warehouse**. If you're using dbt for data transformations (covered in [Data Warehousing](/part-3-technical-foundations/data-warehousing)), you'll write Python for custom models that run in Snowpark (Snowflake), BigQuery DataFrames, or PySpark. The data warehouse ecosystem is Python-native.
+**Data transformations in the warehouse**. If you're using dbt for data transformations (covered in [Data Warehousing](/guide/part-3-technical-foundations/data-warehousing)), you'll write Python for custom models that run in Snowpark (Snowflake), BigQuery DataFrames, or PySpark. The data warehouse ecosystem is Python-native.
 
 **Machine learning and AI work**. If you're building anything involving model training, embeddings, or scientific computing, Python's ecosystem (scikit-learn, numpy, PyTorch) is unmatched.
 
@@ -134,7 +134,7 @@ Use managed services for everything unless you have a specific reason not to.
 
 Your engineering time, at a fully-loaded cost including salary and benefits, is worth (at minimum) $100-200/hour at a VC fund. Spending 4 hours a month managing infrastructure to save $200 on hosting is a terrible trade. Spend that time building features that help GPs make better investment decisions.
 
-**The exception**: If you have specific compliance requirements ([Security and Compliance](/part-3-technical-foundations/security-and-compliance) covers security and compliance), you might need self-hosted infrastructure for data residency or audit reasons. But this is rare for most funds and work with your CISO or compliance officer to find a path forward. Default to managed services.
+**The exception**: If you have specific compliance requirements ([Security and Compliance](/guide/part-3-technical-foundations/security-and-compliance) covers security and compliance), you might need self-hosted infrastructure for data residency or audit reasons. But this is rare for most funds and work with your CISO or compliance officer to find a path forward. Default to managed services.
 
 ## Dependencies: Be Selective But Not Afraid
 
@@ -151,7 +151,7 @@ These are core dependencies that make sense. They're maintained by companies who
 **Be selective about other dependencies:**
 
 - A well-maintained date library (date-fns) saves time and reduces bugs
-- A validation library (Zod for TypeScript, covered in [Integrations and APIs](/part-3-technical-foundations/integrations-and-apis)) is essential for API integrations
+- A validation library (Zod for TypeScript, covered in [Integrations and APIs](/guide/part-3-technical-foundations/integrations-and-apis)) is essential for API integrations
 - A testing library (Vitest) makes sense if you write tests (though for internal tools, extensive testing is often overkill)
 
 **Be wary of:**

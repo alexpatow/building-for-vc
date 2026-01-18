@@ -166,7 +166,7 @@ CREATE TABLE deals (
 
 When you query deals, you join to companies to get company information. When you're analyzing companies (building market maps, tracking sectors), you query companies directly without caring about deals.
 
-This separation is fundamental to building VC software that works. If you try to embed deals into the companies table or vice versa, you'll create a mess that's hard to query and impossible to extend. As emphasized in [CRM and Deal Flow](/part-2-tech-stack/crm-and-deal-flow) on CRM, this distinction is one of the most important architectural decisions you'll make.
+This separation is fundamental to building VC software that works. If you try to embed deals into the companies table or vice versa, you'll create a mess that's hard to query and impossible to extend. As emphasized in [CRM and Deal Flow](/guide/part-2-tech-stack/crm-and-deal-flow) on CRM, this distinction is one of the most important architectural decisions you'll make.
 
 ## Dealing with Messy Reality
 
@@ -256,7 +256,7 @@ Every time you fetch company data from PitchBook (daily, weekly, or on-demand), 
 
 Append-only tables are great for history but inconvenient to query. You usually want the latest information, not every historical value.
 
-Use dbt (covered in [Data Warehousing](/part-3-technical-foundations/data-warehousing)) to transform append-only staging tables into intermediate tables with current values:
+Use dbt (covered in [Data Warehousing](/guide/part-3-technical-foundations/data-warehousing)) to transform append-only staging tables into intermediate tables with current values:
 
 ```sql
 -- dbt model: models/intermediate/pitchbook_companies.sql
@@ -335,7 +335,7 @@ Mart models combine data from multiple sources for specific analyses or applicat
 
 **Option 1: Make hierarchical choices**
 
-Decide which source wins for each field, based on your assessment of data quality (covered in [Data Quality](/part-3-technical-foundations/data-quality)):
+Decide which source wins for each field, based on your assessment of data quality (covered in [Data Quality](/guide/part-3-technical-foundations/data-quality)):
 
 ```sql
 -- models/marts/companies_enriched.sql
