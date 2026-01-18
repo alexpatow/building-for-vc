@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="logo/dark.svg" alt="Building for VC" width="300">
+</p>
+
 # Building for Venture Capital
 
 A comprehensive guide to building technology for venture capital funds, covering everything from understanding VC fundamentals to implementing production infrastructure.
@@ -29,9 +33,9 @@ building-for-vc/
 ├── docs.json                        # Navigation and theme configuration
 ├── index.mdx                        # Homepage
 ├── quickstart.mdx                   # Reading guide
-├── part-1-understanding-vc/         # Chapters 1-3
-├── part-2-tech-stack/               # Chapters 4-12
-└── part-3-technical-foundations/    # Chapters 13-23
+├── part-1-understanding-vc/
+├── part-2-tech-stack/
+└── part-3-technical-foundations/
 ```
 
 ## Content Format
@@ -47,7 +51,7 @@ description: "Brief description for SEO and navigation"
 
 ## Publishing Changes
 
-This site uses Mintlify's GitHub integration. Changes pushed to the default branch are automatically deployed to production.
+This site uses Mintlify's GitHub integration. Changes pushed to the main branch are automatically deployed to production.
 
 ## Contributing
 
