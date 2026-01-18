@@ -92,5 +92,16 @@
     "socials": {
       "github": "https://github.com/alexpatow/building-for-vc"
     }
+  },
+  "seo": {
+    "indexing": "all",
+    "metatags": {
+      "canonical": "https://buildingfor.vc",
+      "og:title": "Building for VC",
+      "og:description": "A technical guide to building technology for VC funds: from understanding the domain to shipping production systems.",
+      "twitter:card": "summary_large_image",
+      "twitter:title": "Building for VC",
+      "twitter:description": "A technical guide to building technology for VC funds: from understanding the domain to shipping production systems."
+    }
   }
 }

@@ -6,3 +6,4 @@ bun.lockb
 *.jpg
 *.jpeg
 .zed/settings.json
+.claude/settings.local.json
