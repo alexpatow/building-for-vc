@@ -5,11 +5,9 @@ description: "Common integration patterns, validating API responses, handling we
 
 ## Overview
 
-Much of the technical work at a VC fund, especially when you're just getting started, is building glue between different tools your team already uses. Connecting Granola (meeting notes) to Attio (CRM). Connecting your data warehouse to an MCP server. Connecting external data providers to your sourcing tool. Connecting portfolio company data to your dashboards.
+Much of the technical work at a VC fund is building glue between tools. Connecting meeting notes to your CRM, data providers to your warehouse, portfolio data to dashboards. Some integrations exist out of the box, but many require custom code.
 
-Some of these integrations exist out of the box. Granola has a built-in Attio integration. Many CRMs integrate with common productivity tools. But many connections require custom code: a service that runs on a schedule to sync data, a webhook handler that processes events from vendors, or an API wrapper that normalizes different data formats.
-
-This chapter covers common integration patterns you'll encounter, how to validate data from external APIs (the biggest source of problems), how to handle webhooks and rate limits, and how to design internal APIs if you're building services. The focus is on practical patterns that work for VC funds, not comprehensive API design theory.
+This chapter covers common integration patterns, validation strategies, webhook handling, rate limits, and internal API design. The focus is on practical patterns that work for VC funds.
 
 ## Common Integration Patterns
 
@@ -301,35 +299,13 @@ When something fails, present an error message that helps with debugging. Not "A
 
 ## Working with LLM Providers
 
-If you're building features that use LLMs (research assistants, summarization, analysis), integrating with OpenAI, Anthropic, or other providers has specific considerations.
+If you're building features that use LLMs, three key considerations:
 
-**LLM providers have lots of downtime**
+**Use an AI gateway for failover**. LLM providers have frequent outages and rate limits. Services like Vercel's AI SDK or LiteLLM provide automatic failover between providers (OpenAI → Anthropic when primary is down).
 
-Especially when rolling out new models, providers have outages. OpenAI's API goes down. Anthropic has rate limits that are lower than you expect. Your features break when this happens.
+**Handle streaming responses**. LLM APIs stream tokens incrementally. Don't assume complete responses in one chunk.
 
-**Use an AI gateway for failover**
-
-Services like Vercel's AI SDK or LiteLLM provide failover across multiple LLM providers. If OpenAI is down, automatically failover to Anthropic. If Anthropic is rate-limited, try OpenAI.
-
-```typescript
-import { openai, anthropic } from "@ai-sdk/providers"
-import { generateText } from "ai"
-
-// Vercel AI SDK handles failover automatically
-const result = await generateText({
-  model: openai("gpt-4"), // Primary
-  fallbacks: [anthropic("claude-3-5-sonnet")], // Fallback if primary fails
-  prompt: "Summarize this company...",
-})
-```
-
-**Handle streaming responses**
-
-LLM APIs often stream responses (tokens arrive incrementally rather than all at once). Make sure your code handles streams properly, especially for long responses. Don't assume you get the complete response in one chunk.
-
-**Set timeouts**
-
-LLM requests can take a long time (30+ seconds for complex prompts). Set appropriate timeouts so you don't wait forever if the provider is slow. 60-90 seconds is reasonable for most requests.
+**Set timeouts**. LLM requests can take 30+ seconds. Set 60-90 second timeouts so slow providers don't block indefinitely.
 
 ## Internal API Design
 
@@ -402,20 +378,8 @@ Established vendors are less flexible, but newer vendors building for the VC mar
 
 ## The Bottom Line
 
-Most technical work at VC funds is glue code: connecting tools your team uses, pulling data from vendors, feeding data into systems.
+Most technical work at VC funds is glue code. Validate everything with Zod or Pydantic - never trust external APIs. Respect rate limits with exponential backoff. Use transactions to avoid partial failures.
 
-Validate everything. Use Zod (TypeScript) or Pydantic (Python) to validate API responses. Never trust external APIs.
-
-Respect rate limits. Use exponential backoff when you hit errors. Don't overwhelm vendors with parallel requests.
-
-Use transactions to avoid partial failures. When multiple operations need to succeed together, wrap them in a database transaction.
-
-For LLMs, use an AI gateway (Vercel AI SDK, LiteLLM) to handle failover when providers have downtime.
-
-Pick one language and framework for internal services. At Inflection, it's TypeScript with Next.js. Optimize for ergonomics over raw performance.
-
-Pay attention to vendor API changes. They happen frequently. Budget time for updates.
-
-Work with newer vendors on API design. Your feedback helps them build better products and makes your integration easier. It's win-win.
+For LLMs, use an AI gateway for failover. Pick one language and framework for internal services. Pay attention to vendor API changes - they happen frequently.
 
 In the next chapter, we'll cover security and compliance: handling sensitive data, SEC regulations, access controls, and audit requirements for VC funds.

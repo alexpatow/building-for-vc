@@ -5,13 +5,9 @@ description: "Understanding external data vendors who supply information about c
 
 ## Overview
 
-You can't build VC infrastructure using only internal data. You need external data about companies, funding, people, markets, and competitors. This data comes from third-party vendors who specialize in aggregating, verifying, and delivering information about the startup ecosystem.
+You need external data about companies, funding, people, and markets. Data providers feed your CRM, power sourcing tools, and enrich your warehouse. But they're expensive, have different strengths, and deliver data differently.
 
-Data providers are foundational to your tech stack. They feed your CRM with company information. They power your sourcing tools with signals about new companies. They enrich your data warehouse with funding data, employee counts, and market context. They help you research markets and track competitors.
-
-But data providers are expensive, have different strengths and weaknesses, and deliver data in different ways. Choosing the right providers and using them effectively is critical to building good infrastructure without wasting budget.
-
-This chapter covers what types of data you need, which vendors provide it, how they deliver data (APIs vs files), what they cost, and how to work with them effectively. We'll leave placeholders for specific vendor recommendations that you can fill in based on your needs.
+This chapter covers what data you need, which vendors provide it, how they deliver it, costs, and how to use them effectively.
 
 ## Types of Data You Need
 
@@ -155,36 +151,11 @@ As covered in [Data Quality](/guide/part-3-technical-foundations/data-quality), 
 
 Choose based on your use case. For LP reporting or board materials, use accurate vendors. For early sourcing signals, speed matters more than perfection.
 
-**Coverage differences**
+**Coverage differences**: Vendors excel at different stages (Harmonic/Specter for early-stage, PitchBook for established), geographies (strong US vs weak international), and sectors (deep tech, bio, fintech).
 
-Vendors have different coverage by stage, geography, and sector:
+**Test with portfolio companies**: As covered in [Data Quality](/guide/part-3-technical-foundations/data-quality), evaluate vendor accuracy against your portfolio companies to understand what each vendor is good for.
 
-- Some excel at early-stage companies (Harmonic, Specter)
-- Some excel at later-stage (PitchBook for established companies)
-- Some have strong US coverage but weak international
-- Some focus on specific sectors (deep tech, bio, fintech)
-
-**Test with your portfolio companies**
-
-The best way to evaluate vendor accuracy is to check their data against companies you know well: your portfolio companies. Take 10-20 portfolio companies and see how accurately each vendor represents them:
-
-- Is funding data correct (amounts, dates, investors)?
-- Are employee counts reasonable?
-- Are descriptions accurate?
-- How quickly do they update after new events?
-
-This gives you ground truth for choosing vendors and understanding their limitations. Document what each vendor is good for and what they're not.
-
-**Data freshness**
-
-Different vendors update at different cadences:
-
-- Real-time (APIs that reflect changes within hours)
-- Daily (updated nightly)
-- Weekly or monthly (bulk refreshes)
-- Quarterly (some datasets update only when they do major refreshes)
-
-Know how fresh the data is and factor that into how you use it. Don't present 6-month-old employee counts as if they're current.
+**Data freshness**: Vendors update at different cadences (real-time, daily, weekly, quarterly). Know how fresh the data is and don't present stale data as current.
 
 ## Cost Considerations
 

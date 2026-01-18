@@ -15,66 +15,25 @@ Unlike operational systems where you control data entry and can enforce validati
 
 This chapter covers how to think about data quality in VC, how to choose and validate data sources, how to handle conflicting information, and how to build trust with your investment team despite the inherent messiness of external data.
 
-## Understanding Data Source Trust Levels
+## Selecting and Evaluating Data Sources
 
-Not all data is equally trustworthy. The first step in data quality is understanding which sources you can trust for what purposes.
+Not all data is equally trustworthy. Data quality starts with choosing the right sources and understanding what you can trust them for.
 
-**High trust: Your firm's internal data**
+**The trust hierarchy**
 
-Your fund's portfolio companies, investment amounts, ownership percentages, board seats, LP capital calls, distributions. This is data your firm generates and controls. It should be your highest quality data because you have direct access to the source. If your internal fund operations data is wrong, that's a problem you can and should fix immediately.
+**High trust:** Your firm's internal data (portfolio companies, investment amounts, ownership, LP data). When external sources conflict with your internal data, your data is almost always correct. Use it as ground truth.
 
-Use this data as ground truth. When external sources conflict with your internal data about portfolio companies, your internal data is almost always correct.
+**Medium trust:** Established vendors for their core competency. PitchBook for funding data. LinkedIn for employee counts. Your CRM for companies you track. These are reliable enough for analysis, but understand the tradeoffs: PitchBook is accurate but slow (2-week lag). Signal providers like Specter or Harmonic are fast but incomplete. Pick based on your use case: accuracy for LP reporting, speed for deal flow alerts.
 
-**Medium trust: Established data vendors for their core competency**
+**Low trust:** Scraped data, meeting transcriptions, AI summaries. Useful for context and exploration, not definitive analysis. Transcriptions mishear names. Scraped data is stale. AI hallucinates.
 
-PitchBook for funding data. LinkedIn for employee counts and job changes. These vendors specialize in their domains and have reasonably good accuracy for what they focus on. They're not perfect, but they're reliable enough to use for analysis and decision-making.
+**Validate with your portfolio**
 
-The tradeoff: PitchBook is usually accurate but slow. They verify information before publishing, which means there's lag. A Series B that closed last week might not appear in PitchBook for two weeks. Signal data providers like Specter or Harmonic prioritize speed over completeness. They surface companies quickly but aren't trying to be comprehensive. If you need accuracy and completeness, use PitchBook. If you need speed and real-time signals, use signal providers. Pick based on your use case.
-
-Your CRM data falls into this category too. It's only as good as what your team enters, but if your team is diligent about tracking companies, it's reasonably trustworthy. If your CRM says you passed on a company, that's probably correct. If it says you never talked to a company, that might just mean nobody logged it.
-
-**Low trust: Scraped, derived, or transcribed data**
-
-Meeting transcriptions from voice-to-text systems. Data scraped from company websites. Derived metrics that combine multiple sources. AI-generated summaries of company descriptions. This data is useful but shouldn't be trusted without verification.
-
-Meeting transcriptions get names wrong, mishear technical terms, and miss context. Scraped data is often stale (companies change but websites don't update). Derived metrics inherit errors from their sources and add their own. AI summaries hallucinate. Use this data for context and exploration, not for definitive analysis.
-
-**Why trust levels matter**
-
-This hierarchy should guide your decisions about what data to use for what purposes. Building a market map to present to GPs? Use PitchBook or your CRM, not scraped website data. Feeding context into an LLM for research? Lower trust data is fine because you're exploring, not deciding. Calculating portfolio performance for LP reporting? Only use high trust internal data.
-
-When you're deciding whether to build a feature that depends on certain data, consider the trust level. If it requires high trust data but you only have medium trust sources, either find better data or don't build the feature. Showing low trust data to GPs without caveats damages your credibility.
-
-## Choosing Your Data Sources
-
-Before worrying about validation, make the right choices about which data sources to use. This is where many funds go wrong: they subscribe to multiple overlapping data sources, try to merge them (requiring entity resolution), and end up with more complexity and not much better data.
-
-**Use your portfolio companies as ground truth**
-
-You know your portfolio companies better than any external data source. Use them to validate the accuracy of vendors. Take 10-20 of your portfolio companies and check how accurately each vendor represents them:
-
-- Is the funding data correct (amounts, dates, investors)?
-- Are employee counts reasonably accurate?
-- Are the company descriptions accurate?
-- How quickly does the vendor update after new events (funding rounds, acquisitions)?
-
-This test reveals which vendors are reliable for which data types. PitchBook might be great on funding but weak on employee counts. LinkedIn might be accurate on people but terrible on company descriptions. Your CRM might have great qualitative notes but missing quantitative data.
-
-Use this analysis to pick your authoritative source for each type of data. Don't guess. Validate with companies you have ground truth on.
+Take 10-20 portfolio companies and check vendor accuracy: funding data, employee counts, descriptions, update speed. This reveals which vendors are reliable for which data types. Use this analysis to pick your authoritative source for each data type. Don't guess.
 
 **Pick one source per use case**
 
-As covered in [Entity Resolution](/guide/part-3-technical-foundations/entity-resolution) (Entity Resolution), the best way to avoid data quality problems is to not merge sources when you don't need to. If you're analyzing total funding in a market, pick PitchBook and use only that. Don't try to combine PitchBook, signal providers, and your CRM. The entity resolution required to merge them creates new opportunities for errors, and you probably won't get meaningfully better data.
-
-Only combine sources when each provides unique value. If you need funding data (PitchBook) and employee counts (LinkedIn) and qualitative notes (your CRM) for the same companies, then yes, merge them. But if you just need funding data, stick with one source.
-
-**Understand the tradeoffs**
-
-Every data source has tradeoffs. PitchBook is accurate but slow and expensive. Signal providers like Specter or Harmonic are faster but prioritize coverage over completeness. LinkedIn has great employee data but mediocre company data. Your CRM has great context but only for companies you've talked to.
-
-Choose based on what matters more for your use case. Building a real-time deal flow alert system? Speed matters, use signal providers. Building materials for LP reporting? Accuracy matters, use PitchBook. Tracking warm intro paths? Use LinkedIn and your CRM.
-
-Don't expect any single source to be perfect for everything. Different sources excel at different things.
+The best way to avoid data quality problems is to not merge sources unnecessarily. Analyzing total market funding? Pick PitchBook and use only that. Don't combine multiple sources, entity resolution creates new errors. Only merge when each source provides unique value and it's required for the type of analysis you're doing.
 
 ## The Validation Challenge
 
@@ -82,9 +41,9 @@ You want validation rules that catch errors before bad data reaches your investm
 
 **Why automated validation is limited**
 
-In operational systems, you can validate that email addresses have @ symbols, that phone numbers are 10 digits, that dates are in the future for scheduled events. These rules work because the domain is constrained and you control data entry.
+In operational systems, you can validate that email addresses have @ symbols, that phone numbers are numeric, that dates are in the future for scheduled events. These rules work because the domain is constrained and you control data entry.
 
-VC data doesn't work like this. Should Series B come after Series A? Usually, but not always (some companies skip rounds). Should valuations increase with each round? Usually, but down rounds happen. Should funding dates be chronological? Usually, but sometimes rounds are announced retroactively. Should employee counts increase over time? Usually, but companies do layoffs.
+VC data doesn't work like this. Should Seed Rounds be less than $1B? Usually, but Thinking Machines raised $2B right off the bat. Should valuations increase with each round? Usually, but down rounds happen. Should funding dates be chronological? Usually, but sometimes rounds are announced retroactively. Should employee counts increase over time? Usually, but companies do layoffs.
 
 Every validation rule you write will have exceptions. Real companies don't follow clean patterns. Markets are messy. You'll either have rules so strict they flag too many false positives (wasting time investigating legitimate data), or rules so loose they miss real errors.
 
@@ -138,39 +97,17 @@ Understand which of your use cases are time-sensitive and prioritize freshness t
 
 ## Building Trust with GPs
 
-You will show bad data to your investment team. When it happens, how you handle it determines whether they trust you going forward.
+You will show bad data to your investment team. How you handle it determines whether they trust you going forward.
 
-**Demo to friendly associates first**
+**Demo to friendly associates first**. Before presenting to partners, show it to a junior associate who knows the market. They'll spot embarrassing mistakes before decision-makers see them. An associate telling you "Airbnb didn't raise a Series A in 2023" is much better than a GP saying it in front of the partnership.
 
-Before presenting anything to partners or GPs, show it to a junior associate you trust. Someone who knows the market, will give you honest feedback, and won't hold mistakes against you. Ask them to spot-check the data: do these companies make sense? Are the numbers reasonable? Are there obvious errors?
+**Always cite sources**. "Funding data from PitchBook, as of January 2026." "Employee counts from LinkedIn." This sets expectations (people know PitchBook is reliable, LinkedIn is approximate) and lets you shift blame when data is wrong. "This is what PitchBook reported" is better than "this is what I analyzed."
 
-This catches embarrassing mistakes before they damage your credibility with decision-makers. An associate telling you "Airbnb didn't raise a Series A in 2023" is much better than a GP saying it in front of the partnership.
+**Entity resolution makes blame-shifting harder**. When you merge multiple sources and the data is wrong, whose fault is it? The vendor, the matching algorithm, or your choice of which source to trust? This is a hidden cost of entity resolution. Single-source analyses let you point to the provider when things are wrong.
 
-**Always cite your data sources**
+**Learn from each mistake**. When bad data reaches GPs, figure out why and fix the root cause. Report errors to vendors. Improve entity resolution. Don't use low-trust data for high-stakes analysis. Each mistake is a chance to improve your infrastructure.
 
-Every analysis, dashboard, or report should include where the data came from. "Funding data from PitchBook, as of January 2026." "Employee counts from LinkedIn." "Competitive analysis based on Crunchbase and CRM data."
-
-This does two things. First, it sets expectations. People know PitchBook funding data is reliable. They know LinkedIn employee counts are approximate. They calibrate their trust appropriately. Second, when data is wrong, you can shift responsibility to the vendor. "This is what PitchBook reported" is much better than "this is what I analyzed" when the data is wrong.
-
-**Entity resolution makes blame-shifting much harder**
-
-When you combine multiple data sources, you can't easily shift blame. If your market map merges signal providers, PitchBook, and your CRM, and the funding data is wrong, whose fault is it? The data vendor, the entity resolution algorithm that matched companies incorrectly, or your data model that chose which source to trust?
-
-This is one of the hidden costs of entity resolution. Simple, single-source analyses let you point to the data provider when things are wrong. Complex, merged analyses make you responsible for errors even when the underlying data was bad.
-
-**Learn from each mistake**
-
-When bad data reaches GPs, figure out how it happened. Was the source data wrong? Did your entity resolution merge the wrong companies? Did you pull data from a low-trust source when you should have used a high-trust source? Was the data stale and you didn't surface that?
-
-Fix the root cause. If PitchBook has wrong data, report it to them. If your entity resolution is merging companies incorrectly, improve it or add human review. If you used low-trust data for high-stakes analysis, change your workflow to prevent that.
-
-Don't just apologize and move on. Each mistake is a chance to improve your data infrastructure.
-
-**Accept that perfect data doesn't exist**
-
-Even with perfect processes, external data will have errors. Companies lie on their websites. Funding announcements exaggerate. Journalists misreport. Data vendors make mistakes. You can minimize errors but not eliminate them.
-
-Set this expectation with your investment team. "We use PitchBook for funding data, which is generally accurate but has occasional errors. When we find errors, we report them to PitchBook." This is better than promising perfect data and failing to deliver.
+**Accept imperfection**. Even with perfect processes, external data will have errors. Set this expectation with your team: "We use PitchBook, which is generally accurate but has occasional errors." Better than promising perfect data and failing to deliver.
 
 ## Prevention and Detection
 
@@ -200,24 +137,9 @@ Set up automated tests that run frequently to catch data quality issues before t
 
 Run these tests frequently (daily or after each data ingestion). When tests fail, you get alerts before bad data reaches dashboards or analyses.
 
-**Why automated validation is even harder than it seems**
-
-You might think you can set up alerts for obviously wrong data: funding amounts over $1B, companies with over 100,000 employees, founding dates before 1900, or sudden 10x changes in employee count. But all of these occur as valid data:
-
-- Later-stage companies do raise $1B+ rounds (OpenAI, Stripe, etc.)
-- Large public and private companies do have 100,000+ employees
-- Old companies founded in the 1800s are still operating
-- Companies do have massive hiring sprees or layoffs that change headcount 10x
-
-Even "obvious" validation rules have too many false positives to be useful. You end up investigating legitimate data constantly, which trains you to ignore the alerts, which means you miss real errors when they occur.
-
-The only reliable automated checks are for truly impossible data: negative funding amounts, null values in required fields, dates in the future, invalid data types. Beyond that, you need domain knowledge and human review.
-
 **Human review for important analyses**
 
-Anything that will be seen by GPs or partners should have human review. You look at it (gut feel test), a friendly associate looks at it (domain knowledge check), and only then does it go to decision-makers.
-
-This doesn't scale to every query or dashboard, but for high-stakes deliverables, human review is essential. Automation is powerful, but humans catch errors that automated validation misses.
+Anything that will be seen by GPs or partners should have human review. You look at it (gut feel test), a friendly associate looks at it (domain knowledge check), and only then does it go to decision-makers. This doesn't scale to every query, but for high-stakes deliverables, human review is essential.
 
 ## The Bottom Line
 
