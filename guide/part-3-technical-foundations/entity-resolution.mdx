@@ -5,17 +5,13 @@ description: "Determining which records across different data sources refer to t
 
 ## Overview
 
-You're pulling company data from Crunchbase, PitchBook, LinkedIn, Harmonic, and your CRM. The same company appears differently in each source. Crunchbase calls it "Acme Inc." PitchBook has "Acme Corporation." LinkedIn shows "Acme." Your CRM has "ACME, Inc." with a different URL format. These are all the same company, but your system doesn't know that.
+When pulling company data from multiple sources (Crunchbase, PitchBook, LinkedIn, your CRM), the same company appears differently in each. "Acme Inc," "Acme Corporation," "Acme," "ACME, Inc.", all the same company, but your system doesn't know that.
 
-This is the entity resolution problem. Without solving it, you can't aggregate data across sources. You can't build accurate analytics. You can't create knowledge graphs. You can't track companies properly. Every query that spans multiple data sources returns duplicates or misses matches.
+Entity resolution is determining which records refer to the same real-world entity. Without it, you can't aggregate data, build accurate analytics, or track companies properly. It's one of the hardest and most important data problems in VC. Getting it right was significant to EQT's Motherbrain.
 
-Entity resolution is determining which records across different data sources refer to the same real-world entity. For VC, this primarily means companies and people. It's one of the hardest data problems you'll face. It's also one of the most important. Getting it right was a significant part of what made EQT's Motherbrain powerful.
-
-This chapter covers why entity resolution matters, how to approach it (starting simple and building up only when necessary), and what it takes to build your own entity resolution system when you reach that point. Spoiler: start with simple URL matching and avoid building a full system as long as possible.
+This chapter covers why it matters, how to approach it (start simple, build up only when necessary), and what it takes to build your own system. Spoiler: start with URL matching and avoid building a full system as long as possible.
 
 ## The Entity Resolution Problem
-
-The problem manifests in multiple ways across your data sources.
 
 **Company name variations**: "Stripe, Inc." vs "Stripe" vs "Stripe Payments" vs "Stripe Inc" (no period). These are all the same company, but string matching fails. Companies also rebrand ("Facebook" became "Meta"), get acquired (should "Instagram" be separate from Meta or merged?), and use different legal names in different jurisdictions.
 

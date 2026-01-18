@@ -5,53 +5,23 @@ description: "How to structure VC data, the critical distinction between compani
 
 ## Overview
 
-How you model your data determines what questions you can answer, how fast you can build new features, and whether your systems can adapt as your fund's needs evolve. Good data modeling makes everything easier. Bad data modeling creates technical debt that slows you down for years.
-
-VC data modeling has specific challenges. Companies change constantly (funding rounds, employee growth, pivots). Your relationship with companies evolves through multiple stages (sourcing, diligence, investment, portfolio monitoring). People move between companies, have overlapping experiences, and maintain networks that matter for deal flow. Data comes from multiple sources with conflicting information. And you need to track history because understanding what you knew when you made an investment decision is important for learning from outcomes.
-
-This chapter covers how to model venture capital data: the core entities and their relationships, the critical distinction between companies and deals, how to handle temporal data that changes over time, and how to structure your data warehouse using dbt to manage complexity as you add more data sources.
-
-The focus is on practical patterns that work for VC funds, not abstract database theory. These patterns come from building real systems at Inflection and dealing with messy, real-world data from multiple vendors.
+How you model your data determines what you can analyze, how fast you can build features, and whether your systems adapt as needs evolve. This chapter covers core entities, the critical distinction between companies and deals, temporal data handling, and practical patterns from building real VC systems.
 
 ## Core Entities and Relationships
 
 Your data model will vary based on what you're building (CRM, research platform, portfolio dashboard), but most VC systems share common entities.
 
-**Companies**
+**Companies** - Startups you might invest in, portfolio companies, competitors. Core attributes: name, description, website, founding date, location, sector, stage. Companies are the center of your data model.
 
-The companies you're tracking: startups you might invest in, portfolio companies, competitors, acquirers. Core attributes include name, description, website, founding date, location, sector, and stage.
+**Deals** - Your fund's relationship with a company (covered in detail in the next section). One company can have multiple deals: you might pass on their seed round, then invest in their Series A.
 
-Companies are the center of your data model. Most other entities relate to companies in some way.
+**People** - Founders, executives, employees. Core attributes: name, email, LinkedIn URL. People connect to companies through roles, not direct relationships.
 
-**Deals**
+**Roles** - The connection between people and companies capturing who works where, in what capacity, and when. Model as a separate entity to track full history: a founder worked at Google (2018-2020), started Company X (2020-present), while advising Company Y (2021-present).
 
-Your fund's relationship with a company. This is separate from the company itself (covered in detail in the next section). A deal represents an investment opportunity: you sourced Company X, you're in diligence, you invested, you passed.
+**Education** - Where people went to school, what they studied, when. Model separately to capture multiple degrees and overlapping education. Enables analysis like "which universities produce the most founders in our focus areas?"
 
-One company can have multiple deals. You might pass on their seed round, then invest in their Series A. Each is a separate deal.
-
-**People**
-
-Founders, executives, employees. People you've met, people at companies you're tracking, people at portfolio companies. Core attributes include name, email, LinkedIn URL, current company, current role.
-
-People are connected to companies through roles (covered below). The same person might work at multiple companies over time or even simultaneously (advisor roles, board seats).
-
-**Roles**
-
-The connection between people and companies. A role captures: this person works at this company in this capacity during this time period. Essential for tracking company history and founder backgrounds.
-
-Model roles as a separate entity rather than embedding them in the people or companies table. This lets you track full history: a founder worked at Google (2018-2020), then started Company X (2020-present), while also advising Company Y (2021-present).
-
-**Education**
-
-Where people went to school, what they studied, when. Similar to roles, model this separately so you can capture multiple degrees and overlapping education (joint degrees, part-time programs).
-
-This matters for analysis: which universities produce the most founders in your focus areas? Do Stanford CS grads in your pipeline perform differently than MIT grads? You need structured education data to answer these questions.
-
-**Funding Rounds**
-
-Capital raised by companies: seed, Series A, Series B, etc. Attributes include round type, amount raised, valuation (pre and post), date announced, date closed, lead investors, participating investors.
-
-Funding rounds are messy in early-stage VC. Not every company announces rounds. SAFE notes are common but often unreported. Data vendors have incomplete information. Your data model needs to handle this uncertainty (covered in "Dealing with Messy Reality" below).
+**Funding Rounds** - Capital raised by companies. Attributes: round type, amount, valuation, dates, investors. Expect messiness: unreported SAFE notes, incomplete data from vendors, unannounced rounds. Your data model needs to handle uncertainty (covered in "Dealing with Messy Reality" below).
 
 **Investors and Funds**
 
@@ -97,16 +67,7 @@ Some data providers (some are better at this than others) provide fund-level det
 
 This distinction has bitten many VC data systems. Get it right from the start.
 
-**LPs (Limited Partners)**
-
-The individuals and institutions who invest in your fund. If you're building fund operations tools or LP portals, you need LP entities with PII (names, addresses, tax information, investment amounts, distributions received).
-
-**LPs can be either individuals or institutions**, which creates modeling headaches. You might have HNWIs (high net worth individuals) who are people, and institutional LPs (pension funds, endowments, family offices, fund of funds) which are organizations. These have different attributes:
-
-- **Individual LPs**: Personal name, SSN/tax ID, home address, bank account for distributions
-- **Institutional LPs**: Organization name, EIN, authorized signatories, wire instructions, contact people
-
-You can model this with a type field and nullable columns, or with separate tables for individual vs. institutional LPs linked through a common LP identifier. Either works, choose based on whether you need to query across both types frequently (single table with type) or whether they're managed separately (separate tables).
+**LPs (Limited Partners)** - Individuals and institutions who invest in your fund. Required for fund operations tools or LP portals. LPs can be individuals (HNWIs with personal info) or institutions (pension funds, endowments with organizational info). Model with a type field and nullable columns, or separate tables if managed differently.
 
 The list above isn't exhaustive. Depending on what you're building, you might also model: board seats, advisors, customers (for B2B portfolio companies), competitors, acquisitions, exits, fund entities (if you manage multiple funds), and more. Start with the entities your application actually needs, not a comprehensive schema you think you might need someday.
 
@@ -285,114 +246,12 @@ The practical considerations are query performance and data warehouse costs (if 
 
 The main exception: if you're storing truly high-volume data (real-time metrics, streaming data, logs), you might need retention policies. But for standard VC data (company attributes, funding rounds, people roles), just keep it all.
 
-## The dbt Approach to Data Modeling
-
-As you add more data sources (PitchBook, LinkedIn, Harmonic, your CRM, scraped data), your data model needs structure to stay manageable. Follow dbt's layered approach: staging → intermediate → marts.
-
-**Staging: Raw data to columns**
-
-Staging models take raw JSON or CSV data from external sources and convert it to structured columns. These are append-only: every fetch creates new rows. Minimal transformation, just making the data queryable.
-
-```sql
--- models/staging/pitchbook/stg_pitchbook__company_changes.sql
--- Takes raw JSON from PitchBook API, extracts fields
-
-SELECT
-  raw_json->>'id' AS external_id,
-  (raw_json->>'name')::text AS name,
-  (raw_json->>'description')::text AS description,
-  (raw_json->>'employeeCount')::integer AS employee_count,
-  (raw_json->>'fundingTotal')::numeric AS funding_total,
-  fetched_at,
-  created_at
-FROM raw_pitchbook_data
-```
-
-One staging model per source table. If you're pulling from PitchBook, LinkedIn, and Harmonic, you have separate staging models for each.
-
-**Intermediate: Latest values per source**
-
-Intermediate models take staging data and get the latest value per entity. These are still source-specific: `pitchbook_companies`, `linkedin_companies`, `harmonic_companies`.
-
-```sql
--- models/intermediate/pitchbook_companies.sql
-SELECT DISTINCT ON (external_id)
-  external_id,
-  name,
-  description,
-  employee_count,
-  funding_total,
-  fetched_at AS pitchbook_updated_at
-FROM {{ ref('stg_pitchbook__company_changes') }}
-ORDER BY external_id, fetched_at DESC
-```
-
-Intermediate models can also do joins, calculations, and business logic that's specific to understanding that source's data. But they don't combine sources yet.
-
-**Marts: Combined for specific use cases**
-
-Mart models combine data from multiple sources for specific analyses or applications. This is where you deal with conflicting information from different vendors.
-
-**Option 1: Make hierarchical choices**
-
-Decide which source wins for each field, based on your assessment of data quality (covered in [Data Quality](/guide/part-3-technical-foundations/data-quality)):
-
-```sql
--- models/marts/companies_enriched.sql
--- Combines multiple sources, choosing best value for each field
-
-SELECT
-  c.id,
-  COALESCE(pb.name, li.name, c.name) AS name,
-  pb.description AS description, -- PitchBook best for descriptions
-  li.employee_count AS employee_count, -- LinkedIn best for headcount
-  pb.funding_total AS funding_total, -- PitchBook best for funding
-  c.website,
-  c.sector
-FROM companies c
-LEFT JOIN pitchbook_companies pb ON c.pitchbook_id = pb.external_id
-LEFT JOIN linkedin_companies li ON c.linkedin_id = li.external_id
-```
-
-This approach gives downstream applications a single "best available" value for each field. Simpler to use, but you lose information about where data came from and what alternatives existed.
-
-**Option 2: Keep multiple columns**
-
-Store data from each source in separate columns and let applications decide which to use:
-
-```sql
--- models/marts/companies_enriched.sql
--- Keeps separate columns for each source
-
-SELECT
-  c.id,
-  c.name,
-  pb.description AS description_pitchbook,
-  li.description AS description_linkedin,
-  pb.employee_count AS employee_count_pitchbook,
-  li.employee_count AS employee_count_linkedin,
-  pb.funding_total AS funding_total_pitchbook,
-  pb.updated_at AS pitchbook_updated_at,
-  li.updated_at AS linkedin_updated_at
-FROM companies c
-LEFT JOIN pitchbook_companies pb ON c.pitchbook_id = pb.external_id
-LEFT JOIN linkedin_companies li ON c.linkedin_id = li.external_id
-```
-
-This preserves all information and lets applications make context-specific choices (use the most recent data, or prefer a specific source for certain use cases). More flexible, but more complex for downstream code to handle.
-
-**Which approach to use?**
-
-For most fields, make hierarchical choices in the mart. It's simpler and good enough. For fields where you genuinely need to see multiple sources (descriptions from different vendors sometimes emphasize different aspects of what a company does), keep separate columns.
-
-Don't try to keep separate columns for everything. Your queries become unmanageable and applications get confused about which field to use. Pick the fields where multiple perspectives actually matter.
+As you add more data sources, follow dbt's layered approach (staging → intermediate → marts) to stay organized. The [Data Warehousing](/guide/part-3-technical-foundations/data-warehousing) chapter covers this methodology in detail.
 
 ## The Bottom Line
 
 Accept that VC data is messy: multiple investments per company, imperfect funding data, overlapping experiences. Your data model should handle uncertainty and incomplete information.
 
-Use append-only staging tables (storage is cheap), transform through dbt to get latest values, combine sources in marts. Follow dbt's layered approach: staging → intermediate → marts.
-
-Start with what you actually need. Don't model everything upfront. Add entities as your systems grow.
+Separate companies from deals. Use append-only tables for history (storage is cheap), transform to latest values for queries. Start with what you need and add entities as your systems grow.
 
 In the next chapter, we'll cover more advanced entity resolution: matching the same company across different data sources when they use different names, formats, and identifiers.

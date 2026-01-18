@@ -30,81 +30,19 @@ Even if you're not immediately running complex analyses, having a data warehouse
 
 ## Choosing Your Data Warehouse
 
-There are several options for data warehouses. The right choice depends on your fund's size, technical sophistication, and whether you need specialized data warehouse features or if a standard database works fine.
+**For small funds: Start with Postgres**. If you're tracking tens of thousands of companies (not millions), Postgres works fine. It's simpler and cheaper than specialized warehouses, your team already knows it, and you can use the same database for applications and analytics.
 
-**For small funds: Start with Postgres**
+Before migrating to a specialized warehouse, consider Postgres extensions: **[pg_mooncake](https://www.mooncake.dev/pgmooncake/)** (Iceberg/Delta Lake format on S3) or **[Hydra](https://github.com/hydradatabase/columnar)** (columnar storage, 200x+ speedups for analytics). These let you keep Postgres while getting analytics database benefits.
 
-If you're a small fund (Fund I or early Fund II, team of 5-15 people, not yet tracking hundreds of thousands of companies), Postgres is often the easiest choice. It's a relational database, not a specialized data warehouse, but for smaller data volumes it works perfectly well.
+**For larger funds: Snowflake, BigQuery, or Redshift**. When Postgres performance degrades (millions of companies, complex aggregations), migrate to a specialized warehouse. Snowflake (industry standard, cloud-agnostic, expensive), BigQuery (fast, Google ecosystem, query-based pricing), or Redshift (AWS integration, cheapest if committed to AWS). Choose based on your cloud ecosystem.
 
-**Why Postgres makes sense for small funds**:
-
-- Simpler to set up and manage than specialized warehouses
-- Cheaper (you can run it yourself or use managed services like AWS RDS or Neon for much less than Snowflake)
-- Your team probably already knows SQL and Postgres
-- If you build other applications (research platforms, internal tools), they'll use the same SQL dialect
-- Easier to keep everything in one database type until you hit scale where you need specialized warehousing
-
-Many small funds use Postgres for everything: CRM data, warehouse, application databases. This simplicity is valuable. You're not managing multiple database systems, not dealing with vendor lock-in from specialized warehouses, and not paying for capabilities you don't need yet.
-
-**When you outgrow Postgres**: As your data volume grows (hundreds of thousands of companies, years of historical data, complex aggregations), Postgres query performance starts to degrade. This usually happens at larger funds (multi-billion dollar funds tracking extensive markets) or funds with very sophisticated data infrastructure. For most small to mid-size funds, Postgres is adequate.
-
-**Extending Postgres with analytics capabilities**
-
-Before migrating to a specialized warehouse, consider Postgres extensions that add columnar storage and analytics features:
-
-- **[pg_mooncake](https://www.mooncake.dev/pgmooncake/)**: Optimizes PostgreSQL for analytics by storing tables in Iceberg or Delta Lake format, either on local disk or cloud storage like S3. Relatively new but promising for analytics workloads.
-
-- **[Hydra](https://github.com/hydradatabase/columnar)**: Open-source columnar storage extension focused on analytical workloads. Stores data by column instead of row, dramatically improving query performance for analytics (benchmarks show 200x+ speedups for analytical queries).
-
-These extensions let you keep using Postgres while getting some benefits of specialized analytics databases. They're worth considering if you're hitting performance limits but want to delay the complexity and cost of migrating to Snowflake or BigQuery.
-
-**For larger funds: Snowflake, BigQuery, or Redshift**
-
-When you need the performance and features of a specialized data warehouse, the main options are:
-
-- **Snowflake**: Most popular for enterprise data warehousing. Good performance, easy to scale, separation of compute and storage. More expensive than alternatives. Lots of third-party tools integrate with it. Good choice if you have budget and want the industry standard.
-
-- **BigQuery**: Google's data warehouse. Very fast for large-scale analytics, good integration with Google Cloud services. Pricing based on queries and storage. Good choice if you're already in the Google ecosystem or if your queries benefit from BigQuery's columnar storage and distributed architecture.
-
-- **Redshift**: Amazon's data warehouse. Tightly integrated with AWS services. Good choice if you're already heavily using AWS. Generally considered less user-friendly than Snowflake or BigQuery but cheaper if you're committed to AWS.
-
-All three work well. The choice often comes down to what cloud ecosystem you're already in (AWS → Redshift, GCP → BigQuery, or Snowflake if you want something cloud-agnostic). None of these are over-engineering for larger funds, though they might be overkill if you're still small.
-
-**The migration path**: Start with Postgres when you're small. When query performance becomes painful or you're spending too much time optimizing Postgres for analytics workloads, migrate to Snowflake, BigQuery, or Redshift. This migration is straightforward because you're already structuring data in a warehouse pattern. You're just moving from one database to a more powerful one.
+**Migration path**: Start with Postgres. Migrate when query performance becomes painful. The migration is straightforward - you're already structuring data in a warehouse pattern, just moving to a more powerful database.
 
 ## The ELT Approach with dbt
 
-Once you have a data warehouse, you need to decide how to get data into it and transform it for analysis. The modern approach is ELT (Extract, Load, Transform) using dbt (data build tool).
+The modern approach is ELT (Extract, Load, Transform) using dbt. Traditional ETL transforms data before loading it. ELT loads raw data first, then transforms it using SQL inside the warehouse. This is simpler because all transformation logic is in SQL, version-controlled, and tested like application code.
 
-**ELT vs ETL**
-
-Traditional data warehousing used ETL (Extract, Transform, Load): pull data from source systems, transform it into the right format using custom code or ETL tools, then load it into the warehouse. This meant lots of custom transformation logic outside your warehouse, often in hard-to-maintain scripts.
-
-ELT flips this: Extract data from sources, Load it into your warehouse as raw data, then Transform it using SQL inside the warehouse. This is simpler because all your transformation logic is in SQL, runs inside the warehouse where data already lives, and can be version-controlled and tested like application code.
-
-**Why dbt is the standard**
-
-dbt (data build tool) is the industry standard for the Transform step in ELT. It lets you write transformations as SQL models that reference each other, automatically figures out the dependency order, runs tests to validate data quality, and generates documentation.
-
-Instead of writing complex SQL scripts that need to be run in the right order, you write dbt models (SELECT statements) and dbt handles orchestration. Instead of manually testing your data, you define tests in dbt that run automatically. Instead of maintaining separate documentation, dbt generates docs from your code.
-
-**How this works in practice**:
-
-1. Extract data from your sources (CRM API, PitchBook exports, LinkedIn data, etc.) and load it raw into your warehouse. This is usually done with extraction tools like Fivetran, Airbyte, or custom scripts.
-
-2. Raw data lands in staging tables in your warehouse. These are exact copies of source data, no transformations yet.
-
-3. Write dbt models to transform raw data into useful structures:
-   - Clean and normalize data
-   - Combine data from multiple sources (joining CRM deals with PitchBook funding data)
-   - Calculate derived metrics (growth rates, time in pipeline, portfolio performance)
-   - Build final tables (marts) optimized for specific analyses or dashboards
-
-4. dbt runs these transformations on a schedule (nightly, hourly, or triggered after raw data loads).
-
-5. Analysts and dashboards query the final transformed tables, not raw data.
-
-This approach is dramatically simpler than custom ETL pipelines. All transformation logic is SQL, version-controlled in git, tested automatically, and easy to modify.
+**How it works**: Extract data from sources (CRM, PitchBook, LinkedIn) and load it raw into your warehouse using tools like Fivetran or Airbyte. Write dbt models (SELECT statements) to transform raw data: clean and normalize, combine sources, calculate metrics, build final tables (marts) for analysis. dbt handles orchestration, testing, and documentation automatically. Analysts query the transformed tables, not raw data.
 
 ## Organizing Your Data: dbt Best Practices
 

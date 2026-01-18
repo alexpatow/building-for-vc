@@ -35,29 +35,11 @@ Venture capital is fundamentally about networks and relationships. Understanding
 
 **Competitor analysis**: For portfolio companies or potential investments, understanding the competitive landscape means knowing not just who the competitors are, but how they're connected. Do they share investors? Do they target the same customers? Have they hired from each other? These relationship patterns reveal competitive dynamics that a flat database misses.
 
-**Company similarity**: Finding similar companies is valuable for sourcing (if we liked this investment, what else is similar?) and benchmarking (how does our portfolio company compare to similar companies?). Similarity based on relationships (same investors, same hiring sources, same partners) often reveals more than similarity based on keywords or sector tags. EQT's CompanyKG project focuses heavily on this use case.
+**Company similarity**: Finding similar companies is valuable for sourcing (if we liked this investment, what else is similar?) and benchmarking (how does our portfolio company compare to similar companies?). Similarity based on relationships (same investors, same hiring sources, same partners) often reveals more than similarity based on keywords or sector tags. **EQT's CompanyKG** (1.17M companies, 51M edges representing 15 relationship types) focuses heavily on this, quantifying similarity through network structure and company description embeddings. They benchmarked 11 different methods, validating that relationship data is valuable enough to build serious infrastructure around.
 
-**Network analysis**: Tracking who knows whom, which investors co-invest together, which founders worked together at previous companies. This is critical for understanding warm intro paths, evaluating investor syndicates, and sourcing through your network. A knowledge graph makes these network queries natural.
+**Network analysis, M&A patterns, investment patterns**: Tracking who knows whom, which investors co-invest, which companies acquire others, which founders worked together. Knowledge graphs make these network queries natural. Understanding acquisition paths, warm intro paths, and investor syndicate behavior all emerge from relationship data.
 
-**M&A analysis**: Understanding potential acquisition paths means knowing which larger companies acquire companies like yours, which companies are building in adjacent spaces, and which strategic investors tend to become acquirers. These patterns emerge from relationship data, not just company attributes.
-
-**Investment patterns**: Which investors tend to follow each other into deals? Which investors lead vs. follow? If investor X invests in a company, which other investors typically join the round? These patterns help with fundraising strategy for portfolio companies and understanding investor behavior for deal flow.
-
-**Identifying tech hubs**: Knowledge graphs can reveal concentrations of entrepreneurial activity. Which cities have the highest density of successful startups in your focus area? Which companies are "founder factories" where employees frequently leave to start companies (like PayPal, Google, or Stripe)? Which universities produce the most founders in your sectors? These patterns help with sourcing (target recruiting from these hubs) and understanding where innovation clusters are forming. A graph query can show you that 15 interesting AI infrastructure companies were founded by people who previously worked at Meta's infrastructure team, suggesting that's a network worth paying attention to.
-
-## Real Example: CompanyKG at EQT
-
-EQT built CompanyKG as part of their Motherbrain investment platform. It's a large-scale knowledge graph designed to quantify similarities between companies for investment purposes.
-
-**Scale**: 1.17 million companies as nodes, with 51 million weighted edges representing 15 different types of inter-company relationships. Each company node is enriched with company description embeddings (vector representations of what the company does).
-
-**Use cases**: Market mapping (understanding companies in a space and their relationships), competitor analysis (finding companies that compete with a target or portfolio company), and M&A evaluation (identifying potential acquirers or acquisition targets based on relationship patterns).
-
-**Evaluation**: EQT developed three tasks to validate the knowledge graph's usefulness: similarity prediction (how similar are two companies?), competitor retrieval (given a company, find its competitors), and similarity ranking (rank companies by similarity to a target). They benchmarked 11 different methods for using the graph data, comparing approaches that use only node features, only edge relationships, or both combined.
-
-**Why it matters**: This is the first large-scale heterogeneous graph dataset from a real-world investment platform. It demonstrates that relationship data is valuable enough to build serious infrastructure around. But notably, EQT built this on top of their existing Motherbrain platform. They didn't start with a graph database. They modeled their data properly first, then built the knowledge graph as a layer on top.
-
-This is the right approach for most funds.
+**Identifying tech hubs**: Knowledge graphs reveal entrepreneurial concentrations. Which companies are "founder factories" (PayPal, Google, Stripe)? Which universities produce the most founders in your sectors? A graph query can show that 15 AI infrastructure companies were founded by people who worked at Meta's infrastructure team, suggesting a network worth watching.
 
 ## GraphRAG: Knowledge Graphs for AI Systems
 
@@ -121,7 +103,7 @@ For most VC funds, the right answer is to model everything in a relational datab
 - Ensure you capture relationships (investments, employment, board seats, partnerships)
 - For basic relationship queries, use SQL joins (they work fine for 1-2 levels of relationships)
 - When you need complex graph queries, either:
-  - Build a materialized view in a graph database (periodically sync data from Postgres to Neo4j)
+  - Build a materialized view in a graph database (periodically sync data from the relational database to the graph database)
   - Use graph algorithms directly on your relational data (libraries like NetworkX in Python can build graphs from relational queries)
   - Query your relational database and build graph structures in your application layer when needed
 
@@ -135,11 +117,10 @@ If you do decide to use a graph database (either as your primary store or as a s
 
 - **Neo4j**: Most popular graph database, mature ecosystem, Cypher query language. Good developer experience and tooling.
 - **Amazon Neptune**: Managed graph database on AWS, supports both Gremlin and SPARQL. Good if you're already on AWS.
-- **TigerGraph**: Focuses on real-time graph analytics at scale. Good for very large graphs with complex analytics.
 - **Memgraph**: In-memory graph database startup with focus on streaming data and real-time analytics. Compatible with Neo4j's Cypher query language.
 - **FalkorDB**: Graph database startup built on Redis, emphasizing low latency and high throughput. Also uses Cypher. Good for real-time applications.
 
-Note that Memgraph and FalkorDB are newer startups, whereas Neo4j and TigerGraph are more established with larger ecosystems and enterprise support.
+Note that Memgraph and FalkorDB are newer startups, whereas Neo4j and Neptune are more established with larger ecosystems and enterprise support.
 
 **Data modeling**: Graph data modeling is different from relational modeling. You need to think about what should be nodes vs. properties (is a funding round a node or a property of an investment edge?), how to model time-varying relationships (person worked at company from date X to date Y), and how to handle different relationship types with different semantics.
 
@@ -157,6 +138,6 @@ But don't start with a graph database. Most VC funds should model their data in 
 
 The hybrid approach works best: model everything in Postgres or similar, then build knowledge graph projections on top when you need them. This could mean materializing data into Neo4j for specific analyses, using graph libraries on top of your relational data, or building graph views in your application layer.
 
-EQT's CompanyKG demonstrates the value of knowledge graphs for VC at scale: 1.17 million companies, 51 million relationships, powering market mapping, competitor analysis, and company similarity. But they built this on top of their existing Motherbrain platform, not as a replacement for it.
+EQT's CompanyKG demonstrates the value of knowledge graphs for VC at scale: 1.17 million companies, 51 million relationships, powering market mapping, competitor analysis, and company similarity. But they built this as a research project on top of their existing Motherbrain platform, not as a replacement for it.
 
 If relationship queries become core to your competitive advantage, invest in proper graph infrastructure. Until then, model your relationships clearly in relational databases and build graph capabilities as needed.

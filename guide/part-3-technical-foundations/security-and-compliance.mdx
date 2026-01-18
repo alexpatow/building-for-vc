@@ -45,43 +45,15 @@ When building research platforms or CRM systems, think about access controls and
 
 ## Basic Security Principles
 
-These principles apply regardless of what systems you're building.
+**Use proven tools**: Don't write your own authentication, encryption, or access control. Use OAuth providers (Google, Okta), authentication services (Auth0, Clerk), and standard encryption libraries. Security is hard - use tools built by experts.
 
-**Principle 1: Use proven tools, don't build your own security**
+**Encrypt data**: Use HTTPS everywhere (data in transit). Enable database encryption at rest (checkbox option in managed services). For LP PII or MNPI, consider application-level encryption.
 
-Don't write your own authentication system. Don't implement your own encryption. Don't build your own access control framework from scratch. Use established libraries and services that have been reviewed by security experts and are widely deployed.
+**Implement access controls**: Not everyone needs access to everything. Use role-based access control (RBAC): define roles (partner, associate, operations) and permissions (read portfolio data, edit CRM, view LP info). Use audit logs to track who accessed what.
 
-For authentication, use OAuth providers (Google, Microsoft, Okta) or authentication services (Auth0, Clerk). For encryption, use standard libraries rather than implementing crypto yourself. For access controls, use frameworks with built-in RBAC (role-based access control).
+**Principle of least privilege**: Give people and services only the minimum access needed. This limits damage if credentials are compromised.
 
-Security is hard to get right. The people who built these tools thought deeply about attack vectors, edge cases, and proper implementation. You won't do better by rolling your own.
-
-**Principle 2: Encrypt data at rest and in transit**
-
-All sensitive data should be encrypted when stored (at rest) and when transmitted over networks (in transit).
-
-For data in transit, use HTTPS everywhere. Every API, every internal service, every dashboard should use TLS/SSL. This is standard now: any modern hosting platform (Vercel, AWS, etc.) makes this trivial.
-
-For data at rest, use database encryption. Managed database services (AWS RDS, Google Cloud SQL, hosted Postgres) offer encryption at rest as a checkbox option. Turn it on. For particularly sensitive data (LP PII, certain MNPI), consider application-level encryption where data is encrypted before being stored in the database.
-
-**Principle 3: Implement proper access controls**
-
-Not everyone at your fund should have access to everything. Partners might need access to all portfolio company data, but junior associates probably don't need access to LP PII. Engineers debugging systems need access to logs and error information, but probably don't need access to production financial data.
-
-Implement role-based access control (RBAC) in your systems. Define roles (partner, associate, operations, engineering) and permissions (read portfolio data, edit CRM records, view LP information), and assign roles to users. This is easier to maintain than per-user permissions.
-
-Use audit logs to track who accessed what data and when. If there's ever a question about whether information was accessed inappropriately, you need to be able to answer it.
-
-**Principle 4: Follow the principle of least privilege**
-
-Give people (and services) only the minimum access they need to do their jobs. If someone doesn't need access to LP data, don't give it to them "just in case." If a service only needs read access to your database, don't give it write access.
-
-This limits damage if credentials are compromised. If an engineer's laptop is stolen and they only had read access to non-sensitive data, the exposure is limited. If they had admin access to everything, the exposure is much larger.
-
-**Principle 5: Keep data only as long as needed**
-
-Don't keep sensitive data forever. Define retention policies: how long do you keep LP information after they exit the fund? How long do you keep due diligence data on companies you passed on? How long do you keep audit logs?
-
-Some data you're required to keep for regulatory reasons (usually 5-7 years for RIAs). Other data can be deleted sooner. Talk to your compliance team about appropriate retention periods, then implement automatic deletion policies so old data doesn't accumulate indefinitely.
+**Keep data only as long as needed**: Define retention policies with your compliance team. RIAs typically must keep some data 5-7 years. Implement automatic deletion for other data.
 
 ## Working with Your Compliance and Legal Teams
 

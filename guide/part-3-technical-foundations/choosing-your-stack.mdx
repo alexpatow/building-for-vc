@@ -5,13 +5,9 @@ description: "The default technology stack for VC tools, when to deviate from it
 
 ## Overview
 
-Your job is to ship tools that help your fund make better investment decisions. Technology choices matter because they affect how fast you can build, how easy it is to maintain what you've built, and what you can accomplish as a small team with limited resources.
+Your job is to ship tools that help your fund make better investment decisions. You're building internal tools for 5-20 people, not the next Stripe. The right stack lets you ship fast, maintain easily, and integrate with VC tools like PitchBook and Attio.
 
-But here's what's different about building technology at a VC fund: you're not building the next Stripe. You're building internal tools for 5-20 people. You're probably a solo developer or a team of 2-3. Your users are investors who care about insights, not engineers who care about architecture. Most importantly, you need to prove value quickly to justify your role and get support for bigger projects.
-
-These constraints should drive every technology decision you make. The right stack for VC is one that lets you ship fast, maintain easily, and integrate with the specific ecosystem of tools that VCs use. It's not about using the newest framework or the most elegant architecture. It's about building things that work and that people actually use.
-
-This chapter covers the default technology stack you should use, when to deviate from it, how to handle existing code you inherit, and why your value comes from what you build rather than how you build it.
+This chapter covers the default technology stack for VC, when to deviate from it, and why velocity matters more than architecture.
 
 ## Why Technology Choices Matter for VC
 
@@ -21,11 +17,11 @@ The technology decisions you make have direct consequences for what you can acco
 
 **Maintenance matters more than elegance**. You'll be maintaining this code, probably alone, for years. The clever architecture that seemed smart when you built it becomes a nightmare when you're the only person who understands it. Boring, well-documented, widely-used technology means you can fix things quickly and onboard others if your team grows.
 
-**Integration matters more than custom solutions**. VC funds live in an ecosystem of specific tools: Attio or Affinity for CRM, PitchBook for data, Harmonic or Specter for sourcing. You need to integrate with these. Choosing technology that makes API integrations easy is more valuable than choosing technology that's theoretically more powerful.
+**Integration matters more than custom solutions**. VC funds live in an ecosystem of specific tools: Attio or Affinity for CRM, PitchBook for data, Harmonic or Specter for sourcing. Choosing technology that makes API integrations easy is more valuable than choosing technology that's theoretically more powerful.
 
-**AI coding assistance is now essential**. When you're a solo developer building multiple tools, AI coding agents (Claude Code, Cursor, Codex) are the difference between shipping something in a day versus a month. These tools work dramatically better with popular, well-documented frameworks. Choosing Next.js over some obscure framework means Claude Code can help you ship faster.
+**AI coding tools work better with popular frameworks**. Claude Code, Cursor, and similar tools dramatically accelerate development with well-documented stacks. This makes choosing boring, widely-used technology even more valuable.
 
-**Your time is the constraint, not compute**. Infrastructure costs for internal VC tools are trivial compared to data subscriptions and compared to your salary. Optimizing for developer velocity rather than hosting costs is the right tradeoff.
+**Your time is the constraint, not compute**. Infrastructure costs for internal VC tools are trivial compared to data subscriptions and your salary. Optimize for developer velocity, not hosting costs.
 
 ## The Default Stack
 
@@ -162,35 +158,15 @@ These are core dependencies that make sense. They're maintained by companies who
 
 Check financial backing and maintenance status. A library with a company behind it is safer than a side project from a solo developer. Not a hard rule, but a useful signal.
 
-## Modern Dev Tools Change the Hiring Equation
+## What Actually Matters
 
-With the development tools available today, you can learn any language or framework very quickly. Better linting, tree-sitter-based code navigation, tab autocomplete, and especially AI coding agents like Claude Code mean that switching between languages is less of a barrier than it was five years ago.
+GPs don't care that you used Next.js or have elegant architecture. They care about whether your tools help them find better companies, make better decisions, and generate better returns. Your value comes from building research platforms that surface insights, sourcing tools that identify companies early, and analyses that inform thesis development. Not from using the newest framework or optimizing performance beyond what's necessary.
 
-**The implication for hiring**: If you do hire engineers to join your team, hire for VC domain knowledge and product sense over language expertise. Someone who understands venture capital, knows how investors think, and can build tools that GPs actually use is far more valuable than someone who's an expert in React but doesn't understand your users.
+**Modern AI tools change everything**. With Claude Code or Cursor, learning any language or framework is fast. AI agents handle syntax, suggest patterns, and catch mistakes. This means two things:
 
-With Claude Code or Cursor, a smart engineer who knows Python can become productive in TypeScript within a week. The AI tools handle syntax, suggest patterns, and catch mistakes. What matters is understanding what to build and why, not memorizing framework APIs.
+**For you**: Choose popular, well-documented frameworks. The AI tools work dramatically better with them, letting you ship faster.
 
-That said, this assumes someone who's already a strong engineer. If you're hiring junior developers, the equation changes. But at VC funds, you should be hiring senior people.
-
-## What GPs Actually Care About
-
-GPs don't care that you used Next.js. They don't care about your database schema. They don't care about your deployment pipeline. They care about whether your tools help them find better companies, make better decisions, and ultimately generate better returns for LPs.
-
-**Your value comes from:**
-
-- Building a research platform that surfaces insights they wouldn't have found manually
-- Building sourcing tools that identify companies before competitors do
-- Building portfolio dashboards that show which companies need attention
-- Building analyses that inform thesis development or market understanding
-
-**Your value does not come from:**
-
-- Using the newest JavaScript framework
-- Having the most elegant architecture
-- Optimizing performance beyond what's necessary
-- Building infrastructure for scale you'll never reach
-
-This is why the chapter emphasizes boring, proven technology. The stack doesn't matter. What matters is shipping tools that work, that GPs actually use, and that make your fund better at investing.
+**For hiring**: Prioritize VC domain knowledge and product sense over language expertise. Someone who understands venture capital and can build tools GPs actually use is far more valuable than a React expert who doesn't understand your users. With AI coding assistance, a strong engineer can become productive in a new stack within a week.
 
 Technology is a means to an end. The end is helping your fund deploy capital more effectively. Choose technology that lets you reach that end faster.
 
