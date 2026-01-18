@@ -61,10 +61,6 @@
               "guide/part-3-technical-foundations/security-and-compliance",
               "guide/part-3-technical-foundations/emerging-trends"
             ]
-          },
-          {
-            "group": "Conclusion",
-            "pages": ["guide/final-thoughts"]
           }
         ]
       },
