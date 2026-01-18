@@ -51,7 +51,9 @@ This site uses Mintlify's GitHub integration. Changes pushed to the default bran
 
 ## Contributing
 
-If you find errors, have suggestions, or want to contribute additional content, please open an issue or pull request. Feel free to reach out on [LinkedIn](https://www.linkedin.com/in/alexpatow/) or via email at [ap@ınflection.fund](mailto:ap@inflection.fund).
+If you find errors, have suggestions, or want to contribute additional content, please open an issue or pull request.
+
+For detailed contribution guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md). Feel free to reach out on [LinkedIn](https://www.linkedin.com/in/alexpatow/) or via email at [ap@ınflection.fund](mailto:ap@inflection.fund).
 
 ### Code Quality and Formatting
 

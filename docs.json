@@ -62,12 +62,19 @@
     }
   },
   "navbar": {
-    "links": []
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/alexpatow/building-for-vc"
+      }
+    ]
   },
   "contextual": {
     "options": ["copy", "view", "chatgpt", "claude", "perplexity", "mcp", "cursor", "vscode"]
   },
   "footer": {
-    "socials": {}
+    "socials": {
+      "github": "https://github.com/alexpatow/building-for-vc"
+    }
   }
 }
