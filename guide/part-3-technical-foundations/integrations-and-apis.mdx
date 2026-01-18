@@ -1,5 +1,5 @@
 ---
-title: "Integrations and API Design"
+title: "Integrations"
 description: "Common integration patterns, validating API responses, handling webhooks and rate limits, and practical approaches to connecting VC tools."
 ---
 
@@ -7,7 +7,7 @@ description: "Common integration patterns, validating API responses, handling we
 
 Much of the technical work at a VC fund is building glue between tools. Connecting meeting notes to your CRM, data providers to your warehouse, portfolio data to dashboards. Some integrations exist out of the box, but many require custom code.
 
-This chapter covers common integration patterns, validation strategies, webhook handling, rate limits, and internal API design. The focus is on practical patterns that work for VC funds.
+This chapter covers common integration patterns, validation strategies, webhook handling, and rate limits. The focus is on practical patterns that work for VC funds.
 
 ## Common Integration Patterns
 
@@ -307,27 +307,6 @@ If you're building features that use LLMs, three key considerations:
 
 **Set timeouts**. LLM requests can take 30+ seconds. Set 60-90 second timeouts so slow providers don't block indefinitely.
 
-## Internal API Design
-
-If you're building internal services that need APIs (your research platform, sourcing tool, portfolio dashboard), keep internal API design simple and consistent.
-
-**Pick one language and framework for everything**
-
-At Inflection, everything is TypeScript with Next.js. This consistency means:
-
-- You write code the same way across services
-- You can reuse libraries and utilities
-- You can move between codebases easily
-- Deployment and infrastructure are consistent
-
-Pick what your team knows and stick with it. Most of what you build isn't latency-sensitive (requests completing in 200ms vs 50ms doesn't matter for internal tools). Optimize for ergonomics and developer productivity over raw performance.
-
-**REST as default**
-
-For most internal APIs, REST is sufficient. GET /companies/:id, POST /companies, etc. Simple, well-understood, easy to test.
-
-**Version your APIs** if they're used by multiple services. /v1/companies, /v2/companies. This lets you make breaking changes without breaking existing clients.
-
 ## Authentication and Data Delivery Patterns
 
 Different vendors deliver data in different ways. Some provide APIs, others provide file exports.
@@ -378,8 +357,8 @@ Established vendors are less flexible, but newer vendors building for the VC mar
 
 ## The Bottom Line
 
-Most technical work at VC funds is glue code. Validate everything with Zod or Pydantic - never trust external APIs. Respect rate limits with exponential backoff. Use transactions to avoid partial failures.
+Much of the technical work at VC funds is glue code. Validate everything with Zod or Pydantic: never trust external APIs. Respect rate limits with exponential backoff. Use database transactions to avoid partial failures.
 
-For LLMs, use an AI gateway for failover. Pick one language and framework for internal services. Pay attention to vendor API changes - they happen frequently.
+For LLMs, use an AI gateway for failover. Pay attention to vendor API changes - they happen frequently.
 
 In the next chapter, we'll cover security and compliance: handling sensitive data, SEC regulations, access controls, and audit requirements for VC funds.

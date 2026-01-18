@@ -30,11 +30,11 @@ Even if you're not immediately running complex analyses, having a data warehouse
 
 ## Choosing Your Data Warehouse
 
-**For small funds: Start with Postgres**. If you're tracking tens of thousands of companies (not hundreds of thousands), Postgres works fine. It's simpler and cheaper than specialized warehouses, your team already knows it, and you can use the same database for applications and analytics.
+**For small funds: Start with Postgres**. If you're tracking tens of thousands of companies (not millions), Postgres works fine. It's simpler and cheaper than specialized warehouses, your team already knows it, and you can use the same database for applications and analytics.
 
 Before migrating to a specialized warehouse, consider Postgres extensions: **[pg_mooncake](https://www.mooncake.dev/pgmooncake/)** (Iceberg/Delta Lake format on S3) or **[Hydra](https://github.com/hydradatabase/columnar)** (columnar storage, 200x+ speedups for analytics). These let you keep Postgres while getting analytics database benefits.
 
-**For larger funds: Snowflake, BigQuery, or Redshift**. When Postgres performance degrades (hundreds of thousands of companies, complex aggregations), migrate to a specialized warehouse. Snowflake (industry standard, cloud-agnostic, expensive), BigQuery (fast, Google ecosystem, query-based pricing), or Redshift (AWS integration, cheapest if committed to AWS). Choose based on your cloud ecosystem.
+**For larger funds: Snowflake, BigQuery, or Redshift**. When Postgres performance degrades (millions of companies, complex aggregations), migrate to a specialized warehouse. Snowflake (industry standard, cloud-agnostic, expensive), BigQuery (fast, Google ecosystem, query-based pricing), or Redshift (AWS integration, cheapest if committed to AWS). Choose based on your cloud ecosystem.
 
 **Migration path**: Start with Postgres. Migrate when query performance becomes painful. The migration is straightforward - you're already structuring data in a warehouse pattern, just moving to a more powerful database.
 

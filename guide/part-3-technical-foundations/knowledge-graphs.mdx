@@ -41,8 +41,6 @@ Venture capital is fundamentally about networks and relationships. Understanding
 
 **Identifying tech hubs**: Knowledge graphs reveal entrepreneurial concentrations. Which companies are "founder factories" (PayPal, Google, Stripe)? Which universities produce the most founders in your sectors? A graph query can show that 15 AI infrastructure companies were founded by people who worked at Meta's infrastructure team, suggesting a network worth watching.
 
-**Key lesson from EQT**: They built CompanyKG on top of their existing Motherbrain platform. They didn't start with a graph database. They modeled their data properly first, then built the knowledge graph as a layer on top. This is the right approach for most funds.
-
 ## GraphRAG: Knowledge Graphs for AI Systems
 
 An emerging application of knowledge graphs in VC is GraphRAG (Graph Retrieval-Augmented Generation). This combines knowledge graphs with large language models to improve how AI systems retrieve and reason about your data.
@@ -105,7 +103,7 @@ For most VC funds, the right answer is to model everything in a relational datab
 - Ensure you capture relationships (investments, employment, board seats, partnerships)
 - For basic relationship queries, use SQL joins (they work fine for 1-2 levels of relationships)
 - When you need complex graph queries, either:
-  - Build a materialized view in a graph database (periodically sync data from Postgres to Neo4j)
+  - Build a materialized view in a graph database (periodically sync data from the relational database to the graph database)
   - Use graph algorithms directly on your relational data (libraries like NetworkX in Python can build graphs from relational queries)
   - Query your relational database and build graph structures in your application layer when needed
 
@@ -119,11 +117,10 @@ If you do decide to use a graph database (either as your primary store or as a s
 
 - **Neo4j**: Most popular graph database, mature ecosystem, Cypher query language. Good developer experience and tooling.
 - **Amazon Neptune**: Managed graph database on AWS, supports both Gremlin and SPARQL. Good if you're already on AWS.
-- **TigerGraph**: Focuses on real-time graph analytics at scale. Good for very large graphs with complex analytics.
 - **Memgraph**: In-memory graph database startup with focus on streaming data and real-time analytics. Compatible with Neo4j's Cypher query language.
 - **FalkorDB**: Graph database startup built on Redis, emphasizing low latency and high throughput. Also uses Cypher. Good for real-time applications.
 
-Note that Memgraph and FalkorDB are newer startups, whereas Neo4j and TigerGraph are more established with larger ecosystems and enterprise support.
+Note that Memgraph and FalkorDB are newer startups, whereas Neo4j and Neptune are more established with larger ecosystems and enterprise support.
 
 **Data modeling**: Graph data modeling is different from relational modeling. You need to think about what should be nodes vs. properties (is a funding round a node or a property of an investment edge?), how to model time-varying relationships (person worked at company from date X to date Y), and how to handle different relationship types with different semantics.
 
@@ -141,6 +138,6 @@ But don't start with a graph database. Most VC funds should model their data in 
 
 The hybrid approach works best: model everything in Postgres or similar, then build knowledge graph projections on top when you need them. This could mean materializing data into Neo4j for specific analyses, using graph libraries on top of your relational data, or building graph views in your application layer.
 
-EQT's CompanyKG demonstrates the value of knowledge graphs for VC at scale: 1.17 million companies, 51 million relationships, powering market mapping, competitor analysis, and company similarity. But they built this on top of their existing Motherbrain platform, not as a replacement for it.
+EQT's CompanyKG demonstrates the value of knowledge graphs for VC at scale: 1.17 million companies, 51 million relationships, powering market mapping, competitor analysis, and company similarity. But they built this as a research project on top of their existing Motherbrain platform, not as a replacement for it.
 
 If relationship queries become core to your competitive advantage, invest in proper graph infrastructure. Until then, model your relationships clearly in relational databases and build graph capabilities as needed.
