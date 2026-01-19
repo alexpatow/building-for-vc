@@ -123,7 +123,7 @@ For most VC funds, the right answer is to model everything in a relational datab
 - For basic relationship queries, use SQL joins (they work fine for 1-2 levels of relationships)
 - When you need complex graph queries, either:
   - Build a materialized view in a graph database (periodically sync data from the relational database to the graph database)
-  - Use graph algorithms directly on your relational data (libraries like NetworkX in Python can build graphs from relational queries)
+  - Use graph algorithms directly on your relational data (libraries like [NetworkX](https://networkx.org/) in Python can build graphs from relational queries)
   - Query your relational database and build graph structures in your application layer when needed
 
 This gives you the benefits of graph thinking without committing to graph databases before you need them.
@@ -134,10 +134,10 @@ If you do decide to use a graph database (either as your primary store or as a s
 
 **Graph database options:**
 
-- **Neo4j**: Most popular graph database, mature ecosystem, Cypher query language. Good developer experience and tooling.
-- **Amazon Neptune**: Managed graph database on AWS, supports both Gremlin and SPARQL. Good if you're already on AWS.
-- **Memgraph**: In-memory graph database startup with focus on streaming data and real-time analytics. Compatible with Neo4j's Cypher query language.
-- **FalkorDB**: Graph database startup built on Redis, emphasizing low latency and high throughput. Also uses Cypher. Good for real-time applications.
+- **[Neo4j](https://neo4j.com/)**: Most popular graph database, mature ecosystem, Cypher query language. Good developer experience and tooling.
+- **[Amazon Neptune](https://aws.amazon.com/neptune/)**: Managed graph database on AWS, supports both Gremlin and SPARQL. Good if you're already on AWS.
+- **[Memgraph](https://memgraph.com/)**: In-memory graph database startup with focus on streaming data and real-time analytics. Compatible with Neo4j's Cypher query language.
+- **[FalkorDB](https://www.falkordb.com/)**: Graph database startup built on Redis, emphasizing low latency and high throughput. Also uses Cypher. Good for real-time applications.
 
 Note that Memgraph and FalkorDB are newer startups, whereas Neo4j and Neptune are more established with larger ecosystems and enterprise support.
 

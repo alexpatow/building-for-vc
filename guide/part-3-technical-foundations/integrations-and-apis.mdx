@@ -46,7 +46,7 @@ The biggest source of problems in integrations is trusting external APIs to retu
 
 **Use validation libraries**
 
-For TypeScript: **Zod**. For Python: **Pydantic**. These libraries let you define schemas for your data and automatically validate objects against them.
+For TypeScript: **[Zod](https://zod.dev/)**. For Python: **[Pydantic](https://docs.pydantic.dev/)**. These libraries let you define schemas for your data and automatically validate objects against them.
 
 ```typescript
 // TypeScript with Zod
@@ -176,7 +176,7 @@ export async function POST(request: NextRequest) {
 
 **Handle idempotency**: Vendors may send the same webhook multiple times (network retries, their infrastructure issues). Make your webhook handler idempotent: processing the same event twice should be safe. Track event IDs you've seen and skip duplicates.
 
-**Return quickly**: Webhook handlers should return 200 OK quickly (within a few seconds). Don't do expensive processing in the webhook handler itself. Accept the webhook, queue the work (in a job queue like BullMQ or background task system), and return success. Process the work asynchronously.
+**Return quickly**: Webhook handlers should return 200 OK quickly (within a few seconds). Don't do expensive processing in the webhook handler itself. Accept the webhook, queue the work (in a job queue like [BullMQ](https://bullmq.io/) or background task system), and return success. Process the work asynchronously.
 
 **After setup, webhooks are reliable**: The initial setup is tricky, but once working, webhooks are much more reliable than polling. You get real-time updates without constantly hitting the vendor's API.
 
@@ -325,8 +325,8 @@ Some vendors provide flat files (CSV, Parquet, JSON) that you download or they u
 
 Import these files into your data warehouse using tools like:
 
-- **Dagster**: Data orchestration, can schedule file imports and transformations
-- **Airflow**: Workflow orchestration, similar to Dagster
+- **[Dagster](https://dagster.io/)**: Data orchestration, can schedule file imports and transformations
+- **[Airflow](https://airflow.apache.org/)**: Workflow orchestration, similar to Dagster
 - **BigQuery Data Transfer Service**: If you use BigQuery, can automatically import files from S3/GCS
 
 File-based imports are usually scheduled (nightly, weekly) rather than real-time.

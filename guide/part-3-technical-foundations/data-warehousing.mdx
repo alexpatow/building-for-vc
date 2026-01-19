@@ -40,9 +40,9 @@ Before migrating to a specialized warehouse, consider Postgres extensions: **[pg
 
 ## The ELT Approach with dbt
 
-The modern approach is ELT (Extract, Load, Transform) using dbt. Traditional ETL transforms data before loading it. ELT loads raw data first, then transforms it using SQL inside the warehouse. This is simpler because all transformation logic is in SQL, version-controlled, and tested like application code.
+The modern approach is ELT (Extract, Load, Transform) using [dbt](https://www.getdbt.com/). Traditional ETL transforms data before loading it. ELT loads raw data first, then transforms it using SQL inside the warehouse. This is simpler because all transformation logic is in SQL, version-controlled, and tested like application code.
 
-**How it works**: Extract data from sources (CRM, PitchBook, LinkedIn) and load it raw into your warehouse using tools like Fivetran or Airbyte. Write dbt models (SELECT statements) to transform raw data: clean and normalize, combine sources, calculate metrics, build final tables (marts) for analysis. dbt handles orchestration, testing, and documentation automatically. Analysts query the transformed tables, not raw data.
+**How it works**: Extract data from sources (CRM, PitchBook, LinkedIn) and load it raw into your warehouse using tools like [Fivetran](https://www.fivetran.com/) or [Airbyte](https://airbyte.com/). Write dbt models (SELECT statements) to transform raw data: clean and normalize, combine sources, calculate metrics, build final tables (marts) for analysis. dbt handles orchestration, testing, and documentation automatically. Analysts query the transformed tables, not raw data.
 
 ```mermaid
 flowchart LR
@@ -110,7 +110,7 @@ With data in a warehouse, these queries are straightforward SQL. Without it, the
 
 **Tools like Hex for quick dashboards**
 
-When you do need dashboards, tools like Hex or Mode let you write SQL queries against your warehouse and turn them into interactive visualizations. These are much faster to build than custom dashboards, and they're easy to iterate on.
+When you do need dashboards, tools like [Hex](https://hex.tech/) or [Mode](https://mode.com/) let you write SQL queries against your warehouse and turn them into interactive visualizations. These are much faster to build than custom dashboards, and they're easy to iterate on.
 
 At Inflection, we use Hex. When a GP wants to see something, we can spin up a dashboard in an hour or two: write SQL queries against the warehouse, add visualizations, share a link. This responsiveness is valuable. You're not waiting weeks for data engineering to build custom dashboards. You're answering questions as they come up.
 
