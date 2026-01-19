@@ -1,0 +1,154 @@
+---
+title: "Accessing Data"
+description: "How data providers deliver data: APIs, file exports, authentication, and integration patterns."
+---
+
+## Overview
+
+Data providers deliver data in two main ways: APIs and files. Each has different implications for how you build integrations. Understanding delivery methods helps you choose the right approach for your use case.
+
+## API-Based Delivery
+
+Most modern vendors provide REST APIs. You authenticate with an API token, make HTTP requests, and receive JSON responses. This is real-time or near-real-time: when you need data about a company, you query the API and get current information.
+
+**Benefits:**
+
+- Real-time or near-real-time data
+- Query exactly what you need (don't download everything)
+- Easy to integrate into applications (CRM enrichment, sourcing tools)
+- Can build interactive features (search, live updates)
+
+**Considerations:**
+
+- Rate limits constrain how fast you can query
+- Per-request or per-entity costs (each API call might cost money)
+- Need to handle failures, retries, validation
+- API schemas change over time
+
+## File-Based Delivery
+
+Some vendors provide data as file exports: CSV, Parquet, or JSON files that you download or they upload to your S3 bucket. This is common for bulk data (entire company database, historical funding data, quarterly dumps).
+
+**Benefits:**
+
+- Can be cheaper than API calls for bulk data
+- Get everything at once (good for analytics, data warehouse loading)
+- Predictable costs (usually flat fee for the export)
+- No rate limits once you have the file
+
+**Considerations:**
+
+- Data is a snapshot (not real-time, might be hours or days old)
+- Need to process and load files
+- File format matters significantly
+
+### Prefer Parquet Over CSV
+
+If vendors offer multiple file formats, always choose Parquet. It's columnar (faster for analytics), includes schema information (you know data types without guessing), compresses well (smaller files), and loads much faster into data warehouses.
+
+CSV/TSV files require parsing, have encoding issues, no schema, and are slower to work with. Ask vendors to provide Parquet if they don't already. Most modern vendors support it, and it will save you significant time and headaches.
+
+## Hybrid Approaches
+
+Some vendors offer both APIs (for real-time enrichment) and bulk exports (for loading your data warehouse). This is ideal: use the API for interactive features, use bulk exports to populate your data warehouse efficiently.
+
+## Authentication
+
+### API Authentication
+
+Most vendors use API tokens (also called API keys). You get a token from the vendor (usually through their dashboard), include it in your HTTP requests (usually as a Bearer token in the Authorization header), and the vendor identifies your account and tracks usage.
+
+**Store API tokens securely:**
+
+- Use environment variables, not hardcoded in code
+- Use a secrets manager (AWS Secrets Manager, 1Password) for production
+- Never commit tokens to git
+- Rotate tokens periodically (every 6-12 months)
+- Have separate tokens for development, staging, production
+
+### File Delivery Authentication
+
+For file-based vendors, they usually:
+
+- Upload files to their own S3 bucket that you can access (they provide AWS credentials)
+- Upload files directly to your S3 bucket (you provide them with write-only credentials)
+- Provide download links through their portal (you download manually or via script)
+
+The third option (manual download) doesn't scale well. Prefer vendors who can integrate with your cloud storage.
+
+### IP Allowlisting
+
+Some vendors require you to allowlist IP addresses that will access their API. This is more common with financial data vendors or those handling sensitive information. Plan for this in your infrastructure (static IPs for your servers, or NAT gateways for cloud deployments).
+
+## Rate Limits
+
+Most APIs limit how many requests you can make in a given time period. Common patterns:
+
+- **Requests per second:** Can't exceed X requests/second
+- **Requests per day:** Daily quota that resets at midnight
+- **Concurrent requests:** Maximum simultaneous connections
+
+### Handling Rate Limits
+
+When you hit rate limits, APIs return HTTP 429 (Too Many Requests). Your code should:
+
+1. Catch 429 responses
+2. Wait before retrying (use the `Retry-After` header if provided)
+3. Use exponential backoff (wait longer after each failure)
+4. Queue requests to stay under limits proactively
+
+```typescript
+async function fetchWithRetry(url: string, maxRetries = 3) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    const response = await fetch(url)
+
+    if (response.status === 429) {
+      const retryAfter = response.headers.get("Retry-After")
+      const waitTime = retryAfter ? parseInt(retryAfter) * 1000 : Math.pow(2, attempt) * 1000
+      await new Promise((resolve) => setTimeout(resolve, waitTime))
+      continue
+    }
+
+    return response
+  }
+  throw new Error("Max retries exceeded")
+}
+```
+
+## Validation
+
+Data vendors change their APIs more often than you'd expect. They rename fields, change data formats, add new attributes, deprecate old endpoints. Your integrations break when this happens.
+
+Use runtime validation (Zod in TypeScript, Pydantic in Python) to catch schema changes early:
+
+```typescript
+import { z } from "zod"
+
+const CompanySchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  website: z.string().url().optional(),
+  foundedYear: z.number().optional(),
+  funding: z
+    .object({
+      totalRaised: z.number(),
+      lastRoundDate: z.string().optional(),
+    })
+    .optional(),
+})
+
+// This will throw if the API response doesn't match
+const company = CompanySchema.parse(apiResponse)
+```
+
+When a vendor changes their API, your validation will fail and alert you immediately, rather than silently corrupting your data.
+
+## Caching
+
+Don't request the same data repeatedly. Cache responses with appropriate TTLs:
+
+- **Company basics (name, website):** Cache for days or weeks (rarely changes)
+- **Funding data:** Cache for hours to a day (changes when rounds happen)
+- **Signal data:** Cache briefly or not at all (meant to be fresh)
+
+Caching saves money on per-request pricing and respects rate limits.

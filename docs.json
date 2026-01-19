@@ -51,7 +51,19 @@
             "group": "Part 3: Technical Foundations",
             "pages": [
               "guide/part-3-technical-foundations/choosing-your-stack",
-              "guide/part-3-technical-foundations/data-providers",
+              {
+                "group": "Data Providers",
+                "pages": [
+                  "guide/part-3-technical-foundations/data-providers/index",
+                  "guide/part-3-technical-foundations/data-providers/starter-kits",
+                  "guide/part-3-technical-foundations/data-providers/accessing-data",
+                  "guide/part-3-technical-foundations/data-providers/company-data",
+                  "guide/part-3-technical-foundations/data-providers/signal-data",
+                  "guide/part-3-technical-foundations/data-providers/people-data",
+                  "guide/part-3-technical-foundations/data-providers/other-data",
+                  "guide/part-3-technical-foundations/data-providers/considerations"
+                ]
+              },
               "guide/part-3-technical-foundations/data-modeling",
               "guide/part-3-technical-foundations/entity-resolution",
               "guide/part-3-technical-foundations/data-quality",

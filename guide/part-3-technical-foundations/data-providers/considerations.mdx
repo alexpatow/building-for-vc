@@ -1,0 +1,98 @@
+---
+title: "Data Provider Considerations"
+description: "Cost, vendor relationships, and things to think about when working with data providers."
+---
+
+## Overview
+
+Data providers are foundational infrastructure, but they're also expensive and require ongoing management. This page covers cost considerations, how to work with vendors, and things to keep in mind.
+
+## Cost Considerations
+
+Data providers are expensive. Budget for them appropriately and understand different pricing models.
+
+### Pricing Models
+
+**Per-request or per-entity:** You pay for each API call or each entity returned. A person data provider might charge per record. This is predictable per query but can add up quickly with high usage.
+
+**Subscriptions:** Pay a fixed amount per year for unlimited (or high-limit) access. Common for established vendors. Costs vary widely depending on the vendor and what you're accessing.
+
+**Per-seat pricing:** Pay per user who has access (common for platforms with dashboards, less common for APIs). Doesn't scale well for programmatic access.
+
+### Cost Management Strategies
+
+- **Start with what you actually need:** Don't subscribe to every vendor. Figure out your critical use cases and buy data for those first.
+
+- **Monitor spending:** Set up alerts when API usage or costs exceed thresholds. It's easy to accidentally rack up bills with per-request pricing.
+
+- **Cache data:** Don't request the same company data repeatedly. Cache responses (in your database or Redis) with appropriate TTLs. This saves money and respects rate limits.
+
+- **Use bulk exports when possible:** If you need to load lots of data into your warehouse, bulk exports are usually cheaper than making thousands of API requests.
+
+- **Negotiate:** Especially with newer vendors, negotiate based on your expected usage. They want customers and are often flexible on pricing.
+
+### Budget Planning
+
+Data costs can easily exceed infrastructure costs (servers, databases, etc.). Factor this into your overall technology budget from the start. Costs scale with fund size and data needs.
+
+## Working with Vendors
+
+### APIs Change Frequently
+
+Data vendors update their APIs more often than you'd expect. They rename fields, change data formats, add new attributes, deprecate old endpoints. Your integrations break when this happens.
+
+Pay attention to vendor communications. They usually announce breaking changes weeks in advance via email or their changelog. Set up notifications so you see these announcements. Budget time to update your integrations when schemas change.
+
+### Collaborate with Newer Vendors
+
+If you're working with a newer data vendor (especially startups building APIs for the VC market), provide feedback on their API design. They want customers to succeed and are often open to suggestions.
+
+If their API returns data in an awkward format, tell them. If they're missing fields you need, ask for them. If rate limits are too restrictive, negotiate. If they only provide CSV but you need Parquet, request it.
+
+This is win-win: they improve their product based on real usage, you get an API that's easier to work with. Established vendors are less flexible, but newer vendors appreciate detailed feedback.
+
+### Support and Documentation
+
+Vendor quality varies significantly in support and documentation:
+
+- Some have excellent docs, responsive support, active communities
+- Some have minimal docs, slow support, no community
+- Some provide developer relations people who help with integration
+
+Factor this into vendor selection. If you're building critical infrastructure on a vendor's data, you need good documentation and reliable support. Don't just evaluate the data quality - evaluate whether you can actually build on top of it.
+
+## Data Quality
+
+Not all data providers are equally accurate or comprehensive. Quality varies significantly between vendors and even within the same vendor for different data types.
+
+### Accuracy vs Speed
+
+Some vendors prioritize accuracy (verify information before publishing, resulting in lag). Others prioritize speed (publish quickly, may have more errors).
+
+Choose based on your use case. For LP reporting or board materials, use accurate vendors. For early sourcing signals, speed matters more than perfection.
+
+### Coverage Differences
+
+Vendors excel at different:
+
+- **Stages:** Some are better for early-stage, others for growth/late-stage
+- **Geographies:** Strong US coverage vs weak international
+- **Sectors:** Deep tech, bio, fintech specializations
+
+### Test with Portfolio Companies
+
+The best way to evaluate vendor accuracy is to test against your portfolio companies - companies where you know the ground truth. Check if funding amounts match, if team data is current, if descriptions are accurate.
+
+This tells you what each vendor is actually good for and where they fall short.
+
+### Data Freshness
+
+Vendors update at different cadences (real-time, daily, weekly, quarterly). Know how fresh the data is and don't present stale data as current.
+
+## The Bottom Line
+
+Data providers are foundational infrastructure. You need external data about companies, funding, people, and markets. You can't build VC technology using only internal data.
+
+Choose vendors based on what data you actually need. Don't subscribe to everything. Test accuracy using your portfolio companies. Understand coverage differences (stage, geography, sector).
+
+Monitor costs, cache data, and negotiate with vendors. APIs change frequently - pay attention to vendor communications and use validation to catch breaking changes early.
