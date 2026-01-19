@@ -44,6 +44,32 @@ The modern approach is ELT (Extract, Load, Transform) using dbt. Traditional ETL
 
 **How it works**: Extract data from sources (CRM, PitchBook, LinkedIn) and load it raw into your warehouse using tools like Fivetran or Airbyte. Write dbt models (SELECT statements) to transform raw data: clean and normalize, combine sources, calculate metrics, build final tables (marts) for analysis. dbt handles orchestration, testing, and documentation automatically. Analysts query the transformed tables, not raw data.
 
+```mermaid
+flowchart LR
+    subgraph Sources
+        direction TB
+        CRM[CRM] ~~~ CO[Company Data] ~~~ PPL[People Data] ~~~ SIG[Signal Data] ~~~ MTG[Meeting Notes] ~~~ FO[Fund Ops]
+    end
+
+    EL[Extract & Load]
+
+    subgraph Warehouse
+        RAW[(Raw)]
+        STG[Staging]
+        INT[Intermediate]
+        MARTS[Marts]
+    end
+
+    subgraph Destination
+        direction TB
+        DASH[Dashboards] ~~~ SQL[Ad-hoc SQL] ~~~ MCP[MCP Servers] ~~~ APP[Apps]
+    end
+
+    Sources --> EL --> RAW
+    RAW --> STG --> INT --> MARTS
+    MARTS --> Destination
+```
+
 ## Organizing Your Data: dbt Best Practices
 
 The right way to structure data in your warehouse follows [dbt best practices](https://docs.getdbt.com/best-practices). Rather than reinvent this, follow their guide. Here are the key principles:
