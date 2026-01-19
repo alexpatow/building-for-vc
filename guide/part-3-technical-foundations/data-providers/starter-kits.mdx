@@ -11,10 +11,11 @@ This page outlines starter kits for different fund profiles. These are starting 
 
 ## Pre-Seed / Seed Focus
 
-You're looking for companies before anyone else knows about them. Signal data matters more than comprehensive funding history.
+You're looking for companies before anyone else knows about them. Signal data based on government registries matters more than comprehensive funding history, though even if you have a comprehensive funding database, you may not find all the companies you're interested in.
 
 **What you need:**
 
+- Data to support your macro and market trend research
 - Early-stage signal data (who's starting companies, what's trending)
 - Founder and team data (background, previous experience)
 - Basic company data (to track what you find)
@@ -26,7 +27,13 @@ You're looking for companies before anyone else knows about them. Signal data ma
 
 **Typical stack:**
 
-{/* TODO: Add specific recommendations */}
+| Category                | Recommendation                                                                                                                                  |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Early Signal data       | [Gravity](https://www.gravity.inc/) (US) or [Evertrace](https://www.evertrace.io/) (Europe)                                                     |
+| People and Company data | Choose either [People Data Labs](https://www.peopledatalabs.com/) or [Coresignal](https://coresignal.com/) for coverage of people and companies |
+| Research tools          | [Perplexity API](https://docs.perplexity.ai) for quick market research                                                                          |
+
+At this stage, signal and people data matter more than comprehensive funding databases. Focus your budget there.
 
 ---
 
@@ -48,7 +55,15 @@ You're evaluating companies with some traction. Need a balance of signal data an
 
 **Typical stack:**
 
-{/* TODO: Add specific recommendations */}
+| Category     | Recommendation                                                                                                                                      |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Company data | [Crunchbase](https://www.crunchbase.com/) or [Dealroom](https://dealroom.co/), if you can splurge [Pitchbook](https://www.pitchbook.com/),          |
+| Signal data  | [Specter](https://www.tryspecter.com/) or [Harmonic](https://harmonic.ai/) for growth signals                                                       |
+| People data  | [People Data Labs](https://www.peopledatalabs.com/), [Coresignal](https://coresignal.com/), or [MixRank](https://mixrank.com/) for team composition |
+| Web traffic  | [SimilarWeb](https://www.similarweb.com/) if evaluating consumer companies                                                                          |
+| Research     | [Perplexity API](https://docs.perplexity.ai) + [Exa](https://exa.ai/) for competitive research                                                      |
+
+This is the "balanced" tier. You need both signal data (to find companies with momentum) and comprehensive company data (for due diligence). This is where you might start to experiment with "flat files" instead of APIs (see [Accessing Data](/guide/part-3-technical-foundations/data-providers/accessing-data))
 
 ---
 
@@ -69,7 +84,13 @@ You're doing deeper due diligence on established companies. Comprehensive data a
 
 **Typical stack:**
 
-{/* TODO: Add specific recommendations */}
+| Category       | Recommendation                                                                                                     |
+| -------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Company data   | [PitchBook](https://pitchbook.com/) for comprehensive financials, valuations, cap tables                           |
+| Financial data | [S&P Capital IQ](https://www.spglobal.com/marketintelligence/en/solutions/sp-capital-iq-platform) for public comps |
+| People data    | [People Data Labs](https://www.peopledatalabs.com/) for executive backgrounds                                      |
+
+At this stage, the coverage and quality of premium data becomes worth the investment. You need detailed financials, valuation history, and deal terms that lighter providers don't offer. You probably also need full data dumps, rather than just API access.
 
 ---
 
@@ -91,7 +112,21 @@ You're evaluating technical founders and novel technology. Research and patent d
 
 **Typical stack:**
 
-{/* TODO: Add specific recommendations */}
+| Category       | Recommendation                                                                                                                                                           |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Academic       | [arXiv](https://arxiv.org/) (AI/ML, physics), [PubMed](https://pubmed.ncbi.nlm.nih.gov/) (bio/healthcare)                                                                |
+| Research tools | [Semantic Scholar](https://www.semanticscholar.org/) for citation networks and research impact or [Lens](https://www.lens.org/) for linking patents to academic research |
+| People data    | [People Data Labs](https://www.peopledatalabs.com/) for founder backgrounds                                                                                              |
+
+**For bio/healthcare specifically, add:**
+
+| Category        | Recommendation                                                                              |
+| --------------- | ------------------------------------------------------------------------------------------- |
+| Clinical trials | [ClinicalTrials.gov](https://clinicaltrials.gov/)                                           |
+| Drug pipeline   | [BioMedTracker](https://www.biomedtracker.com/) for pipeline intelligence                   |
+| FDA data        | [FDA databases](https://www.fda.gov/drugs/drug-approvals-and-databases/drugsfda-data-files) |
+
+Research and patent data are mostly free. Your budget goes toward people data and specialized tools like BioMedTracker.
 
 ---
 
@@ -109,9 +144,24 @@ You focus on a specific geography or vertical. Niche data providers often have b
 
 Generalist data providers often have weak coverage outside US tech. If you invest in Europe, Asia, or specific verticals, look for specialized providers who focus on your market.
 
-**Typical stack:**
+**By geography:**
 
-{/* TODO: Add specific recommendations based on region/sector */}
+| Region | Recommendations                                                                                             |
+| ------ | ----------------------------------------------------------------------------------------------------------- |
+| US     | [Gravity](https://www.gravity.inc/) for signals, [Crunchbase](https://www.crunchbase.com/) for company data |
+| Europe | [Evertrace](https://www.evertrace.io/) for signals, [Dealroom](https://dealroom.co/) for company data       |
+
+**By sector:**
+
+| Sector      | Recommendations                                                                                                       |
+| ----------- | --------------------------------------------------------------------------------------------------------------------- |
+| Consumer    | [SimilarWeb](https://www.similarweb.com/) for web traffic, [data.ai](https://www.data.ai/) for mobile apps            |
+| E-commerce  | [Jungle Scout](https://www.junglescout.com/) for Amazon, [SimilarWeb](https://www.similarweb.com/) for traffic        |
+| Real estate | [CARTO](https://carto.com/) or [SafeGraph](https://safegraph.com/) for location intelligence                          |
+| Fintech     | [SEC EDGAR](https://www.sec.gov/edgar) for filings, standard company providers for funding data                       |
+| Climate     | [EIA](https://www.eia.gov/) for energy data, [EPA databases](https://www.epa.gov/enviro/data-downloads) for emissions |
+
+The key is finding providers with deep coverage in your specific market rather than relying on generalists.
 
 ---
 
@@ -119,8 +169,6 @@ Generalist data providers often have weak coverage outside US tech. If you inves
 
 Your data budget should scale with fund size and strategy:
 
-- **Small fund (<$50M):** Focus on 1-2 core providers. Start with what you absolutely need.
-- **Mid-size fund ($50-250M):** Can afford broader coverage. 2-4 providers typical.
-- **Large fund (>$250M):** Comprehensive coverage across categories. Multiple providers per category.
-
-See [Considerations](/guide/part-3-technical-foundations/data-providers/considerations) for detailed cost guidance.
+- **Small fund (under $50M):** Focus on 1-2 core providers. Start with what you absolutely need.
+- **Mid-size fund ($50-250M):** Can afford broader coverage. 3-5 providers typical.
+- **Large fund (over $250M):** 3-5 providers (but typically more expensive), then additional budget reserved for project or deal specific data sources.
