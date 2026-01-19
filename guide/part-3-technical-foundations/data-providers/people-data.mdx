@@ -1,0 +1,52 @@
+---
+title: "People Data Providers"
+description: "Providers for founder, team, and employee information."
+---
+
+## Overview
+
+People data is critical for evaluating teams. You need information about founders (background, previous experience, education), executives (who's leading the company), and employees (team size, hiring patterns, talent quality).
+
+VCs invest in people as much as products. Understanding founder backgrounds, tracking talent movement, and evaluating team composition are core use cases.
+
+## What You're Looking For
+
+**Founder and executive profiles:**
+
+- Work history and previous companies
+- Education and credentials
+- Previous exits and successes
+- Board positions and advisors
+
+**Team composition:**
+
+- Employee count over time
+- Department breakdown (engineering, sales, etc.)
+- Leadership team changes
+- Key hires and departures
+
+**Talent signals:**
+
+- Where people are moving from/to
+- Hiring from strong companies
+- Founder quality indicators
+
+## Providers
+
+Coverage across these providers is relatively similar: not as large a gap as with company data providers. Choose based on which data points matter to you, how timely updates are, and quality of support.
+
+| Provider                                            | Strengths                                                                                             | Weaknesses                                                         | Price |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ----- |
+| [People Data Labs](https://www.peopledatalabs.com/) | Support has been great (personal experience). Free "cleaner" APIs have been useful in data pipelines. | Uses Elasticsearch SQL which can make filtering difficult via API. | $$    |
+| [Coresignal](https://coresignal.com/)               | Recently improved, "cleaned" datasets.                                                                |                                                                    | $$    |
+| [Mixrank](https://mixrank.com/)                     | Offers managed SQL databases for easier integration.                                                  | API can be difficult to work with.                                 | $$    |
+
+## Considerations
+
+**Data privacy:** People data has privacy implications. Understand what data you're getting and how it was collected. Some regions (EU especially) have strict rules about processing personal data.
+
+**Accuracy varies:** Professional profiles may be outdated. Current employer might be stale by months. Test data quality by comparing with your portfolio or verifying manually.
+
+**Enrichment use cases:** People data is often used to enrich signal data (add founder backgrounds to company records, building a holistic view of a company's leadership team, etc.) rather than as a primary source.
+
+See [Considerations](/guide/part-3-technical-foundations/data-providers/considerations) for cost and vendor relationship guidance.

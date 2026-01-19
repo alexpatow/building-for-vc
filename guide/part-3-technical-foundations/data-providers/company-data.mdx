@@ -1,0 +1,63 @@
+---
+title: "Company Data Providers"
+description: "Providers for company information, funding history, and investment data."
+---
+
+## Overview
+
+Company and investment data is the foundation of VC technology. You need information about companies (name, location, founding date, description, website) and their funding history (rounds, amounts, dates, investors, valuations).
+
+This data powers your CRM, deal flow tracking, market analysis, and portfolio monitoring.
+
+## What You're Looking For
+
+**Company basics:**
+
+- Name, description, website
+- Location and founding date
+- Industry/sector classification
+- Employee count
+
+**Funding history:**
+
+- Investment rounds (dates, amounts, valuations)
+- Investors in each round
+- Lead investors and co-investors
+- Total funding raised
+
+**Investor data:**
+
+- Which VCs invested in which companies
+- Fund-level information
+- Investment patterns and focus areas
+
+## Providers
+
+| Provider                                  | Strengths                                                                                         | Weaknesses                                                                              | Price |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ----- |
+| [PitchBook](https://pitchbook.com/)       | Analyst-verified financials, valuation history, cap tables, detailed deal terms. Deep PE/VC data. | Overkill for early-stage focused funds. Dashboard-first, API secondary.                 | $$$$  |
+| [Crunchbase](https://www.crunchbase.com/) | Broad startup coverage, user-friendly UI, AI-powered search, good for prospecting.                | Less depth on financials and deal terms. User-contributed data can be stale/inaccurate. | $$$   |
+| [Dealroom](https://dealroom.co/)          | Strong European coverage, government partnerships, ecosystem mapping, early-stage depth.          | Weaker US coverage compared to alternatives.                                            | $$$   |
+
+## Alternatives
+
+The providers above involve human curation and verification, making them more accurate and contextually rich. The alternatives below are primarily scraped from online sources: useful for specific use cases and supplementary data, but typically less depth and accuracy.
+
+| Provider                                                        | Description                                                                             |
+| --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| [CrustData](https://crustdata.com/)                             | Real-time firmographics via API. Headcount, funding, web traffic signals.               |
+| [People Data Labs](https://www.peopledatalabs.com/company-data) | People data provider that also offers company firmographics.                            |
+| [Mixrank](https://mixrank.com/datasets/company-data/)           | Basic firmographics.                                                                    |
+| [Coresignal](https://coresignal.com/company-dataset/)           | Comprehensive firmographics with many data points. Traditionally known for people data. |
+
+More on these in the [People Data Providers](/guide/part-3-technical-foundations/data-providers/people-data) section.
+
+## Considerations
+
+**Coverage varies by geography and stage:** Some providers are stronger in US tech, others in European markets, others in specific stages. Test coverage against your target market.
+
+**Data freshness matters:** How quickly does the provider capture new funding rounds? Some are faster than others.
+
+**API vs dashboard:** Some providers focus on dashboard access, others have better APIs for programmatic access. Know what you need.
+
+See [Considerations](/guide/part-3-technical-foundations/data-providers/considerations) for cost and vendor relationship guidance.

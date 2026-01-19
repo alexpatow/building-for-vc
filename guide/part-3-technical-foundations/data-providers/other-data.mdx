@@ -1,0 +1,141 @@
+---
+title: "Other Data Providers"
+description: "Market data, research, patents, and specialized data sources."
+---
+
+## Overview
+
+Beyond company, signal, and people data, VC funds often need specialized data: market intelligence, academic research, patents, financial data, and sector-specific sources.
+
+<Tip>
+  This page isn't comprehensive, it's a starting point for inspiration. The specialized data
+  landscape is vast and constantly evolving. If you've found a great resource that should be here,
+  [suggest an
+  edit](https://github.com/alexpatow/building-for-vc/edit/main/guide/part-3-technical-foundations/data-providers/other-data.mdx).
+</Tip>
+
+## Market and Financial Data
+
+| Provider                                                                                          | What It's For                                                             | Price |
+| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ----- |
+| [S&P Capital IQ](https://www.spglobal.com/marketintelligence/en/solutions/sp-capital-iq-platform) | Comprehensive financial data. Comparables analysis, market sizing.        | $$$$  |
+| [Bloomberg](https://www.bloomberg.com/professional/products/data/)                                | Real-time market data, news, analytics. Standard in finance.              | $$$$  |
+| [Refinitiv (LSEG)](https://www.lseg.com/en/data-analytics)                                        | Market data, news, regulatory filings. Bloomberg alternative.             | $$$   |
+| [Morningstar](https://www.morningstar.com/products/data)                                          | Investment research, fund ratings, equity data. Strong on public markets. | $$$   |
+
+These are primarily useful for growth-stage funds doing comparables analysis or funds that invest alongside public market activity. Most early-stage funds won't need this level of financial data.
+
+---
+
+## Research and Academic Data
+
+For deep tech and science-based funds, academic research is critical for evaluating technical founders and understanding technology landscapes.
+
+| Provider                                             | What It's For                                                                                      | Price |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----- |
+| [arXiv](https://arxiv.org/)                          | Preprints in physics, math, CS, AI/ML. Track cutting-edge research before publication.             | Free  |
+| [Semantic Scholar](https://www.semanticscholar.org/) | AI-powered research discovery. Citation networks and research impact.                              | Free  |
+| [Google Scholar](https://scholar.google.com/)        | Broad academic search. Good for quick lookups and citation counts. Can use SerpAPI to scrape data. | $     |
+| [PubMed](https://pubmed.ncbi.nlm.nih.gov/)           | Biomedical and life sciences literature. Essential for bio/healthcare funds.                       | Free  |
+
+These are mostly free and publicly accessible. The challenge isn't cost, it's knowing how to use them and having the domain expertise to interpret what you find.
+
+---
+
+## Patent and IP Data
+
+Patents indicate technology development, potential IP moats, and founder technical depth.
+
+| Provider                                      | What It's For                                                                                                        | Price   |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------- |
+| [Lens](https://www.lens.org/)                 | Patent and scholarly search, inexpensive yearly subscription for commercial use. Links patents to academic research. | $       |
+| [Google Patents](https://patents.google.com/) | Quick patent searches. Good for initial lookups. Can use SerpAPI to scrape data.                                     | $       |
+| [USPTO](https://www.uspto.gov/)               | Official US patent database.                                                                                         | Free    |
+| [Espacenet](https://worldwide.espacenet.com/) | European patent database. Good international coverage.                                                               | Free    |
+| [PatSnap](https://www.patsnap.com/)           | Patent analytics platform. Visualization, competitive analysis.                                                      | Unknown |
+
+Most patent data is publicly available through government databases. Paid tools like Lens and PatSnap add analytics, visualization, and search on top.
+
+---
+
+## Web Traffic and E-commerce Data
+
+For evaluating consumer-facing companies, web traffic and e-commerce data can provide useful signals about traction and market position.
+
+| Provider                                     | What It's For                                                                       | Price |
+| -------------------------------------------- | ----------------------------------------------------------------------------------- | ----- |
+| [SimilarWeb](https://www.similarweb.com/)    | Web traffic estimates, SEO data, competitive analysis. Good for consumer companies. | $$$   |
+| [Jungle Scout](https://www.junglescout.com/) | Amazon product research, seller data, market trends. Essential for e-commerce.      | $$    |
+| [Sensor Tower](https://sensortower.com/)     | Mobile app analytics, downloads, revenue estimates. Good for app-based companies.   | $$$   |
+| [data.ai](https://www.data.ai/)              | Mobile market data, app intelligence. Broader than Sensor Tower.                    | $$$   |
+
+These tools are particularly useful when evaluating companies in consumer, e-commerce, or mobile-first categories where traditional funding data doesn't capture traction.
+
+---
+
+## Geospatial Data
+
+Location intelligence can be valuable for evaluating companies in retail, real estate, logistics, and other location-dependent sectors.
+
+| Provider                            | What It's For                                                                        | Price |
+| ----------------------------------- | ------------------------------------------------------------------------------------ | ----- |
+| [CARTO](https://carto.com/)         | Location intelligence platform. Demographics, foot traffic, site selection.          | $$$   |
+| [SafeGraph](https://safegraph.com/) | Points of interest, foot traffic patterns. Good for retail and real estate analysis. | $$$   |
+
+Useful when evaluating companies where physical location matters: retail chains, logistics, real estate tech, or any business with brick-and-mortar components.
+
+---
+
+## Sector-Specific Data
+
+Some sectors have specialized data needs that general providers don't cover well.
+
+**Healthcare/Bio:**
+
+| Provider                                                                                    | What It's For                                       |
+| ------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| [ClinicalTrials.gov](https://clinicaltrials.gov/)                                           | Clinical trial registry. Track drug development.    |
+| [FDA databases](https://www.fda.gov/drugs/drug-approvals-and-databases/drugsfda-data-files) | Drug approvals, safety data.                        |
+| [BioMedTracker](https://www.biomedtracker.com/)                                             | Drug pipeline intelligence. Probability of success. |
+
+**Fintech:**
+
+| Provider                                           | What It's For                                       |
+| -------------------------------------------------- | --------------------------------------------------- |
+| [FDIC](https://www.fdic.gov/resources/data-tools/) | Bank data, regulatory filings.                      |
+| [SEC EDGAR](https://www.sec.gov/edgar)             | Public company filings. Essential for any analysis. |
+
+**Climate/Energy:**
+
+| Provider                                                   | What It's For                                    |
+| ---------------------------------------------------------- | ------------------------------------------------ |
+| [EIA](https://www.eia.gov/)                                | US energy data. Production, consumption, prices. |
+| [EPA databases](https://www.epa.gov/enviro/data-downloads) | Emissions, environmental compliance.             |
+
+---
+
+## LLM-Powered Research Tools
+
+LLMs with search capabilities are increasingly useful for market research, competitive analysis, and due diligence. Unlike traditional databases, these tools synthesize information from multiple sources and return cited answers.
+
+| Provider                                     | What It's For                                                                             | Price |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------- | ----- |
+| [Perplexity API](https://docs.perplexity.ai) | Search + LLM that returns sourced answers. Great for market research and quick diligence. | $     |
+| [Exa](https://exa.ai/)                       | AI-powered semantic search. Find similar companies, research markets, discover content.   | $     |
+
+These tools are useful for:
+
+- Quick market sizing and landscape overviews
+- Finding competitors and similar companies
+- Background research on founders or technologies
+- Synthesizing public information during due diligence
+
+The key advantage is that they return sources with their answers, so you can verify the underlying data. Integrate them into your research workflows via API.
+
+---
+
+## Considerations
+
+**Specialized data requires domain expertise:** Market data and research data are only valuable if you can interpret them. These sources work best when you have domain expertise on your team.
+
+See [Considerations](/guide/part-3-technical-foundations/data-providers/considerations) for cost and vendor relationship guidance.
