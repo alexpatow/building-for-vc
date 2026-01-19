@@ -23,7 +23,7 @@
         "groups": [
           {
             "group": "Introduction",
-            "pages": ["guide/index", "guide/quickstart"]
+            "pages": ["guide/index", "guide/quickstart", "guide/contributors"]
           },
           {
             "group": "Part 1: Understanding VC",
