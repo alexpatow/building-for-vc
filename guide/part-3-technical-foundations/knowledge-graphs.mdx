@@ -23,9 +23,28 @@ A knowledge graph represents information as a network of entities (nodes) and th
 
 **Edges** are relationships between nodes. These can be directional (Alice works at Acme Corp) or bidirectional (Company A competes with Company B). Edges can also have properties. An "invested in" edge might have properties like investment date, amount, and ownership percentage. A "worked with" edge between two people might have properties indicating when and where they worked together.
 
+```mermaid
+flowchart LR
+    SEQ["Sequoia Capital<br/><i>Type: Investor</i><br/><i>AUM: $85B</i>"]
+    STR["Stripe<br/><i>Type: Company</i><br/><i>Sector: Fintech</i>"]
+    AUC["Auctomatic<br/><i>Type: Company</i><br/><i>Acquired: 2008</i>"]
+    PC["Patrick Collison<br/><i>Type: Person</i><br/><i>Role: CEO</i>"]
+    JC["John Collison<br/><i>Type: Person</i><br/><i>Role: President</i>"]
+
+    SEQ -->|"invested in<br/>$2M Seed<br/>2011"| STR
+    SEQ -->|"invested in<br/>$20M Series B<br/>2012"| STR
+    PC -->|"founded<br/>2010"| STR
+    JC -->|"founded<br/>2010"| STR
+    PC -->|"worked at<br/>2007-2008"| AUC
+    JC -->|"worked at<br/>2007-2008"| AUC
+    PC ---|"siblings"| JC
+```
+
+This is a trivial example, but it illustrates how knowledge graphs map entities and relationships. Nodes have properties (company sector, person role, investor AUM) and edges have properties (investment amount, dates). Graph queries can traverse these relationships: "find all companies founded by people who previously worked together" returns Stripe by following the "worked at" edges from the Collisons to Auctomatic. A real knowledge graph would have thousands of nodes and millions of edges, but the structure is the same.
+
 **Graph databases** are databases optimized for storing and querying graph data. They make it efficient to traverse relationships. Instead of joining tables, you follow edges. Queries like "find all companies within 3 degrees of separation from this investor that operate in the same sector" are natural in graph databases but painful in SQL.
 
-**The difference from relational databases**: In a relational database, you might have a companies table, a people table, an investments table that links companies to investors, and an employment table that links people to companies. To answer "which companies did investors who funded my competitor also fund?" requires joining investments table to itself through companies, then joining again to get company details. In a graph database, you start at your competitor node, follow "invested_by" edges to investor nodes, follow their other "invested_in" edges to company nodes, and you're done.
+**The difference from relational databases**: In a relational database, you might have a companies table, a people table, an investments table that links companies to investors, and an employment table that links people to companies. To answer "which companies did investors who funded my competitor also fund?" requires joining investments table to itself through companies, then joining again to get company details. In a graph database, you start at your competitor node, follow "invested in" edges to investor nodes, follow their other "invested in" edges to company nodes, and you're done.
 
 ## Why Knowledge Graphs Matter for VC
 

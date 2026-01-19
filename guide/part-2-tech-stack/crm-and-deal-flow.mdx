@@ -99,6 +99,28 @@ The key is making it low-friction. If entering data takes too many clicks or too
 
 **Don't overthink the workflow**: Many funds spend weeks designing the perfect pipeline stages and custom fields. This is usually overengineering. Start simple. You can always add complexity later. The basics (who are we talking to, what stage are they at, what's the next step) cover 80% of what you need.
 
+The key difference from traditional sales funnels: VC deal flow isn't linear. Companies move forward, sideways, and sometimes back. You might pass on a company's seed round and lead their Series A. A "watchlist" company might sit dormant for two years then become your best investment.
+
+```mermaid
+stateDiagram-v2
+    direction LR
+
+    [*] --> New
+    New --> InitialContact: First meeting
+    InitialContact --> Research: Interested
+    InitialContact --> Watchlist: Not now
+    InitialContact --> Passed: Not a fit
+    Research --> TermSheet: Want to invest
+    Research --> Watchlist: Timing wrong
+    Research --> Passed: Decided against
+    TermSheet --> Invested: Deal closed
+    TermSheet --> Lost: Didn't get allocation
+    Watchlist --> InitialContact: Revisit later
+
+    InitialContact: Initial Contact
+    TermSheet: Term Sheet
+```
+
 ## Real Example: Attio at Inflection
 
 <Tip>
