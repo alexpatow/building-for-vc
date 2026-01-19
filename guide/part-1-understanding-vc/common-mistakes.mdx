@@ -106,7 +106,7 @@ Watch out for red flags: "We need custom everything" usually means nobody's thou
 
 When we started building at Inflection, we had this huge backlog of products we thought we needed (you can [find a lot of them in this list](https://svrgn.substack.com/p/an-engineering-approach-to-venture) from before I was hired). If I was to execute on all these projects, I would always be context switching and stretched too thin. The key was constantly setting realistic priorities with the partnership, spelling out what it would actually take to build things, and forcing them to give feedback on what mattered most.
 
-Over time, many of those "critical" needs changed. The fund evolved. More importantly, more products became available to buy off the shelf. Half the backlog became irrelevant or solvable with purchased tools. That huge initial list wasn't wrong, it just wasn't static. Keep re-prioritizing based on what's actually needed today, not what seemed important six months ago.
+Over time, many of those "critical" needs changed. The fund evolved. More importantly, more products became available to buy off the shelf. Half the backlog became irrelevant or solvable with purchased tools. Keep re-prioritizing based on what's actually needed today, not what seemed important six months ago.
 
 </Tip>
 
@@ -122,7 +122,7 @@ But here's the reality. A $100M VC fund's scale looks like this: five to twenty 
 
 You don't need microservices. You don't need Kubernetes. You don't need event-driven architecture. You don't need complex caching. You don't need auto-scaling. What you need is to ship something that works.
 
-Start with the simplest thing that could possibly work. Single application server. One database. Cron jobs for batch processing. Deploy to Heroku, Render, or Railway with a single command. Manual processes for rare operations that happen once a quarter.
+Start with the simplest thing that could possibly work. Single application server. One database. Cron jobs for batch processing. Deploy to Vercel, Render, or Railway with a single command. Manual processes for rare operations that happen once a quarter.
 
 Add complexity only when you have a specific problem. The database is slow? Add indexes and optimize queries. Deployments are risky? Add tests and CI/CD. The server goes down? Add monitoring and auto-restart. But don't build complex caching because something "might be slow someday." Build it when it's actually slow today.
 
@@ -234,7 +234,7 @@ You own the outcomes, not just the code. That's the real job.
 
 ## The Bottom Line
 
-These seven mistakes are common and understandable. Every technical person joining a VC fund faces some version of these challenges. The difference between success and frustration isn't talent or experience. It's knowing the mistakes exist and planning accordingly.
+These seven mistakes are common and understandable. Every technical person joining a VC fund faces some version of these challenges. The difference between success and frustration isn't talent or experience, it's knowing the mistakes exist and planning accordingly.
 
 Before you write any code, spend one to three months understanding the fund. Align explicitly on buy versus build strategy. Be realistic about what you can accomplish with available resources. Start simple and add complexity only when you have specific problems to solve. Understand data sensitivity and confidentiality from day one. Build for auditability, not just functionality. Get feedback early and often. Communicate in outcomes, not technical implementations.
 
