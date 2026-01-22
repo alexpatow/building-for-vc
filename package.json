@@ -7,10 +7,11 @@
     "dev": "bunx mint dev",
     "check-links": "bunx mint broken-links",
     "validate": "bunx mint validate",
-    "prepare": "simple-git-hooks"
+    "prepare": "simple-git-hooks",
+    "pre-commit": "bun run format && bun run check-links && bun run validate"
   },
   "simple-git-hooks": {
-    "pre-commit": "bun run format && bun run check-links && bun run validate"
+    "pre-commit": "bun run pre-commit"
   },
   "devDependencies": {
     "mint": "^4.2.284",
