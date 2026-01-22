@@ -1,0 +1,340 @@
+---
+title: "Prompt Bank"
+description: "Copy-paste prompts for working with LLMs in VC infrastructure"
+---
+
+A collection of prompts for common VC workflows. These are starting points, adapt them to your specific use case and data.
+
+<Note>
+  Contributed by [Ebba Forsberg](https://www.linkedin.com/in/ebba-forsberg-6a3820183/) from
+  [Norrsken Evolve](https://www.norrskenevolve.vc/).
+</Note>
+
+---
+
+## Deal Screening
+
+<AccordionGroup>
+  <Accordion title="10-Minute Killer Screen">
+    A fast, brutal initial assessment. Use this for quick pass/pursue decisions before investing more time.
+
+    ```text
+    You are the top early-stage VC analyst. Assess {Company} based on {Pitch}.
+
+    Output:
+
+    1. Market: ICP, use case, urgency, budget holder, timing, market growth, reasons this is happening *now*.
+    2. Why buy / Why switch: top 3 reasons + top 3 blockers.
+    3. Competition: direct, indirect, "do nothing", internal build, incumbents.
+    4. Moat: what could become defensible in 24 months? what is fake moat?
+    5. GTM: expected sales cycle, distribution path, likely CAC drivers.
+    6. Risks: 5 biggest risks ranked by probability × impact, and how to de-risk each in 30 days.
+    7. Verdict: pursue / pass / needs specific answers. Include the 3 questions that decide the outcome.
+    ```
+
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Call Preparation
+
+<AccordionGroup>
+  <Accordion title="Diligence Call Prep (Deep)">
+    Use with a research or thinking model. Generates comprehensive preparation for high-stakes founder calls.
+
+    ```text
+    You are preparing me for a high-stakes diligence call. I need to sound intelligent, be conversational, and extract decisive information fast.
+    I have limited market context, so you must educate me and then arm me with sharp questions.
+
+    INPUTS
+    Website: {URL}
+    My role: early-stage VC
+    My goal: decide INVEST vs PASS
+    What I already know (optional): {Notes}
+    Top concerns (optional): {e.g., market size, adoption, pricing, reliability}
+
+    TASK 1 — EASY EXPLAINER (so I can speak confidently)
+
+    1. 60-second explanation of what they do (simple language).
+    2. 3 crisp "what we believe" bullets (thesis framing).
+    3. 3 crisp "what we worry about" bullets (skeptical framing).
+    4. Mini glossary of 6 terms I might need to say out loud.
+
+    TASK 2 — MARKET RESEARCH (fast but deep)
+
+    1. Market overview: how the value chain works + who has power.
+    2. Where budgets come from + what procurement cares about.
+    3. Adoption blockers + typical timelines.
+    4. Competitive landscape + what "good" alternatives look like.
+    5. 8 key facts to reference naturally on the call (NOT too many; must be memorable).
+    6. 8 recommended readings after the call with 1-2 bullet summaries each.
+
+    TASK 3 — QUESTION SET (with conversational phrasing)
+
+    Core questions — 20 total, grouped:
+    - Market + ICP + urgency (6)
+    - Buyer + budget + procurement (4)
+    - Competition + switching (4)
+    - GTM + sales cycle + channels (4)
+    - Moat + defensibility (2)
+
+    For EACH question provide:
+    - "Why I'm asking" (1 line)
+    - What a GREAT answer sounds like
+    - What a RED FLAG answer sounds like
+    - A follow-up question that digs deeper
+
+    "Trapdoor" questions (8)
+    These reveal truth if they're bluffing. Include conversational versions.
+
+    TASK 4 — CALL FLOW (minute-by-minute plan)
+
+    Give a recommended structure:
+    - 5-20: market + buyer + urgency
+    - 20-40: competition + GTM + proof
+    - 40-55: risks + de-risk + next steps
+    - 55-60: close
+
+    Include exact phrases to transition between sections.
+
+    TASK 5 — WHAT TO LISTEN FOR (signal detection)
+
+    1. 12 signals of strength (specific, not generic).
+    2. 12 signals of weakness / BS.
+    3. A scoring rubric (0-5) for: market pain, buyer clarity, budget, urgency, adoption friction, differentiation, GTM realism.
+
+    TASK 6 — AFTER-CALL OUTPUT TEMPLATE
+
+    Give me a one-page template to fill in immediately after the call:
+    - Key facts learned
+    - Confirmed / unconfirmed assumptions
+    - Biggest risks
+    - Next proof steps
+    - Decision direction
+
+    STYLE REQUIREMENTS
+    - Must be conversational; provide exact wording I can say.
+    - No jargon without explanation.
+    - Focus on market truth and adoption reality.
+    - Make it feel like top-tier partner-level preparation.
+    ```
+
+  </Accordion>
+
+  <Accordion title="Expert Call Question Set">
+    Generate questions for expert/operator calls to validate market assumptions.
+
+    ```text
+    You are prepping an expert call for {Company} in {Market}.
+
+    Give:
+    - 12 questions that uncover market structure (value chain, margins, buyer power, adoption cycles)
+    - 8 questions that expose competitive dynamics and incumbent response
+    - 6 questions that validate pricing/budgets
+    - 5 "what would make this fail?" questions
+
+    Provide what a good answer vs bad answer looks like.
+    ```
+
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Investment Decision
+
+<AccordionGroup>
+  <Accordion title="Investment Decision Framework">
+    Force a high-quality INVEST / PASS decision based on evidence. Use after you've gathered materials and done calls.
+
+    ```text
+    You are my senior partner at an early-stage venture fund. Your job is to force a high-quality INVEST / PASS decision based on evidence, not vibes.
+    Be skeptical, quantify uncertainty, and prioritize MARKET risk (timing, structure, budgets, adoption dynamics, competition).
+    Separate FACTS from ASSUMPTIONS. If something is missing, call it out and tell me exactly what would change the decision.
+
+    COMPANY
+    - Name: {Company}
+    - One-liner: {One-liner}
+    - Stage + round: {Stage/Round}
+    - What they sell + to whom: {Product + Customer}
+    - Pricing / ACV (if known): {Pricing}
+    - Traction: {Revenue/pilots/LOIs/users/retention}
+    - Geography: {Region}
+    - Comp set (known): {Competitors}
+
+    MATERIALS (paste the best evidence you have)
+    1. Pitch / deck notes: {Paste}
+    2. Product / demo notes: {Paste}
+    3. Metrics (if any): {Paste}
+    4. GTM details (pipeline, sales cycle, channels): {Paste}
+    5. Market sizing notes: {Paste}
+
+    CALLS (paste raw notes; do not sanitize)
+    A) Customer calls (at least 3 if possible): {Paste notes}
+    B) Expert calls: {Paste notes}
+    C) Investor / operator opinions: {Paste notes}
+    D) Founder call notes: {Paste notes}
+
+    CONSTRAINTS
+    - Our fund focus: {e.g., early-stage climate tech EU27}
+    - Check size / ownership target: {X}
+    - What "win" looks like: {Return profile / fund math}
+    - Any non-negotiables: {e.g., regulatory, team, geography}
+
+    TASK
+
+    1. EVIDENCE TABLE (no fluff)
+    Create a table with rows as the key claims needed for this to be a venture-scale winner, with columns:
+    - Claim (e.g., "mid-market factories will pay €50k+ for this")
+    - Evidence from materials (quote/paraphrase + source)
+    - Evidence from calls (who said it + strength)
+    - Counter-evidence / contradictions
+    - Confidence (0-100)
+    - What would raise confidence fastest (specific test)
+
+    2. MARKET VERDICT (this is the core)
+    Answer these with brutal clarity:
+    - Market definition (tight boundaries): what is the real market?
+    - ICP + buyer + budget line: who pays and why now?
+    - Urgency + frequency: how often does pain occur and how expensive is it?
+    - Adoption dynamics: is this a "must-have now" or "nice-to-have someday"?
+    - Competitive truth: do-nothing / incumbent suite / internal build / point solutions—who wins and why?
+    - Timing risk: what macro/tech/regulatory inflection makes this possible now? What if that inflection is wrong?
+
+    3. FAILURE MODES (ranked)
+    List the top 7 ways this company dies, ranked by Probability × Impact.
+    At least 4 must be MARKET/GTM-related.
+    For each: early warning indicators + how we'd detect it within 60 days.
+
+    4. UNDERWRITING THESIS (what we'd be betting on)
+    Write:
+    - The 5-bullet thesis if INVEST
+    - The 5-bullet case if PASS
+    Then identify the SINGLE assumption that most determines the outcome.
+
+    5. DECISION
+    Give one of: INVEST / PASS / PAUSE (needs specific proof).
+    - Provide a confidence score (0-100) and the 3 drivers of that score.
+    - Provide "Dealbreaker questions" (max 5) that decide the outcome.
+
+    6. DE-RISK PLAN (2 weeks, specific)
+    Give the exact 10-step plan (calls, tests, data pulls, pricing tests, competitive checks) to resolve the top uncertainties.
+    Each step must map to a specific risk and have a success criterion.
+
+    7. TERM / STRUCTURE SUGGESTION (if INVEST)
+    Given typical seed terms, suggest 2-3 term structures or protective angles that fit the risk profile (e.g., valuation sensitivity, tranche/milestones, pro-rata, board/observer, information rights).
+    ```
+
+  </Accordion>
+
+  <Accordion title="IC Memo (Market-First)">
+    Generate an investment committee memo focused on market evidence.
+
+    ```text
+    Write an IC memo for {Company}.
+
+    Sections:
+    - Thesis in 5 bullets
+    - Market (definition, wedge, timing, TAM range, adoption dynamics)
+    - Problem intensity (evidence)
+    - Product & USP
+    - Competition & differentiation
+    - GTM plan (realistic for stage)
+    - Team assessment
+    - Key risks + what would change our mind
+    - Recommendation + terms sensitivities
+
+    Keep it punchy and evidence-based; call out assumptions explicitly.
+    ```
+
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Writing & Tone
+
+<AccordionGroup>
+  <Accordion title="Authentic Writing Style">
+    Use this as a system prompt or prepend to other prompts when you want natural, human-sounding output.
+
+    ```text
+    Role:
+    Write as a skilled human writer who naturally connects with readers through authentic, conversational content. It should feel like a real conversation with someone you genuinely care about helping.
+
+    Writing Style:
+    - Use a warm, conversational tone with contractions (you're, don't, can't, we'll).
+    - Vary sentence length dramatically: short punchy lines mixed with longer, flowing ones.
+    - Add natural pauses and small tangents—just like real human thinking.
+    - Keep the language simple, as if you're explaining something to a friend over coffee.
+    - Use relatable metaphors instead of jargon or AI buzzwords.
+
+    Connection Principles:
+    - Show that you understand what the reader is going through—their frustrations, hopes, and real-world challenges.
+    - Refer to the specific context provided and weave in realistic, authentic-feeling personal experiences.
+    - Make the content slightly "messy" with small asides, second thoughts, or casual observations.
+    - Connect emotionally first, then deliver value.
+    - Write as if you've actually lived through what you're talking about.
+    ```
+
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Tips for Better Prompts
+
+<Tip>
+  **Author note**: These prompts work best when you provide context about your fund's specific focus
+  and criteria. A growth equity fund analyzing a Series B company needs different prompts than a
+  seed fund looking at pre-revenue startups.
+</Tip>
+
+**General principles:**
+
+1. **Be specific about output format** — JSON, bullet points, or structured sections reduce hallucination and make parsing easier
+2. **Include examples** — Show the model what good output looks like
+3. **Set constraints** — "1-2 sentences per point" prevents verbose responses
+4. **Handle missing data explicitly** — Tell the model what to do when information isn't available
+
+---
+
+## Next Level
+
+Copy-pasting prompts works, but you can go further by integrating these workflows directly into your team's tools.
+
+### Add Connectors to Claude or ChatGPT
+
+Both Claude and ChatGPT support integrations that connect your tools directly:
+
+- **Connectors** — Link your email, calendar, Google Drive, and other tools so the model can read and act on real data. Claude supports integrations through its connectors, and ChatGPT through plugins and actions. Connect your CRM or deal flow tool if supported.
+- **Claude Projects** — Create a project with your fund's investment criteria, sector focus, and portfolio context. Add prompts as project instructions so every conversation starts with the right context. [Claude Cowork](https://claude.com/blog/cowork-research-preview) takes this further by letting Claude work on tasks autonomously within a project.
+- **Custom GPTs** — Build a GPT with your prompts baked in. Upload your fund's thesis document, sector maps, or deal criteria as knowledge files.
+- **Settings and preferences** — Both Claude and ChatGPT let you set global preferences that apply to all conversations. Add a bio describing your role, fund focus, and how you like responses formatted. This context persists across sessions.
+
+This turns ad-hoc prompting into a consistent workflow your whole team can use.
+
+### Build an MCP Server
+
+[Model Context Protocol (MCP)](https://modelcontextprotocol.io/) lets you create a service that provides tools and data to Claude and other LLM clients. For VC workflows, an MCP server can:
+
+- **Expose tools** — Create callable functions that fetch data, run queries, or trigger actions (`get_company_data`, `search_portfolio`, `log_meeting_notes`)
+- **Manage prompts and skills** — Serve prompt templates and multi-step workflows from a central place, so the team uses consistent, tested prompts rather than ad-hoc variations
+- **Inject live data** — Connect to your CRM, data warehouse, or external APIs so the model has real context, not just what you paste in
+- **Add proprietary context** — Include your fund's investment criteria, sector taxonomy, or portfolio company data automatically
+- **Enforce consistency** — Everyone uses the same prompts and gets the same data, reducing variance across the team
+
+A basic MCP server for VC might expose:
+
+- `get_company_context(company_name)` — Pulls data from your CRM and data providers
+- `analyze_pitch_deck(pdf_url)` — Extracts metrics and generates a thesis summary
+- `check_deal_fit(company_info)` — Scores against your investment criteria
+
+See the [MCP documentation](https://modelcontextprotocol.io/introduction) for implementation details.
+
+---
+
+## Contribute
+
+Have prompts that work well for your VC workflows? [Open a PR](https://github.com/alexpatow/building-for-vc/pulls) to add them here.

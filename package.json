@@ -5,10 +5,12 @@
     "format": "prettier --write \"**/*.{mdx,md,json}\"",
     "format:check": "prettier --check \"**/*.{mdx,md,json}\"",
     "dev": "bunx mint dev",
+    "check-links": "bunx mint broken-links",
+    "validate": "bunx mint validate",
     "prepare": "simple-git-hooks"
   },
   "simple-git-hooks": {
-    "pre-commit": "bun run format"
+    "pre-commit": "bun run format && bun run check-links && bun run validate"
   },
   "devDependencies": {
     "mint": "^4.2.284",
