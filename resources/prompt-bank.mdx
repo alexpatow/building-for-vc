@@ -7,39 +7,29 @@ A collection of prompts for common VC workflows. These are starting points, adap
 
 <Note>
   Contributed by [Ebba Forsberg](https://www.linkedin.com/in/ebba-forsberg-6a3820183/) from
-  [Norrsken](https://www.norrskenfoundation.org/).
+  [Norrsken Evolve](https://www.norrskenevolve.vc/).
 </Note>
 
 ---
 
-## Company Research
+## Deal Screening
 
 <AccordionGroup>
-  <Accordion title="Company Summary from Description">
+  <Accordion title="10-Minute Killer Screen">
+    A fast, brutal initial assessment. Use this for quick pass/pursue decisions before investing more time.
+
     ```text
-    Analyze this company description and provide:
-    1. What the company does (one sentence)
-    2. Target customer segment
-    3. Business model (SaaS, marketplace, services, etc.)
-    4. Industry vertical
-    5. Stage indicators (pre-product, early revenue, scaling)
+    You are the top early-stage VC analyst. Assess {Company} based on {Pitch}.
 
-    Company description:
-    {description}
-    ```
+    Output:
 
-  </Accordion>
-
-  <Accordion title="Competitive Landscape Analysis">
-    ```text
-    Given this company information, identify:
-    1. Direct competitors (companies solving the same problem)
-    2. Indirect competitors (alternative solutions)
-    3. Key differentiators for this company
-    4. Market positioning
-
-    Company: {company_name}
-    Description: {description}
+    1. Market: ICP, use case, urgency, budget holder, timing, market growth, reasons this is happening *now*.
+    2. Why buy / Why switch: top 3 reasons + top 3 blockers.
+    3. Competition: direct, indirect, "do nothing", internal build, incumbents.
+    4. Moat: what could become defensible in 24 months? what is fake moat?
+    5. GTM: expected sales cycle, distribution path, likely CAC drivers.
+    6. Risks: 5 biggest risks ranked by probability × impact, and how to de-risk each in 30 days.
+    7. Verdict: pursue / pass / needs specific answers. Include the 3 questions that decide the outcome.
     ```
 
   </Accordion>
@@ -47,37 +37,104 @@ A collection of prompts for common VC workflows. These are starting points, adap
 
 ---
 
-## Pitch Deck Analysis
+## Call Preparation
 
 <AccordionGroup>
-  <Accordion title="Extract Key Metrics">
+  <Accordion title="Diligence Call Prep (Deep)">
+    Use with a research or thinking model. Generates comprehensive preparation for high-stakes founder calls.
+
     ```text
-    Extract the following information from this pitch deck. If not explicitly stated, mark as "Not found":
+    You are preparing me for a high-stakes diligence call. I need to sound intelligent, be conversational, and extract decisive information fast.
+    I have limited market context, so you must educate me and then arm me with sharp questions.
 
-    - ARR / MRR
-    - Growth rate
-    - Customer count
-    - Team size
-    - Funding raised to date
-    - Burn rate / runway
-    - Key customers mentioned
+    INPUTS
+    Website: {URL}
+    My role: early-stage VC
+    My goal: decide INVEST vs PASS
+    What I already know (optional): {Notes}
+    Top concerns (optional): {e.g., market size, adoption, pricing, reliability}
 
-    Return as structured JSON.
+    TASK 1 — EASY EXPLAINER (so I can speak confidently)
+
+    1. 60-second explanation of what they do (simple language).
+    2. 3 crisp "what we believe" bullets (thesis framing).
+    3. 3 crisp "what we worry about" bullets (skeptical framing).
+    4. Mini glossary of 6 terms I might need to say out loud.
+
+    TASK 2 — MARKET RESEARCH (fast but deep)
+
+    1. Market overview: how the value chain works + who has power.
+    2. Where budgets come from + what procurement cares about.
+    3. Adoption blockers + typical timelines.
+    4. Competitive landscape + what "good" alternatives look like.
+    5. 8 key facts to reference naturally on the call (NOT too many; must be memorable).
+    6. 8 recommended readings after the call with 1-2 bullet summaries each.
+
+    TASK 3 — QUESTION SET (with conversational phrasing)
+
+    Core questions — 20 total, grouped:
+    - Market + ICP + urgency (6)
+    - Buyer + budget + procurement (4)
+    - Competition + switching (4)
+    - GTM + sales cycle + channels (4)
+    - Moat + defensibility (2)
+
+    For EACH question provide:
+    - "Why I'm asking" (1 line)
+    - What a GREAT answer sounds like
+    - What a RED FLAG answer sounds like
+    - A follow-up question that digs deeper
+
+    "Trapdoor" questions (8)
+    These reveal truth if they're bluffing. Include conversational versions.
+
+    TASK 4 — CALL FLOW (minute-by-minute plan)
+
+    Give a recommended structure:
+    - 5-20: market + buyer + urgency
+    - 20-40: competition + GTM + proof
+    - 40-55: risks + de-risk + next steps
+    - 55-60: close
+
+    Include exact phrases to transition between sections.
+
+    TASK 5 — WHAT TO LISTEN FOR (signal detection)
+
+    1. 12 signals of strength (specific, not generic).
+    2. 12 signals of weakness / BS.
+    3. A scoring rubric (0-5) for: market pain, buyer clarity, budget, urgency, adoption friction, differentiation, GTM realism.
+
+    TASK 6 — AFTER-CALL OUTPUT TEMPLATE
+
+    Give me a one-page template to fill in immediately after the call:
+    - Key facts learned
+    - Confirmed / unconfirmed assumptions
+    - Biggest risks
+    - Next proof steps
+    - Decision direction
+
+    STYLE REQUIREMENTS
+    - Must be conversational; provide exact wording I can say.
+    - No jargon without explanation.
+    - Focus on market truth and adoption reality.
+    - Make it feel like top-tier partner-level preparation.
     ```
 
   </Accordion>
 
-  <Accordion title="Investment Thesis Summary">
-    ```text
-    Based on this pitch deck, summarize:
-    1. The core problem being solved
-    2. The proposed solution
-    3. Why now (market timing)
-    4. Team's unique advantage
-    5. Go-to-market strategy
-    6. Ask (funding amount and use of funds)
+  <Accordion title="Expert Call Question Set">
+    Generate questions for expert/operator calls to validate market assumptions.
 
-    Keep each point to 1-2 sentences.
+    ```text
+    You are prepping an expert call for {Company} in {Market}.
+
+    Give:
+    - 12 questions that uncover market structure (value chain, margins, buyer power, adoption cycles)
+    - 8 questions that expose competitive dynamics and incumbent response
+    - 6 questions that validate pricing/budgets
+    - 5 "what would make this fail?" questions
+
+    Provide what a good answer vs bad answer looks like.
     ```
 
   </Accordion>
@@ -85,40 +142,110 @@ A collection of prompts for common VC workflows. These are starting points, adap
 
 ---
 
-## Data Extraction
+## Investment Decision
 
 <AccordionGroup>
-  <Accordion title="Company Classification">
+  <Accordion title="Investment Decision Framework">
+    Force a high-quality INVEST / PASS decision based on evidence. Use after you've gathered materials and done calls.
+
     ```text
-    Classify this company into the following categories. Provide confidence scores (high/medium/low).
+    You are my senior partner at an early-stage venture fund. Your job is to force a high-quality INVEST / PASS decision based on evidence, not vibes.
+    Be skeptical, quantify uncertainty, and prioritize MARKET risk (timing, structure, budgets, adoption dynamics, competition).
+    Separate FACTS from ASSUMPTIONS. If something is missing, call it out and tell me exactly what would change the decision.
 
-    Primary industry: [one of: {industry_list}]
-    Sub-sector: [specific niche]
-    Business model: [SaaS, Marketplace, Services, Hardware, Other]
-    Target market: [B2B, B2C, B2B2C]
-    Stage: [Pre-seed, Seed, Series A, Series B+]
+    COMPANY
+    - Name: {Company}
+    - One-liner: {One-liner}
+    - Stage + round: {Stage/Round}
+    - What they sell + to whom: {Product + Customer}
+    - Pricing / ACV (if known): {Pricing}
+    - Traction: {Revenue/pilots/LOIs/users/retention}
+    - Geography: {Region}
+    - Comp set (known): {Competitors}
 
-    Company: {company_name}
-    Description: {description}
+    MATERIALS (paste the best evidence you have)
+    1. Pitch / deck notes: {Paste}
+    2. Product / demo notes: {Paste}
+    3. Metrics (if any): {Paste}
+    4. GTM details (pipeline, sales cycle, channels): {Paste}
+    5. Market sizing notes: {Paste}
+
+    CALLS (paste raw notes; do not sanitize)
+    A) Customer calls (at least 3 if possible): {Paste notes}
+    B) Expert calls: {Paste notes}
+    C) Investor / operator opinions: {Paste notes}
+    D) Founder call notes: {Paste notes}
+
+    CONSTRAINTS
+    - Our fund focus: {e.g., early-stage climate tech EU27}
+    - Check size / ownership target: {X}
+    - What "win" looks like: {Return profile / fund math}
+    - Any non-negotiables: {e.g., regulatory, team, geography}
+
+    TASK
+
+    1. EVIDENCE TABLE (no fluff)
+    Create a table with rows as the key claims needed for this to be a venture-scale winner, with columns:
+    - Claim (e.g., "mid-market factories will pay €50k+ for this")
+    - Evidence from materials (quote/paraphrase + source)
+    - Evidence from calls (who said it + strength)
+    - Counter-evidence / contradictions
+    - Confidence (0-100)
+    - What would raise confidence fastest (specific test)
+
+    2. MARKET VERDICT (this is the core)
+    Answer these with brutal clarity:
+    - Market definition (tight boundaries): what is the real market?
+    - ICP + buyer + budget line: who pays and why now?
+    - Urgency + frequency: how often does pain occur and how expensive is it?
+    - Adoption dynamics: is this a "must-have now" or "nice-to-have someday"?
+    - Competitive truth: do-nothing / incumbent suite / internal build / point solutions—who wins and why?
+    - Timing risk: what macro/tech/regulatory inflection makes this possible now? What if that inflection is wrong?
+
+    3. FAILURE MODES (ranked)
+    List the top 7 ways this company dies, ranked by Probability × Impact.
+    At least 4 must be MARKET/GTM-related.
+    For each: early warning indicators + how we'd detect it within 60 days.
+
+    4. UNDERWRITING THESIS (what we'd be betting on)
+    Write:
+    - The 5-bullet thesis if INVEST
+    - The 5-bullet case if PASS
+    Then identify the SINGLE assumption that most determines the outcome.
+
+    5. DECISION
+    Give one of: INVEST / PASS / PAUSE (needs specific proof).
+    - Provide a confidence score (0-100) and the 3 drivers of that score.
+    - Provide "Dealbreaker questions" (max 5) that decide the outcome.
+
+    6. DE-RISK PLAN (2 weeks, specific)
+    Give the exact 10-step plan (calls, tests, data pulls, pricing tests, competitive checks) to resolve the top uncertainties.
+    Each step must map to a specific risk and have a success criterion.
+
+    7. TERM / STRUCTURE SUGGESTION (if INVEST)
+    Given typical seed terms, suggest 2-3 term structures or protective angles that fit the risk profile (e.g., valuation sensitivity, tranche/milestones, pro-rata, board/observer, information rights).
     ```
 
   </Accordion>
 
-  <Accordion title="Extract Structured Data from Text">
+  <Accordion title="IC Memo (Market-First)">
+    Generate an investment committee memo focused on market evidence.
+
     ```text
-    Extract the following fields from this text. Return as JSON.
-    If a field is not found, use null.
+    Write an IC memo for {Company}.
 
-    Fields:
-    - company_name: string
-    - founding_year: number
-    - headquarters: string (city, country)
-    - founders: array of {name, role, linkedin_url}
-    - funding_rounds: array of {date, amount, round_type, investors}
-    - employees: number or range
+    Sections:
+    - Thesis in 5 bullets
+    - Market (definition, wedge, timing, TAM range, adoption dynamics)
+    - Problem intensity (evidence)
+    - Product & USP
+    - Competition & differentiation
+    - GTM plan (realistic for stage)
+    - Team assessment
+    - Key risks + what would change our mind
+    - Recommendation + terms sensitivities
 
-    Text:
-    {text}
+    Keep it punchy and evidence-based; call out assumptions explicitly.
     ```
 
   </Accordion>
@@ -126,64 +253,29 @@ A collection of prompts for common VC workflows. These are starting points, adap
 
 ---
 
-## Deal Flow
+## Writing & Tone
 
 <AccordionGroup>
-  <Accordion title="Initial Deal Screening">
+  <Accordion title="Authentic Writing Style">
+    Use this as a system prompt or prepend to other prompts when you want natural, human-sounding output.
+
     ```text
-    Based on our investment criteria, evaluate this opportunity:
+    Role:
+    Write as a skilled human writer who naturally connects with readers through authentic, conversational content. It should feel like a real conversation with someone you genuinely care about helping.
 
-    Our criteria:
-    - Stage: {target_stage}
-    - Sectors: {target_sectors}
-    - Geography: {target_geography}
-    - Check size: {check_size}
+    Writing Style:
+    - Use a warm, conversational tone with contractions (you're, don't, can't, we'll).
+    - Vary sentence length dramatically: short punchy lines mixed with longer, flowing ones.
+    - Add natural pauses and small tangents—just like real human thinking.
+    - Keep the language simple, as if you're explaining something to a friend over coffee.
+    - Use relatable metaphors instead of jargon or AI buzzwords.
 
-    Company information:
-    {company_info}
-
-    Provide:
-    1. Fit score (1-5)
-    2. Key reasons for/against
-    3. Questions to ask in first meeting
-    ```
-
-  </Accordion>
-
-  <Accordion title="Meeting Notes Summary">
-    ```text
-    Summarize these meeting notes into a structured format:
-
-    1. Key takeaways (3-5 bullets)
-    2. Concerns raised
-    3. Follow-up items
-    4. Next steps
-    5. Investment recommendation (pass/continue/fast-track)
-
-    Notes:
-    {meeting_notes}
-    ```
-
-  </Accordion>
-</AccordionGroup>
-
----
-
-## Portfolio Support
-
-<AccordionGroup>
-  <Accordion title="Portfolio Update Summary">
-    ```text
-    Summarize this portfolio company update for the investment team:
-
-    1. Performance vs. plan (on track / ahead / behind)
-    2. Key wins this period
-    3. Challenges or concerns
-    4. Support needed from us
-    5. Upcoming milestones
-
-    Update:
-    {update_text}
+    Connection Principles:
+    - Show that you understand what the reader is going through—their frustrations, hopes, and real-world challenges.
+    - Refer to the specific context provided and weave in realistic, authentic-feeling personal experiences.
+    - Make the content slightly "messy" with small asides, second thoughts, or casual observations.
+    - Connect emotionally first, then deliver value.
+    - Write as if you've actually lived through what you're talking about.
     ```
 
   </Accordion>
