@@ -1,0 +1,248 @@
+---
+title: "Prompt Bank"
+description: "Copy-paste prompts for working with LLMs in VC infrastructure"
+---
+
+A collection of prompts for common VC workflows. These are starting points, adapt them to your specific use case and data.
+
+<Note>
+  Contributed by [Ebba Forsberg](https://www.linkedin.com/in/ebba-forsberg-6a3820183/) from
+  [Norrsken](https://www.norrskenfoundation.org/).
+</Note>
+
+---
+
+## Company Research
+
+<AccordionGroup>
+  <Accordion title="Company Summary from Description">
+    ```text
+    Analyze this company description and provide:
+    1. What the company does (one sentence)
+    2. Target customer segment
+    3. Business model (SaaS, marketplace, services, etc.)
+    4. Industry vertical
+    5. Stage indicators (pre-product, early revenue, scaling)
+
+    Company description:
+    {description}
+    ```
+
+  </Accordion>
+
+  <Accordion title="Competitive Landscape Analysis">
+    ```text
+    Given this company information, identify:
+    1. Direct competitors (companies solving the same problem)
+    2. Indirect competitors (alternative solutions)
+    3. Key differentiators for this company
+    4. Market positioning
+
+    Company: {company_name}
+    Description: {description}
+    ```
+
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Pitch Deck Analysis
+
+<AccordionGroup>
+  <Accordion title="Extract Key Metrics">
+    ```text
+    Extract the following information from this pitch deck. If not explicitly stated, mark as "Not found":
+
+    - ARR / MRR
+    - Growth rate
+    - Customer count
+    - Team size
+    - Funding raised to date
+    - Burn rate / runway
+    - Key customers mentioned
+
+    Return as structured JSON.
+    ```
+
+  </Accordion>
+
+  <Accordion title="Investment Thesis Summary">
+    ```text
+    Based on this pitch deck, summarize:
+    1. The core problem being solved
+    2. The proposed solution
+    3. Why now (market timing)
+    4. Team's unique advantage
+    5. Go-to-market strategy
+    6. Ask (funding amount and use of funds)
+
+    Keep each point to 1-2 sentences.
+    ```
+
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Data Extraction
+
+<AccordionGroup>
+  <Accordion title="Company Classification">
+    ```text
+    Classify this company into the following categories. Provide confidence scores (high/medium/low).
+
+    Primary industry: [one of: {industry_list}]
+    Sub-sector: [specific niche]
+    Business model: [SaaS, Marketplace, Services, Hardware, Other]
+    Target market: [B2B, B2C, B2B2C]
+    Stage: [Pre-seed, Seed, Series A, Series B+]
+
+    Company: {company_name}
+    Description: {description}
+    ```
+
+  </Accordion>
+
+  <Accordion title="Extract Structured Data from Text">
+    ```text
+    Extract the following fields from this text. Return as JSON.
+    If a field is not found, use null.
+
+    Fields:
+    - company_name: string
+    - founding_year: number
+    - headquarters: string (city, country)
+    - founders: array of {name, role, linkedin_url}
+    - funding_rounds: array of {date, amount, round_type, investors}
+    - employees: number or range
+
+    Text:
+    {text}
+    ```
+
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Deal Flow
+
+<AccordionGroup>
+  <Accordion title="Initial Deal Screening">
+    ```text
+    Based on our investment criteria, evaluate this opportunity:
+
+    Our criteria:
+    - Stage: {target_stage}
+    - Sectors: {target_sectors}
+    - Geography: {target_geography}
+    - Check size: {check_size}
+
+    Company information:
+    {company_info}
+
+    Provide:
+    1. Fit score (1-5)
+    2. Key reasons for/against
+    3. Questions to ask in first meeting
+    ```
+
+  </Accordion>
+
+  <Accordion title="Meeting Notes Summary">
+    ```text
+    Summarize these meeting notes into a structured format:
+
+    1. Key takeaways (3-5 bullets)
+    2. Concerns raised
+    3. Follow-up items
+    4. Next steps
+    5. Investment recommendation (pass/continue/fast-track)
+
+    Notes:
+    {meeting_notes}
+    ```
+
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Portfolio Support
+
+<AccordionGroup>
+  <Accordion title="Portfolio Update Summary">
+    ```text
+    Summarize this portfolio company update for the investment team:
+
+    1. Performance vs. plan (on track / ahead / behind)
+    2. Key wins this period
+    3. Challenges or concerns
+    4. Support needed from us
+    5. Upcoming milestones
+
+    Update:
+    {update_text}
+    ```
+
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Tips for Better Prompts
+
+<Tip>
+  **Author note**: These prompts work best when you provide context about your fund's specific focus
+  and criteria. A growth equity fund analyzing a Series B company needs different prompts than a
+  seed fund looking at pre-revenue startups.
+</Tip>
+
+**General principles:**
+
+1. **Be specific about output format** — JSON, bullet points, or structured sections reduce hallucination and make parsing easier
+2. **Include examples** — Show the model what good output looks like
+3. **Set constraints** — "1-2 sentences per point" prevents verbose responses
+4. **Handle missing data explicitly** — Tell the model what to do when information isn't available
+
+---
+
+## Next Level
+
+Copy-pasting prompts works, but you can go further by integrating these workflows directly into your team's tools.
+
+### Add Connectors to Claude or ChatGPT
+
+Both Claude and ChatGPT support integrations that connect your tools directly:
+
+- **Connectors** — Link your email, calendar, Google Drive, and other tools so the model can read and act on real data. Claude supports integrations through its connectors, and ChatGPT through plugins and actions. Connect your CRM or deal flow tool if supported.
+- **Claude Projects** — Create a project with your fund's investment criteria, sector focus, and portfolio context. Add prompts as project instructions so every conversation starts with the right context. [Claude Cowork](https://claude.com/blog/cowork-research-preview) takes this further by letting Claude work on tasks autonomously within a project.
+- **Custom GPTs** — Build a GPT with your prompts baked in. Upload your fund's thesis document, sector maps, or deal criteria as knowledge files.
+- **Settings and preferences** — Both Claude and ChatGPT let you set global preferences that apply to all conversations. Add a bio describing your role, fund focus, and how you like responses formatted. This context persists across sessions.
+
+This turns ad-hoc prompting into a consistent workflow your whole team can use.
+
+### Build an MCP Server
+
+[Model Context Protocol (MCP)](https://modelcontextprotocol.io/) lets you create a service that provides tools and data to Claude and other LLM clients. For VC workflows, an MCP server can:
+
+- **Expose tools** — Create callable functions that fetch data, run queries, or trigger actions (`get_company_data`, `search_portfolio`, `log_meeting_notes`)
+- **Manage prompts and skills** — Serve prompt templates and multi-step workflows from a central place, so the team uses consistent, tested prompts rather than ad-hoc variations
+- **Inject live data** — Connect to your CRM, data warehouse, or external APIs so the model has real context, not just what you paste in
+- **Add proprietary context** — Include your fund's investment criteria, sector taxonomy, or portfolio company data automatically
+- **Enforce consistency** — Everyone uses the same prompts and gets the same data, reducing variance across the team
+
+A basic MCP server for VC might expose:
+
+- `get_company_context(company_name)` — Pulls data from your CRM and data providers
+- `analyze_pitch_deck(pdf_url)` — Extracts metrics and generates a thesis summary
+- `check_deal_fit(company_info)` — Scores against your investment criteria
+
+See the [MCP documentation](https://modelcontextprotocol.io/introduction) for implementation details.
+
+---
+
+## Contribute
+
+Have prompts that work well for your VC workflows? [Open a PR](https://github.com/alexpatow/building-for-vc/pulls) to add them here.

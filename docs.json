@@ -83,7 +83,7 @@
         "groups": [
           {
             "group": "Resources",
-            "pages": ["resources/index"],
+            "pages": ["resources/index", "resources/prompt-bank"],
             "expanded": false
           }
         ]
