@@ -27,7 +27,7 @@ The word "limited" is important here. LPs have limited involvement in the fund's
 
 This limited involvement comes with significant confidentiality. LP identities and their commitment amounts are typically kept private. An LP might not want it publicly known that they're investing in venture capital, or they might not want other GPs to know the size of their commitments elsewhere. This confidentiality shapes everything from how data is secured to who can access what information in any software you build.
 
-It's also crucial to understand that when an LP commits $10 million to a fund, they don't write a $10 million check on day one. Instead, they promise to provide that capital over time as the fund needs it for investments. The money stays in the LP's accounts earning returns until the fund calls for it. This distinction between committed capital and called capital runs through every aspect of how VC funds operate.
+It's also crucial to understand that when an LP commits \$10 million to a fund, they don't write a \$10 million check on day one. Instead, they promise to provide that capital over time as the fund needs it for investments. The money stays in the LP's accounts earning returns until the fund calls for it. This distinction between committed capital and called capital runs through every aspect of how VC funds operate.
 
 ### General Partners: The Operators
 
@@ -35,7 +35,7 @@ On the other side are the General Partners, or GPs. These are the investors you 
 
 Unlike LPs, GPs have unlimited liability (in theory, though in practice this is often structured differently) and make all the decisions about how the fund's capital gets deployed. They decide which companies to invest in, how much to invest, what terms to negotiate, and when to exit.
 
-GPs make money in two ways. First, they receive management fees, typically 2% of the committed capital per year. For a $100 million fund, that's $2 million annually to cover salaries, office space, travel, and all the operational costs of running the fund. These fees are paid regardless of how well the investments perform.
+GPs make money in two ways. First, they receive management fees, typically 2% of the committed capital per year. For a \$100 million fund, that's \$2 million annually to cover salaries, office space, travel, and all the operational costs of running the fund. These fees are paid regardless of how well the investments perform.
 
 Second, and more importantly, GPs receive carried interest, or "carry." This is their share of the profits, typically 20%. But here's the key: carry only gets paid after the LPs have received back all their invested capital, and sometimes only after a preferred return hurdle is met. This alignment of incentives means GPs only make serious money if the fund performs well for the LPs.
 
@@ -89,15 +89,15 @@ The movement of capital through a VC fund follows a predictable but often misund
 
 It starts with fundraising. The GPs go out and pitch their strategy to potential LPs: "We're raising a $100 million fund to invest in early-stage B2B SaaS companies in Europe." LPs who are interested don't write checks immediately. Instead, they sign commitment letters promising to provide capital when called upon.
 
-A fund might have a target size of $100 million but a hard cap of $150 million. They'll announce a "first close" when they reach the minimum needed to start investing, say $50 million in commitments. They can now legally start making investments. The fund continues fundraising until they reach final close, which might be $120 million in total commitments. This fundraising period typically takes 6-18 months.
+A fund might have a target size of \$100 million but a hard cap of \$150 million. They'll announce a "first close" when they reach the minimum needed to start investing, say \$50 million in commitments. They can now legally start making investments. The fund continues fundraising until they reach final close, which might be \$120 million in total commitments. This fundraising period typically takes 6-18 months.
 
 During this time, LPs haven't actually transferred most of their money yet. They've just promised it. This is a crucial distinction that confuses many people building VC software: committed capital is not the same as cash in the bank.
 
 ### Capital Calls
 
-When the fund finds an investment opportunity (let's say they want to invest $3 million in a promising startup), they don't have a bank account with $100 million sitting in it. Instead, they issue a capital call to the LPs.
+When the fund finds an investment opportunity (let's say they want to invest \$3 million in a promising startup), they don't have a bank account with \$100 million sitting in it. Instead, they issue a capital call to the LPs.
 
-A capital call is a formal notice saying "We need $3 million for this investment. Each of you needs to send us your pro-rata share within 30 days." An LP who committed $10 million (10% of the fund) would need to wire $300,000 (10% of the call). The fund collects the capital from all the LPs, then wires the money to the portfolio company and receives equity in return.
+A capital call is a formal notice saying "We need \$3 million for this investment. Each of you needs to send us your pro-rata share within 30 days." An LP who committed \$10 million (10% of the fund) would need to wire \$300,000 (10% of the call). The fund collects the capital from all the LPs, then wires the money to the portfolio company and receives equity in return.
 
 This happens over and over throughout the investment period of the fund. Each time the fund makes an investment, it calls capital. This means the fund is constantly tracking how much each LP has committed, how much has been called, and how much remains uncalled (often called "dry powder").
 
@@ -119,7 +119,7 @@ The fund also decides whether to invest more. Most VC funds reserve capital for 
 
 Eventually, some portfolio companies exit. A company gets acquired, goes public, or sells shares in a secondary transaction. The fund receives either cash or liquid stock in return for its equity. This is when LPs finally see returns.
 
-But the money doesn't just get distributed immediately. First, it flows through what's called a distribution waterfall. The standard VC structure works like this: first, return all the capital that LPs invested. If the fund called $80 million total from LPs over the fund's life, the first $80 million of exits goes back to LPs. Then split remaining profits: typically 80% to LPs, 20% to GPs as carry. Some funds (more common in PE) include a preferred return hurdle between these steps, typically 8% annually that LPs must receive before carry is paid.
+But the money doesn't just get distributed immediately. First, it flows through what's called a distribution waterfall. The standard VC structure works like this: first, return all the capital that LPs invested. If the fund called \$80 million total from LPs over the fund's life, the first \$80 million of exits goes back to LPs. Then split remaining profits: typically 80% to LPs, 20% to GPs as carry. Some funds (more common in PE) include a preferred return hurdle between these steps, typically 8% annually that LPs must receive before carry is paid.
 
 These waterfall calculations get complex fast. Different investments exit at different times. LPs care about exactly when they receive distributions. The fund needs to track everything precisely: how much each LP contributed across all capital calls, how much they've received in distributions so far, and how profits should be split according to the fund's specific waterfall structure.
 
@@ -131,9 +131,9 @@ Every field has its jargon, and venture capital is no exception. Here are the te
 
 ### Performance Metrics
 
-**DPI (Distributions to Paid-In Capital)** is the most important metric for LPs because it measures actual cash returned. Take the total cash distributed to LPs and divide by the total capital called from LPs. If a fund called $80 million and has distributed $120 million, the DPI is 1.5x. This is real money in LPs' bank accounts, not theoretical value.
+**DPI (Distributions to Paid-In Capital)** is the most important metric for LPs because it measures actual cash returned. Take the total cash distributed to LPs and divide by the total capital called from LPs. If a fund called \$80 million and has distributed \$120 million, the DPI is 1.5x. This is real money in LPs' bank accounts, not theoretical value.
 
-**TVPI (Total Value to Paid-In Capital)** includes both distributions and the current value of remaining investments. If that same fund has distributed $120 million and its remaining portfolio companies are valued at $40 million, the TVPI is 2.0x ($160M / $80M). This metric is less reliable than DPI because it depends on valuations of unrealized investments, which might not materialize.
+**TVPI (Total Value to Paid-In Capital)** includes both distributions and the current value of remaining investments. If that same fund has distributed \$120 million and its remaining portfolio companies are valued at \$40 million, the TVPI is 2.0x (\$160M / \$80M). This metric is less reliable than DPI because it depends on valuations of unrealized investments, which might not materialize.
 
 **IRR (Internal Rate of Return)** is the annualized return accounting for the timing of cash flows. It's time-weighted, so returning 3x in 3 years is much better than returning 3x in 10 years, and IRR captures that difference. The calculation is complex. It's finding the discount rate where the net present value of all cash flows equals zero.
 
@@ -157,27 +157,27 @@ Why this matters: Each instrument type needs different data modeling. A SAFE doe
 
 Venture capital happens in stages, each with different characteristics, valuations, and investor types.
 
-**Pre-Seed** is the earliest stage, often before the company has launched or has meaningful revenue. Rounds are typically $100K-$1M, often from angel investors, very early stage funds, or accelerators. Companies might just have a prototype or idea. High risk, very early.
+**Pre-Seed** is the earliest stage, often before the company has launched or has meaningful revenue. Rounds are typically \$100K-\$1M, often from angel investors, very early stage funds, or accelerators. Companies might just have a prototype or idea. High risk, very early.
 
-**Seed** is when the company has proven some concept but is still early. Rounds are typically $500K-$3M. The company might have initial product-market fit, some revenue, or strong early traction. Seed funds specialize in this stage, along with angel investors and some multi-stage funds doing early deals.
+**Seed** is when the company has proven some concept but is still early. Rounds are typically \$500K-\$3M. The company might have initial product-market fit, some revenue, or strong early traction. Seed funds specialize in this stage, along with angel investors and some multi-stage funds doing early deals.
 
-**Series A** is the first institutional round for most companies. Rounds typically $3M-$15M. The company has proven product-market fit and needs capital to scale. They usually have meaningful revenue or user growth. Series A funds look for clear metrics: revenue growth, customer acquisition, team strength. This is where things get more formal: boards, proper governance, structured metrics.
+**Series A** is the first institutional round for most companies. Rounds typically \$3M-\$15M. The company has proven product-market fit and needs capital to scale. They usually have meaningful revenue or user growth. Series A funds look for clear metrics: revenue growth, customer acquisition, team strength. This is where things get more formal: boards, proper governance, structured metrics.
 
-**Series B** is about scaling what works. Rounds typically $15M-$50M. The company has proven they can grow and now needs capital to expand: new markets, more sales people, larger team. Clear business model, strong revenue, maybe even profitability or a clear path to it.
+**Series B** is about scaling what works. Rounds typically \$15M-\$50M. The company has proven they can grow and now needs capital to expand: new markets, more sales people, larger team. Clear business model, strong revenue, maybe even profitability or a clear path to it.
 
-**Series C and beyond** are later stages focused on scaling faster or expanding into new areas. Rounds can be $50M-$200M+. These companies are usually mature businesses with strong revenue, clear unit economics, and paths to exit. The focus shifts from "will this work?" to "how big can this get?"
+**Series C and beyond** are later stages focused on scaling faster or expanding into new areas. Rounds can be \$50M-\$200M+. These companies are usually mature businesses with strong revenue, clear unit economics, and paths to exit. The focus shifts from "will this work?" to "how big can this get?"
 
-**Growth/Late Stage** rounds are the final stages before IPO or acquisition. Rounds can be $100M-$500M+. Companies are often profitable or nearly so, with hundreds of millions in revenue. These look more like PE deals than traditional venture.
+**Growth/Late Stage** rounds are the final stages before IPO or acquisition. Rounds can be \$100M-\$500M+. Companies are often profitable or nearly so, with hundreds of millions in revenue. These look more like PE deals than traditional venture.
 
 Why this matters: The stage determines everything about how you track the investment. Seed investments might not have board seats or detailed metrics. Series B+ investments require comprehensive tracking, board management, and detailed reporting. Your software needs to handle the complexity appropriate to each stage.
 
 ### Valuation Terms
 
-When a fund invests in a company, the **pre-money valuation** is what the company was worth before the investment. If a company has a $10 million pre-money valuation and the fund invests $3 million, the **post-money valuation** is $13 million. The fund owns $3M / $13M = 23% of the company. This math is fundamental to tracking ownership.
+When a fund invests in a company, the **pre-money valuation** is what the company was worth before the investment. If a company has a \$10 million pre-money valuation and the fund invests \$3 million, the **post-money valuation** is \$13 million. The fund owns \$3M / \$13M = 23% of the company. This math is fundamental to tracking ownership.
 
 **Pro-rata rights** give investors the option to invest in future rounds to maintain their ownership percentage. If the fund owns 23% and the company raises a Series B, pro-rata rights let the fund invest enough to stay at 23% instead of getting diluted down. These rights are negotiated as part of each investment and need to be tracked because they affect follow-on investment decisions.
 
-**Liquidation preferences** determine who gets paid first in an exit. A "1x liquidation preference" means the fund gets their money back before other shareholders see anything. In a $50 million exit, if the fund invested $10 million with a 1x preference, they get $10 million off the top, and the remaining $40 million is split among all shareholders. More complex preferences (2x, participating preferences) exist and dramatically affect exit proceeds.
+**Liquidation preferences** determine who gets paid first in an exit. A "1x liquidation preference" means the fund gets their money back before other shareholders see anything. In a \$50 million exit, if the fund invested \$10 million with a 1x preference, they get \$10 million off the top, and the remaining \$40 million is split among all shareholders. More complex preferences (2x, participating preferences) exist and dramatically affect exit proceeds.
 
 **Dilution** is what happens when a company issues new shares, reducing everyone's percentage ownership. If the fund owns 20% and the company raises a new round, the fund might get diluted down to 15%. Tracking dilution accurately requires understanding every financing event in the company's history and how it affected the cap table.
 
@@ -187,7 +187,7 @@ It's worth understanding the economics of running a VC fund, because they shape 
 
 ### Management Fees: Keeping the Lights On
 
-The standard structure is 2% of committed capital annually, though this varies. For a $100 million fund, that's $2 million per year. Over a typical 10-year fund life, that's $20 million total. Many funds step down fees after the investment period ends - 2% for the first 5 years while actively investing, then 1.5% or less while just managing existing investments.
+The standard structure is 2% of committed capital annually, though this varies. For a \$100 million fund, that's \$2 million per year. Over a typical 10-year fund life, that's \$20 million total. Many funds step down fees after the investment period ends - 2% for the first 5 years while actively investing, then 1.5% or less while just managing existing investments.
 
 This fee revenue needs to cover everything: partner salaries, analyst salaries, office rent, travel, legal fees, accounting, software, data, subscriptions, events, everything. For a small fund, 2% often isn't enough to cover a large team, which is why many seed funds are small teams or solo GPs. For larger funds, management fees can support bigger teams with specialized roles.
 
@@ -195,9 +195,9 @@ This fee revenue needs to cover everything: partner salaries, analyst salaries, 
 
 Carried interest is where GPs make real money, but only if the fund performs. The standard is 20% of profits, but this only kicks in after returning LP capital and paying preferred return (if applicable).
 
-Here's an example: a $100 million fund fully deploys its capital into portfolio companies. Years later, the portfolio exits for $300 million total. First, $100 million goes back to LPs (their capital back). That leaves $200 million in profit. LPs get 80% of the profit ($160 million), and GPs get 20% ($40 million) as carry.
+Here's an example: a \$100 million fund fully deploys its capital into portfolio companies. Years later, the portfolio exits for \$300 million total. First, \$100 million goes back to LPs (their capital back). That leaves \$200 million in profit. LPs get 80% of the profit (\$160 million), and GPs get 20% (\$40 million) as carry.
 
-That $40 million carry is split among the GPs according to the partnership agreement. A large fund with many partners might split it widely; a small fund with two GPs might split it 50/50. Either way, carry is the incentive to generate returns, and it dwarfs management fees for successful funds.
+That \$40 million carry is split among the GPs according to the partnership agreement. A large fund with many partners might split it widely; a small fund with two GPs might split it 50/50. Either way, carry is the incentive to generate returns, and it dwarfs management fees for successful funds.
 
 ## The Process: How Deals Flow
 
