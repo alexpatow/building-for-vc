@@ -19,9 +19,9 @@ VC funds handle several types of sensitive data. Understanding what's sensitive 
 
 Your LPs are individuals and institutions who have invested money in your fund. You have their personal information: names, addresses, social security numbers or tax IDs, bank account details, investment amounts. This is personally identifiable information (PII) that must be protected for both regulatory and trust reasons.
 
-Private fund advisers managing $150M or more in AUM must register as RIAs with the SEC, which comes with specific compliance obligations around data handling (Regulation S-P for privacy, Regulation S-ID for identity theft prevention). Funds below this threshold can often qualify as Exempt Reporting Advisers (ERAs) with lighter requirements. But regardless of registration status, LPs invest millions of dollars in your fund and need to trust you'll handle their information properly. Data breaches with LP PII can result in lawsuits and damaged LP relationships.
+Private fund advisers managing $150M or more in AUM must register as RIAs with the SEC, which comes with specific compliance obligations around data handling. Funds below this threshold can often qualify as Exempt Reporting Advisers (ERAs) with lighter requirements. But regardless of registration status, LPs invest millions of dollars in your fund and need to trust you'll handle their information properly. Data breaches with LP PII can result in lawsuits and damaged LP relationships.
 
-If you're building fund operations software or LP portals, this data needs strong access controls. Most funds restrict LP data access to fund operations staff and partners.
+If you're building or buying fund operations software or LP portals, this data needs strong access controls. Most funds restrict LP data access to fund operations staff and partners.
 
 **Material Non-Public Information (MNPI)**
 
@@ -39,17 +39,17 @@ When you're building portfolio dashboards or analytics systems, consider who sho
 
 Your investment memos, due diligence notes, IC (investment committee) discussions, and proprietary research represent your fund's intellectual property. Competitors would love to know what you're looking at, what your thesis is, and how you evaluate companies. While this isn't regulated the same way as MNPI or LP PII, it's still sensitive and needs protection.
 
-When building research platforms or CRM systems, think about access controls and who can see what information.
+When building or buying research platforms or CRM systems, think about access controls and who can see what information.
 
 **The bottom line**: You're handling data that has regulatory requirements (LP PII, MNPI), relationship consequences (LP trust, portfolio company trust), and legal liability (SEC enforcement, lawsuits). The specific regulations are complex and require legal expertise to interpret correctly. Work with compliance officers and lawyers who understand what applies to your fund's specific situation.
 
 ## Basic Security Principles
 
-**Use proven tools**: Don't write your own authentication, encryption, or access control. Use OAuth providers (Google, Okta), authentication services (Auth0, Clerk), and standard encryption libraries. Security is hard - use tools built by experts.
+**Use proven tools**: Don't write your own authentication, encryption, or access control. Use OAuth providers ([Google](https://support.google.com/cloud/answer/15549257?hl=en), [Okta](https://www.okta.com/)), authentication services ([Auth0](https://auth0.com/), [Clerk](https://clerk.com/)), and standard encryption libraries. Security is hard - use tools built by experts.
 
 **Encrypt data**: Use HTTPS everywhere (data in transit). Enable database encryption at rest (checkbox option in managed services). For LP PII or MNPI, consider application-level encryption.
 
-**Implement access controls**: Not everyone needs access to everything. Use role-based access control (RBAC): define roles (partner, associate, operations) and permissions (read portfolio data, edit CRM, view LP info). Use audit logs to track who accessed what.
+**Implement access controls**: Not everyone needs access to everything. Use role-based access control (RBAC): define roles (partner, associate, operations) and permissions (read portfolio data, edit CRM, view LP info). Use audit logs to track who accessed what. If you're building a multi-tenant application (for portfolio companies or LPs), implement Row-Level Security (RLS).
 
 **Principle of least privilege**: Give people and services only the minimum access needed. This limits damage if credentials are compromised.
 
@@ -79,12 +79,11 @@ This isn't adversarial. Compliance teams want you to build good tools. They just
 
 Here's how these principles translate to the systems you're actually building.
 
-**For CRM systems** (Attio, Affinity, Salesforce):
+**For CRM systems**:
 
 - Use SSO (single sign-on) with your company's identity provider so you can centrally manage access
 - Set up role-based permissions so not everyone can see all data
 - Enable audit logging if the CRM supports it
-- If you're building a custom CRM, use an established auth framework (NextAuth, Clerk) rather than rolling your own
 
 **For data warehouses** (Postgres, Snowflake, BigQuery):
 
@@ -97,6 +96,7 @@ Here's how these principles translate to the systems you're actually building.
 
 - Require authentication: don't build unauthenticated internal tools that anyone with the URL can access
 - Use HTTPS everywhere
+- Use an established auth framework ([NextAuth](https://next-auth.js.org/), [Clerk](https://clerk.com/)) rather than rolling your own
 - Consider IP allowlisting for particularly sensitive tools (only accessible from office network or VPN)
 - Implement session timeouts so inactive sessions don't stay logged in forever
 

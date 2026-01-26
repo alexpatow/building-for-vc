@@ -21,9 +21,9 @@ Not all data is equally trustworthy. Data quality starts with choosing the right
 
 **The trust hierarchy**
 
-**High trust:** Your firm's internal data (portfolio companies, investment amounts, ownership, LP data). When external sources conflict with your internal data, your data is almost always correct. Use it as ground truth.
+**High trust:** Your firm's internal data (portfolio companies, investment amounts, ownership, LP data). When external sources conflict with your internal data, your data is almost always correct. Use it as ground truth. If it's incorrect, you have a workflow issue, not a technical issue.
 
-**Medium trust:** Established vendors for their core competency. PitchBook for funding data. LinkedIn for employee counts. Your CRM for companies you track. These are reliable enough for analysis, but understand the tradeoffs: PitchBook is accurate but slow (2-week lag). Signal providers like Specter or Harmonic are fast but incomplete. Pick based on your use case: accuracy for LP reporting, speed for deal flow alerts.
+**Medium trust:** Established vendors for their core competency. PitchBook for funding data. CoreSignal for employee counts. Your CRM for companies you track. These are reliable enough for analysis, but understand the tradeoffs: PitchBook is accurate but slow. Signal providers like Specter or Harmonic are fast but incomplete. Pick based on your use case: accuracy for LP reporting, speed for deal flow alerts.
 
 **Low trust:** Scraped data, meeting transcriptions, AI summaries. Useful for context and exploration, not definitive analysis. Transcriptions mishear names. Scraped data is stale. AI hallucinates.
 
@@ -51,19 +51,7 @@ Every validation rule you write will have exceptions. Real companies don't follo
 
 The most effective validation is humans with industry knowledge reviewing data. Someone who knows the fintech space will immediately spot that "Stripe raised a $10M Series A in 2023" is wrong because Stripe raised their Series A over a decade ago. Someone who follows AI infrastructure companies will know which competitors belong in a market map. Automated systems won't catch these errors because they lack context.
 
-This is why you should know the industries and markets your fund focuses on. If you're building data infrastructure for a fintech fund, learn fintech. If you're supporting a deep tech fund, understand deep tech. Domain knowledge is your best validation tool.
-
-**Basic sanity checks that help**
-
-Some validation is still worth doing:
-
-- Funding dates should be reasonable (not in the future, not before the company was founded)
-- Funding amounts should be positive numbers
-- URLs should be valid domains
-- Employee counts shouldn't be negative
-- Location data should be real cities/countries
-
-These catch data entry errors and obvious problems. They won't catch subtle errors, but they prevent embarrassing mistakes like showing a company with -50 employees.
+This is why **you should know the industries and markets your fund focuses on**. If you're building data infrastructure for a fintech fund, learn fintech. If you're supporting a deep tech fund, understand deep tech. Domain knowledge is your best validation tool.
 
 **The gut feel test**
 
@@ -77,7 +65,7 @@ Data gets stale. Companies update their information irregularly. Data vendors sc
 
 **Surface freshness to users**
 
-Always show when data was last updated. If you're displaying employee count, show "500 employees (as of Dec 2024)." If you're showing funding data, show "Series B, $50M (announced May 2025)." Don't present stale data as if it's current.
+Always show when data was last updated. If you're displaying employee count, show "500 employees (as of Dec 2024)." Don't present stale data as if it's current.
 
 This does two things. First, it sets appropriate expectations. Users know whether to trust the data for current decisions. Second, it shifts responsibility. If a GP uses 6-month-old employee counts and makes a decision based on that, they knew the data was old. You're not hiding staleness.
 
@@ -117,9 +105,8 @@ Good data quality comes from both preventing bad data from entering your systems
 
 When you ingest data from external sources:
 
-- Validate basic formats (URLs are URLs, dates are dates, numbers are numbers)
 - Normalize data (consistent date formats, consistent naming, lowercase domains)
-- Log what you received so you can trace errors back to the source
+- Store what you received so you can trace errors back to the source
 - Version your data so you can see what changed and when
 - Flag data from low-trust sources so it doesn't get used inappropriately
 
@@ -127,7 +114,7 @@ These practices don't prevent all errors, but they prevent careless mistakes and
 
 **Detection: Monitoring for obvious errors**
 
-Set up automated tests that run frequently to catch data quality issues before they reach users. dbt (data build tool) tests are particularly good for this. They let you define tests in SQL that run against your data warehouse and alert you when things break.
+Set up automated tests that run frequently to catch data quality issues before they reach users. [dbt](https://www.getdbt.com/) tests are particularly good for this. They let you define tests in SQL that run against your data warehouse and alert you when things break.
 
 **Examples of useful dbt tests for VC data:**
 

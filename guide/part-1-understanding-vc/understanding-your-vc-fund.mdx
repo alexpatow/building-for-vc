@@ -23,7 +23,7 @@ Building generic "VC software" is a recipe for failure. You need to build for a 
 
 The stage a fund invests at fundamentally shapes everything about how they operate. A seed fund seeing 100 companies per month operates nothing like a growth equity fund doing 3-month diligence processes on 10 companies per year.
 
-### Pre-Seed and Seed Funds (\$10M-\$50M)
+### Pre-Seed and Seed Funds (\$10M-\$100M)
 
 Seed funds vary widely in their approach, some are concentrated portfolios, other are more "spray-and-pray". A typical seed fund might make 5-10 investments per year with check sizes around \$500K-\$2M. These aren't tiny angel checks, but meaningful seed investments where the fund takes a significant ownership stake.
 
@@ -43,7 +43,7 @@ Examples:
 
 ### Series A and B Funds (\$50M-\$300M)
 
-Series A and B funds occupy the middle ground. They see moderate deal volume (20-40 companies per fund), write checks in the \$2M-\$10M range, and have substantial diligence processes. These funds usually take board seats and plan to be involved for years. They reserve 50-70% of their capital for follow-on investments in their best companies.
+Series A and B funds occupy the middle ground. They see moderate deal volume (20-40 companies per fund), write checks in the \$2M-\$10M range, and have substantial diligence processes. These funds usually take board seats. They reserve 30-50% of their capital for follow-on investments in their best companies.
 
 Deal teams are larger here. You might have 5-10 investment professionals, plus operating partners or specialists. The diligence process involves multiple people: someone does market research, someone handles financial modeling, someone does customer reference calls, maybe someone does technical evaluation. Everything feeds into an investment committee meeting where partners debate the deal.
 
@@ -53,9 +53,9 @@ Examples:
 - [Balderton Capital](https://www.balderton.com/) - European Series A/B
 - [Index Ventures](https://www.indexventures.com/) - Series A and B focus
 
-### Growth Equity (\$300M-\$1B+)
+### Growth Equity (\$500M-\$2B+)
 
-Growth equity funds operate at the other end of the spectrum. Low deal volume (maybe 10-20 companies per fund), very large checks (\$10M-\$50M+), and diligence processes that can stretch 3-6 months. These deals look more like acquisitions than venture bets. The fund is evaluating mature businesses with real revenue, established customers, and clear unit economics.
+Growth equity funds operate at the other end of the spectrum. Low deal volume (maybe 10-20 companies per fund), very large checks (\$25M-\$100M+), and diligence processes that can stretch 3-6 months. These deals look more like acquisitions than venture bets. The fund is evaluating mature businesses with real revenue, established customers, and clear unit economics.
 
 The focus here shifts from "will this work?" to "can this scale profitably?" Customer references matter a lot. Financial models need to be detailed. The fund often co-invests with other growth funds, so syndicate management becomes important. There's significant operational involvement. Some growth funds effectively function as operating partners, helping professionalize finance, sales, and operations.
 
@@ -69,7 +69,7 @@ Examples:
 
 PE funds are a different world. Very low deal volume (5-15 companies per fund), controlling stakes or full acquisitions, complex capital structures involving debt, and extensive operational involvement. These aren't minority investments hoping for growth. These are acquisitions where the fund owns and operates the business.
 
-Deal sourcing happens differently. Deals often come from investment banks running formal processes, not warm intros from founders. Due diligence involves consultants, legal teams, accounting firms, and operational experts. The fund isn't just evaluating the business, they're planning how to improve operations, cut costs, and eventually sell it.
+Deal sourcing happens differently. Deals often come from investment banks running formal processes, not warm intros from founders. Due diligence involves consultants, legal teams, accounting firms, and operational experts. The fund isn't just evaluating the business, they're planning how to grow revenue, improve operations, cut costs, and eventually sell it.
 
 Post-investment, the fund isn't just monitoring. They're actively managing. They might replace the CEO, restructure operations, or make add-on acquisitions to roll up competitors. Portfolio company management requires deep integration with the company's systems.
 
@@ -89,7 +89,7 @@ Some of the largest and most prominent VC firms operate across multiple stages a
 
 The structure creates interesting dynamics. A company might start as a seed investment from the early-stage fund, then receive follow-on investment from the growth fund years later. Deal flow can be shared across funds. A company that's too late for the seed fund might be perfect for Series A. Partners often specialize by stage or sector but can collaborate across funds.
 
-This multi-fund structure affects everything about operations. You're not building for one fund with one strategy. You're building infrastructure that needs to support multiple funds with different workflows, different LPs, different reporting requirements, and different team structures. But you also want shared infrastructure where it makes sense: one deal flow system that all funds use, one portfolio tracking platform, shared research and data.
+This multi-fund structure affects everything about operations. You're not building for one fund with one strategy. You're building infrastructure that needs to support multiple funds with different sourcing methods, evaluation criteria, workflows, LPs, reporting requirements, and team structures. But you also want shared infrastructure where it makes sense: one deal flow system that all funds use, one portfolio tracking platform, shared research and data.
 
 The challenge is managing complexity while maintaining the benefits of integration. Each fund needs its own LP reporting, its own capital tracking, its own performance metrics. But deals, companies, and relationships should be shared. A partner working on both the seed and growth funds needs visibility across both, but LPs for each fund should only see their specific fund's data.
 
@@ -109,7 +109,9 @@ Geographic focus, industry specialization, and investment approach all create di
 
 A fund focused on a single city or region operates differently than a global fund. Hyper-local funds benefit from dense networks. They know everyone in the ecosystem. They track local events, community gatherings, and founder meetups. Deals come from repeated interactions and warm introductions within a tight network.
 
-Global funds face different challenges. Partners operate across time zones. Travel coordination matters. The fund deals with multiple currencies and potentially multiple legal entities for regional investments. Different regions have different legal and compliance requirements. Regional partners might have deal attribution and carry allocation based on geography.
+Global funds face different challenges. Partners operate across time zones. The fund deals with multiple currencies and potentially multiple legal entities for regional investments. Different regions have different legal and compliance requirements. Regional partners might have deal attribution and carry allocation based on geography.
+
+Sourcing is also harder at scale. Global funds compete against local investors with deeper regional networks. Building relationships with founders across time zones requires more deliberate effort and often more reliance on data-driven sourcing to compensate for thinner local presence.
 
 From a technical perspective, geographic focus shapes your architecture significantly. Multi-entity structures require careful data modeling: which legal entity made which investment? How do you aggregate performance across entities while maintaining separation for legal and tax purposes? Currency handling affects portfolio valuation and financial reporting. Time zones affect scheduling features, notification timing, and how you display dates. Access control becomes more complex: regional partners might only see deals in their geography, while HQ needs global visibility.
 
@@ -131,7 +133,7 @@ B2B SaaS funds focus heavily on financial metrics. ARR, net retention, customer 
 
 Consumer and marketplace funds care about user growth, retention, cohort analysis, and unit economics. Brand strength matters. Community and network effects need assessment. The metrics are different from B2B, and the diligence process focuses on different aspects.
 
-Technically, industry specialization means building extensible metric systems from day one. You can't hard-code ARR fields when portfolio companies might have wildly different success metrics. Your data model needs to support custom metrics per company or per sector. Integration requirements vary dramatically: a fintech fund needs banking API connections and regulatory databases, while a deep tech fund needs patent databases and grant tracking systems. Document templates and diligence checklists become sector-specific. Even your deal sourcing might integrate with industry-specific data sources: blockchain explorers for crypto, clinical trial databases for biotech, or defense contract databases for dual-use technology.
+From a technical perspective, industry specialization shapes your sourcing and research infrastructure especially. A deep tech fund needs access to patent databases, grant tracking systems, and academic research. A fintech fund integrates with regulatory databases and compliance monitoring. A crypto fund might pull data from blockchain explorers and token analytics platforms. Your deal sourcing changes - defense tech funds track government contract databases, biotech funds monitor clinical trials, and B2B SaaS funds benchmark against industry ARR data.
 
 Examples of industry-focused funds:
 
@@ -141,7 +143,7 @@ Examples of industry-focused funds:
 
 ### Generalist Funds
 
-Generalist funds invest across sectors and stages. They rely on broader pattern recognition rather than deep domain expertise in one area. Diligence frameworks need to be more standardized because you can't have sector-specific processes for everything. Portfolio construction is deliberately diverse. Team members bring varied backgrounds.
+Generalist funds invest across sectors and stages. They rely on broader pattern recognition rather than deep domain expertise in one area. Portfolio construction is deliberately diverse. Team members bring varied backgrounds.
 
 The technical challenge for generalist funds is flexibility without chaos. Your categorization systems need to handle companies that don't fit neat boxes. Tagging and metadata become more important than rigid hierarchies. Signal processing for deal flow requires broader pattern matching: you can't rely on sector-specific signals, so you need systems that surface opportunities based on founder quality, market dynamics, and thesis fit across different industries. Your metric tracking needs to gracefully handle B2B SaaS, consumer apps, marketplaces, and hardware companies in the same portfolio. The key is building abstractions that work across sectors while allowing customization where needed.
 
@@ -287,6 +289,6 @@ Before you write any code, get clear on seven critical questions:
 
 **Operating Style**: What's the organization's culture? Move fast and break things, or stable release cycles? Is the tech team embedded with deal teams or a separate function? This determines your deployment approach, testing requirements, and how you prioritize features.
 
-These seven answers determine your entire technical architecture. A seed fund needs speed and volume handling. A growth equity fund needs depth and sophistication. There's no one-size-fits-all solution. The most expensive mistake you can make is building generic VC software and trying to adapt it later. Start specific. Understand your fund deeply. Build exactly what they need. Expand carefully based on actual requirements, not hypothetical futures.
+These seven answers determine your entire technical architecture. There's no one-size-fits-all solution. The most expensive mistake you can make is building generic VC software and trying to adapt it later. Start specific. Understand your fund deeply. Build exactly what they need. Expand carefully based on actual requirements, not hypothetical futures.
 
 In the next chapter, we'll cover the common mistakes that even experienced developers make when starting at a VC fund, and more importantly, how to avoid them before they cost you months of wasted work.

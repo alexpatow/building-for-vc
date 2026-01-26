@@ -1,15 +1,15 @@
 ---
 title: "Accessing Data"
-description: "How data providers deliver data: APIs, file exports, authentication, and integration patterns."
+description: "How data providers deliver data: APIs, file exports, and hybrid approaches."
 ---
 
 ## Overview
 
-Data providers deliver data in two main ways: APIs and files. Each has different implications for how you build integrations. Understanding delivery methods helps you choose the right approach for your use case.
+Data providers deliver data in two main ways: APIs and files. Each has different implications for how you build integrations and what you pay.
 
 ## API-Based Delivery
 
-Most modern vendors provide REST APIs. You authenticate with an API token, make HTTP requests, and receive JSON responses. When you need data about a company, you query the API and get the latest information your vendor has.
+Most modern vendors provide REST APIs. You authenticate with an API token, make HTTP requests, and receive JSON responses.
 
 **Benefits:**
 
@@ -26,9 +26,9 @@ Most modern vendors provide REST APIs. You authenticate with an API token, make 
 
 ## File-Based Delivery
 
-Almost all vendors provide data as file exports: CSV, Parquet, or JSON files that you download or they upload to your S3 bucket. This is common for bulk data (entire company database, historical funding data, periodic dumps).
+Almost all vendors also provide data as file exports: CSV, [Parquet](https://parquet.apache.org/), or JSON files that you download or they upload to your S3 bucket. This is common for bulk data (entire company database, historical funding data, periodic dumps).
 
-However, this is often in the "premium" tier, which is usually many times more expensive than using the API.
+However, this is often in the "premium" tier, which is usually many times more expensive than API access.
 
 **Benefits:**
 
@@ -45,105 +45,30 @@ However, this is often in the "premium" tier, which is usually many times more e
 
 ### Prefer Parquet Over CSV
 
-Vendors will sometimes give you the option of CSV, TSV, JSON/JSONL or Parquet. **Always choose Parquet**.
+Vendors will sometimes give you the option of CSV, TSV, JSON/JSONL or [Parquet](https://parquet.apache.org/). **Always choose Parquet**.
 
 It includes schema information (you know data types without guessing), compresses well (smaller files), and loads much faster into data warehouses.
 
-JSON/JSONL is also a decent choice, but typically more cumbersome to work with.
+JSON/[JSONL](https://jsonlines.org/) is also a decent choice, but typically more cumbersome to work with.
 
 CSV/TSV files require parsing, have encoding issues, no schema, and are slower to work with.
 
-Ask vendors to provide Parquet if they don't already. Most modern vendors support it, and it will save you significant time and headaches.
+Ask vendors to provide Parquet if they don't already. Most modern vendors support it.
 
 ## Hybrid Approaches
 
 Some vendors offer both APIs (for real-time enrichment) and bulk exports (for loading your data warehouse). This is ideal: use the API for interactive features, use bulk exports to populate your data warehouse efficiently.
 
-## Authentication
-
-### API Authentication
-
-Most vendors use API tokens (also called API keys). You get a token from the vendor (usually through their dashboard), include it in your HTTP requests (usually as a Bearer token in the Authorization header), and the vendor identifies your account and tracks usage.
-
-**Store API tokens securely:**
-
-- Use environment variables, not hardcoded in code
-- Use a secrets manager (AWS Secrets Manager, 1Password, Google Cloud Secret Manager) for production
-- Never commit tokens to git
-- Rotate tokens periodically (every 6-12 months)
-- Have separate tokens for development, staging, production
-
-### File Delivery Authentication
+## File Delivery Authentication
 
 For file-based vendors, there are three common options:
 
-- Upload files to their own S3 bucket that you can access (they provide AWS credentials)
-- Upload files directly to your S3 bucket (you provide them with write-only credentials)
-- Provide download links through their portal (you download manually or via script)
+- They upload files to their own S3 bucket that you can access (they provide AWS credentials)
+- They upload files directly to your S3 bucket (you provide them with write-only credentials)
+- They provide download links through their portal (you download manually or via script)
 
 The third option (manual download) doesn't scale well. Prefer vendors who can integrate with your cloud storage.
 
-## Rate Limits
+## Working with APIs
 
-Most APIs limit how many requests you can make in a given time period. Common patterns:
-
-- **Requests per second:** Can't exceed X requests/second
-- **Requests per day/month/year:** Quota for your subscription
-- **Concurrent requests:** Maximum simultaneous connections
-
-### Handling Rate Limits
-
-When you hit rate limits, APIs return HTTP 429 (Too Many Requests). Your code should:
-
-1. Catch 429 responses
-2. Wait before retrying (use the `Retry-After` header if provided)
-3. Use exponential backoff (wait longer after each failure)
-4. Queue requests to stay under limits proactively
-
-```typescript
-async function fetchWithRetry(url: string, maxRetries = 3) {
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    const response = await fetch(url)
-
-    if (response.status === 429) {
-      const retryAfter = response.headers.get("Retry-After")
-      const waitTime = retryAfter ? parseInt(retryAfter) * 1000 : Math.pow(2, attempt) * 1000
-      await new Promise((resolve) => setTimeout(resolve, waitTime))
-      continue
-    }
-
-    return response
-  }
-  throw new Error("Max retries exceeded")
-}
-```
-
-## Validation
-
-Data vendors change their APIs more often than you'd expect. They rename fields, change data formats, add new attributes, deprecate old endpoints. Your integrations break when this happens.
-
-Use runtime validation (Zod in TypeScript, Pydantic in Python) to catch schema changes early:
-
-```typescript
-import { z } from "zod"
-
-const CompanySchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  website: z.string().url().optional(),
-  foundedYear: z.number().optional(),
-  funding: z
-    .object({
-      totalRaised: z.number(),
-      lastRoundDate: z.string().optional(),
-    })
-    .optional(),
-})
-
-// This will throw if the API response doesn't match
-const company = CompanySchema.parse(apiResponse)
-```
-
-When a vendor changes their API, your validation will fail and alert you immediately, rather than silently corrupting your data.
-
-See [Considerations](/guide/part-3-technical-foundations/data-providers/considerations) for how to work with vendors when APIs change.
+For details on API authentication, validation, rate limits, error handling, and other integration patterns, see [Integrations](/guide/part-3-technical-foundations/integrations-and-apis).

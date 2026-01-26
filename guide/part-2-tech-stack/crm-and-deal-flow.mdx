@@ -3,6 +3,8 @@ title: "CRM and Deal Flow Management"
 description: "Understanding why every fund needs a CRM, how to choose between options, and making it actually work for your team."
 ---
 
+import { CurrentYear } from "/snippets/current-year.jsx"
+
 ## Overview
 
 Unlike sourcing tools, which work for some funds and not others, CRM is universally valuable. Every fund tracks relationships and manages deal flow. The question isn't whether you need it, but which tool you use and whether you actually use it consistently.
@@ -11,7 +13,7 @@ CRM stands for Customer Relationship Management, which is a terrible name for wh
 
 The reality is that all CRMs feel terrible to use. They're not built for venture capital out of the box. They're built for sales teams with standardized processes, clear conversion funnels, and lots of repetitive activity. VC is messier. Every deal is different. The relationship with a founder you passed on three years ago might lead to your best investment next year. You can't force this into a linear sales pipeline.
 
-But building your own CRM from scratch is worse. Much worse. It's 2026. Don't do it. Buy something customizable, integrate it with your other tools, and commit to actually using it. This chapter covers how to choose a CRM and make it work for your fund.
+But building your own CRM from scratch is worse. Much worse. It's <CurrentYear />. Don't do it. Buy something customizable, integrate it with your other tools, and commit to actually using it. This chapter covers how to choose a CRM and make it work for your fund.
 
 ## Why CRMs Feel Terrible
 
@@ -42,13 +44,16 @@ Before choosing a CRM, understand what you actually need it to do for a venture 
   follow-on rounds come up - you can't mark a company as both "Invested" and "Passed" at the same
   time. I have first hand experience of trying to change this data model, it's a nightmare. Most
   good CRMs support this if you set it up correctly from the start.
+
+See [Data Modeling](/guide/part-3-technical-foundations/data-modeling) for more information.
+
 </Tip>
 
 **Team coordination**: In a fund with multiple people, you need to know who's talking to which founders, who's working on which deals, and what everyone learned. The CRM prevents duplicate outreach, surfaces relevant context when someone else talked to a founder months ago, and helps the team build on each other's work.
 
 **Notes and history**: When you talked to a founder six months ago, what did you learn? When they email you an update, can you quickly see the full context? The CRM should be the source of truth for all interactions with companies and founders.
 
-**Search and filtering**: Find all the AI infrastructure companies you talked to in the last year. Find everyone you met at that conference. Find all the founders you passed on who you said you'd check back with in six months. If you can't find information quickly, you won't use the system. Unfortunately, search systems on CRMs are inexplicably poor in 2026.
+**Search and filtering**: Find all the AI infrastructure companies you talked to in the last year. Find everyone you met at that conference. Find all the founders you passed on who you said you'd check back with in six months. If you can't find information quickly, you won't use the system. Unfortunately, search systems on CRMs are inexplicably poor in <CurrentYear />.
 
 **Beyond deal flow**: While this chapter focuses on deal flow management, many funds also use their CRM to manage LP relationships. Tracking interactions with current and potential LPs, managing fundraising pipelines, and maintaining investor reporting history. The same principles apply: relationship tracking, interaction history, and systematic follow-up. Some funds use separate systems for LPs, others use the same CRM with different pipelines.
 
@@ -56,13 +61,13 @@ Before choosing a CRM, understand what you actually need it to do for a venture 
 
 There's no perfect CRM for venture capital. There are three main options that funds use, each with tradeoffs.
 
-**Attio**: Modern, flexible, and designed with relationship-centric businesses in mind. Better UX than traditional CRMs. Strong customization without requiring a full-time admin. Good email and calendar integration. Pricing is reasonable for small to mid-sized funds. The main limitation is that it's less established than Affinity or Salesforce, so fewer integrations and smaller ecosystem.
+**Attio**: Modern, flexible, and designed with relationship-centric businesses in mind. Better UX than traditional CRMs. Strong customization without requiring a full-time admin. Good email and calendar integration. Pricing is reasonable for small to mid-sized funds. The main limitation is that it's less established than Affinity or Salesforce, so fewer integrations and smaller ecosystem, however the APIs are easy enough to work with if you need to add some "glue code" to integrate systems.
 
 Many newer funds choose Attio because it's easier to customize to match your specific workflow without fighting the tool, it also tends to be the cheapest.
 
 **Affinity**: Built specifically for relationship-driven industries like venture capital. Automatically enriches contact data and tracks relationship strength based on email and meeting patterns. Strong at surfacing "who knows who" for warm intros. More opinionated about workflow, which means less customization but faster setup.
 
-Large funds and established GPs often choose Affinity because it has VC-specific features out of the box. The tradeoff is less flexibility if your process differs from what Affinity expects.
+Large funds and established GPs often choose Affinity because it has purpose-built VC workflows out of the box. The tradeoff is less flexibility.
 
 **Salesforce**: The enterprise standard. Extremely customizable. Massive ecosystem of integrations and consultants. Can be configured to do almost anything. The downsides are cost (expensive for small funds), complexity (requires real admin overhead), and UX that feels dated.
 
@@ -75,7 +80,7 @@ Larger, established funds with dedicated operations teams sometimes use Salesfor
 
 Many funds start with [Airtable](https://www.airtable.com/) or [Notion](https://www.notion.com/) for deal flow tracking because they're familiar, flexible, and easy to set up. This is a mistake.
 
-The problem is that Airtable and Notion don't integrate with email and calendar. You have to manually enter everything. What happens is that people stop updating it within weeks. You end up with a partially-filled database that nobody trusts or uses, and you've lost all the email and meeting history that a real CRM would have captured automatically.
+The problem is that Airtable and Notion don't integrate well with email and calendar. You have to manually enter everything. What happens is that people stop updating it within weeks. You end up with a partially-filled database that nobody trusts or uses, and you've lost all the email and meeting history that a real CRM would have captured automatically.
 
 Just buy a real CRM from the start. The cost is worth it for the automatic email and meeting tracking alone.
 
@@ -99,7 +104,7 @@ The key is making it low-friction. If entering data takes too many clicks or too
 
 **Don't overthink the workflow**: Many funds spend weeks designing the perfect pipeline stages and custom fields. This is usually overengineering. Start simple. You can always add complexity later. The basics (who are we talking to, what stage are they at, what's the next step) cover 80% of what you need.
 
-The key difference from traditional sales funnels: VC deal flow isn't linear. Companies move forward, sideways, and sometimes back. You might pass on a company's seed round and lead their Series A. A "watchlist" company might sit dormant for two years then become your best investment.
+The key difference from transactional sales workflows: VC deal flow isn't linear. Companies move forward, sideways, and sometimes back. You might pass on a company's seed round and lead their Series A. A "watchlist" company might sit dormant for two years then become your best investment.
 
 ```mermaid
 stateDiagram-v2

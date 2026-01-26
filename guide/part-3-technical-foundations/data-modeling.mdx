@@ -33,6 +33,10 @@ One investor (the firm) can have multiple funds. Sequoia Capital has multiple fu
 
 This matters because different funds from the same investor can make different investment decisions. Inflection Mercury Fund might pass on a deal while Inflection Mars Fund invests. If you model this as just "Inflection invested," you lose critical information.
 
+<Note>
+  The SQL below is simplified to illustrate entity relationships - not production-ready code.
+</Note>
+
 ```sql
 -- Investors table (the firms)
 CREATE TABLE investors (
@@ -148,7 +152,7 @@ Your data model should allow for:
 - Rounds that might not exist (rumored but unconfirmed)
 - Multiple rounds of the same type (Seed, Seed Extension, Seed II)
 
-Don't build validation rules that enforce "Series B must come after Series A" or "funding amounts must be known." Real companies break these rules constantly.
+Don't build validation rules that enforce "Series B must come after Series A" or "funding amounts must be known." Real companies break these rules constantly and your data sources, even more so.
 
 **People have overlapping experiences and education**
 
@@ -217,7 +221,7 @@ Every time you fetch company data from PitchBook (daily, weekly, or on-demand), 
 
 Append-only tables are great for history but inconvenient to query. You usually want the latest information, not every historical value.
 
-Use dbt (covered in [Data Warehousing](/guide/part-3-technical-foundations/data-warehousing)) to transform append-only staging tables into intermediate tables with current values:
+Use [dbt](https://www.getdbt.com/) (covered in [Data Warehousing](/guide/part-3-technical-foundations/data-warehousing)) to transform append-only staging tables into intermediate tables with current values:
 
 ```sql
 -- dbt model: models/intermediate/pitchbook_companies.sql

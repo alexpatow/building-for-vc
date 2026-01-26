@@ -19,7 +19,7 @@ The technology decisions you make have direct consequences for what you can acco
 
 **Integration matters more than custom solutions**. VC funds live in an ecosystem of specific tools: Attio or Affinity for CRM, PitchBook for data, Harmonic or Specter for sourcing. Choosing technology that makes API integrations easy is more valuable than choosing technology that's theoretically more powerful.
 
-**AI coding tools work better with popular frameworks**. Claude Code, Cursor, and similar tools dramatically accelerate development with well-documented stacks. This makes choosing boring, widely-used technology even more valuable.
+**AI coding tools work better with popular frameworks**. [Claude Code](https://code.claude.com/docs/en/overview), [Cursor](https://cursor.com/), and similar tools dramatically accelerate development with well-documented stacks. This makes choosing boring, widely-used technology even more valuable.
 
 **Your time is the constraint, not compute**. Infrastructure costs for internal VC tools are trivial compared to data subscriptions and your salary. Optimize for developer velocity, not hosting costs.
 
@@ -27,13 +27,14 @@ The technology decisions you make have direct consequences for what you can acco
 
 At Inflection, our default stack for web applications and APIs is:
 
-- **Next.js**: React framework with built-in routing, API routes, server-side rendering
-- **TypeScript**: JavaScript with static typing
-- **Shadcn**: Component library built on Radix UI and Tailwind CSS
-- **Postgres**: Relational database
-- **Drizzle**: TypeScript ORM for Postgres
-- **Vercel AI SDK**: For LLM integrations
-- **Deployed on Vercel**: Git push equals deployment, zero DevOps overhead
+- **[Next.js](https://nextjs.org/)**: React framework with built-in routing, API routes, server-side rendering
+- **[TypeScript](https://www.typescriptlang.org/)**: JavaScript with static typing
+- **[shadcn/ui](https://ui.shadcn.com/)**: Component library built on Radix UI and Tailwind CSS
+- **[PostgreSQL](https://www.postgresql.org/)**: Relational database
+- **[Neon](https://neon.com/)**: Serverless Postgres
+- **[Drizzle](https://orm.drizzle.team/)**: TypeScript ORM for Postgres
+- **[Vercel AI SDK](https://ai-sdk.dev/)**: For LLM integrations
+- **[Deployed on Vercel](https://vercel.com/)**: Git push equals deployment, zero DevOps overhead
 
 This isn't the only viable stack. But it's the right default for most VC tools, and here's why in VC-specific terms:
 
@@ -41,7 +42,7 @@ This isn't the only viable stack. But it's the right default for most VC tools, 
 
 **TypeScript catches errors before they reach users**. When you're shipping fast with limited testing, static typing is your safety net. The compiler catches bugs that would otherwise break production. And with modern AI coding tools, TypeScript's explicitness helps Claude Code understand your codebase and generate correct code.
 
-**Shadcn provides good-enough UI components**. VCs aren't evaluating your tools based on design polish. They care about functionality and insights. Shadcn gives you professional-looking components that work well without hiring a designer. Your GPs will never complain that you used Shadcn instead of a custom design system.
+**shadcn/ui provides good-enough UI components**. VCs aren't evaluating your tools based on design polish. They care about functionality and insights. Shadcn gives you professional-looking components that work well without hiring a designer. Your GPs will never complain that you used shadcn/ui instead of a custom design system.
 
 **Postgres is the right database for most VC tools**. It's relational (your data is structured: companies, deals, people, relationships), it's mature, it scales far beyond what you'll need, and as covered in [Data Warehousing](/guide/part-3-technical-foundations/data-warehousing), it's adequate as a data warehouse for small to mid-size funds before you need Snowflake or BigQuery.
 
@@ -84,11 +85,11 @@ For most projects, you won't introduce new technology. When you do, be selective
 
 The default stack for us is TypeScript, but you can't escape Python entirely at a VC fund. Here's where Python is the right choice:
 
-**Data analysis and exploration**. When a GP asks "how many Series A companies in fintech raised in the last 6 months?", you open a Jupyter or Hex notebook, write SQL to pull data from your warehouse, and use pandas to analyze it. Python notebooks are the standard for ad-hoc data work. TypeScript isn't competitive here.
+**Data analysis and exploration**. When a GP asks "how many Series A companies in fintech raised in the last 6 months?", you open a [Jupyter](https://jupyter.org/) or [Hex](https://hex.tech/) notebook, write SQL to pull data from your warehouse, and use [pandas](https://pandas.pydata.org/) to analyze it. Python notebooks are the standard for ad-hoc data work. TypeScript isn't competitive here.
 
-**Data transformations in the warehouse**. If you're using dbt for data transformations (covered in [Data Warehousing](/guide/part-3-technical-foundations/data-warehousing)), you'll write Python for custom models that run in Snowpark (Snowflake), BigQuery DataFrames, or PySpark. The data warehouse ecosystem is Python-native.
+**Data transformations in the warehouse**. If you're using [dbt](https://www.getdbt.com/) for data transformations (covered in [Data Warehousing](/guide/part-3-technical-foundations/data-warehousing)), you'll write Python for custom models that run in [Snowpark (Snowflake)](https://www.snowflake.com/en/product/features/snowpark/), [BigQuery DataFrames](https://docs.cloud.google.com/bigquery/docs/use-bigquery-dataframes), or [PySpark](https://spark.apache.org/docs/latest/api/python/index.html). The data warehouse ecosystem is Python-native.
 
-**Machine learning and AI work**. If you're building anything involving model training, embeddings, or scientific computing, Python's ecosystem (scikit-learn, numpy, PyTorch) is unmatched.
+**Machine learning and AI work**. If you're building anything involving model training, embeddings, or scientific computing, Python's ecosystem ([scikit-learn](https://scikit-learn.org/stable/), [numpy](https://numpy.org/), [PyTorch](https://pytorch.org/)) is unmatched.
 
 **Our approach**: TypeScript by default for everything. Python when you genuinely need it for data work. That's two stacks total: web stack (TypeScript/Next.js) and data stack (Python). Don't add a third unless you have an exceptional reason.
 
@@ -118,13 +119,13 @@ At Inflection, I was blessed to have no legacy code, but if we'd inherited worki
 
 Use managed services for everything unless you have a specific reason not to.
 
-**For hosting**: Vercel for Next.js apps. Railway, Render, or Fly.io for other services. These platforms handle deployment, scaling, monitoring, and uptime. You push code, they run it. The alternative is configuring AWS infrastructure, managing Docker containers, setting up CI/CD, monitoring servers, and handling incidents. Not worth your time.
+**For hosting**: [Vercel](https://vercel.com/) for Next.js apps. [Railway](https://railway.com/), [Render](https://render.com/), or [Fly.io](https://fly.io/) for other services. These platforms handle deployment, scaling, monitoring, and uptime. You push code, they run it. The alternative is configuring AWS infrastructure, managing Docker containers, setting up CI/CD, monitoring servers, and handling incidents. Not worth your time.
 
-**For databases**: Neon, Supabase, or PlanetScale for Postgres. AWS RDS if you're already committed to AWS. Don't run your own database servers. Let someone else handle backups, replication, and uptime.
+**For databases**: [Neon](https://neon.com/), [Supabase](https://supabase.com/), or [PlanetScale](https://planetscale.com/) for Postgres. [AWS RDS](https://aws.amazon.com/rds) if you're already committed to AWS. Don't run your own database servers. Let someone else handle backups, replication, and uptime.
 
-**For background jobs**: If you need async task processing, use a managed service like Trigger.dev, Inngest, Vercel's workflow SDK rather than running your own job queue infrastructure.
+**For background jobs**: If you need async task processing, use a managed service like [Trigger.dev](https://trigger.dev/), [Inngest](https://www.inngest.com/), [Vercel's workflow SDK](https://vercel.com/docs/workflow) rather than running your own job queue infrastructure.
 
-**For monitoring**: Use Vercel's built-in monitoring or services like Sentry for error tracking. Don't build your own observability stack.
+**For monitoring**: Use Vercel's built-in monitoring or services like [Sentry](https://sentry.io/) for error tracking. Don't build your own observability stack.
 
 **The cost argument**: Managed services are more expensive than self-hosting. Vercel costs more than running an EC2 instance. Managed Postgres costs more than running your own RDS instance. But the cost difference is trivial compared to your time.
 
@@ -147,8 +148,8 @@ These are core dependencies that make sense. They're maintained by companies who
 **Be selective about other dependencies:**
 
 - A well-maintained date library (date-fns) saves time and reduces bugs
-- A validation library (Zod for TypeScript, covered in [Integrations and APIs](/guide/part-3-technical-foundations/integrations-and-apis)) is essential for API integrations
-- A testing library (Vitest) makes sense if you write tests (though for internal tools, extensive testing is often overkill)
+- A validation library ([Zod](https://zod.dev/) for TypeScript, covered in [Integrations and APIs](/guide/part-3-technical-foundations/integrations-and-apis)) is essential for API integrations
+- A testing library ([Vitest](https://vitest.dev/)) makes sense if you write tests (though for internal tools, extensive testing is often overkill)
 
 **Be wary of:**
 
@@ -180,10 +181,10 @@ If you inherit existing code that works, continue building on it. Don't rewrite 
 
 Lean on managed services for everything. Your time is worth more than the cost difference between managed and self-hosted infrastructure.
 
-Be selective about dependencies, but use well-maintained libraries that speed up development. In VC, that includes vendor SDKs for Attio, PitchBook, data providers, and LLM integrations.
+Be selective about dependencies, but use well-maintained libraries that speed up development. In VC, that includes vendor SDKs for CRMs, data providers, and LLM integrations.
 
 With modern AI coding tools, learning new languages and frameworks is fast. Language expertise matters less than VC domain knowledge and product sense.
 
 Most importantly: GPs care about insights and decisions, not technology. Your value comes from what you build, not how you build it. Ship fast, prove value, get support for bigger projects. Use technology that enables that, not technology that impresses other engineers.
 
-In the next chapter, we'll cover data providers: the external vendors who supply information about companies, funding, people, and markets that you'll integrate into the tools you build.
+In the next chapters, we'll cover data providers: the external vendors who supply information about companies, funding, people, and markets that you'll integrate into the tools you build.

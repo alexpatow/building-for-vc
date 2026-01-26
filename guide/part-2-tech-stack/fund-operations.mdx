@@ -13,8 +13,6 @@ The right time to implement proper fund operations software is before you raise 
 
 Unlike research platforms (which some funds might build) or sourcing tools (which some funds don't need), fund operations software is something every fund needs and should buy off the shelf. This is financial infrastructure. Don't build it yourself.
 
-The main platforms are [Carta Fund Forecasting](https://carta.com/funds/) (formerly Tactyc, acquired by Carta), [Vestberry](https://www.vestberry.com/), and [Standard Metrics](https://www.standardmetrics.io/). All three handle the core functionality you need. The decision comes down to which one integrates best with your existing systems, which your fund ops team finds easiest to use, and which matches your specific workflow.
-
 This chapter covers what fund operations software actually does, how to choose between the main platforms, and how to make the transition smooth for your fund ops team.
 
 ## What You Actually Need
@@ -39,21 +37,35 @@ Fund operations software handles several core functions that every venture fund 
 
 ## Choosing a Platform
 
-There are three main platforms that venture funds use for operations. All three handle the core functionality. The differences are in user experience, integration capabilities, and specific features.
+Several platforms serve the venture fund operations space. All handle core functionality: the differences are in user experience, integration capabilities, and specific features.
 
-**Carta Fund Forecasting** (formerly Tactyc): Carta acquired Tactyc and integrated it into their platform. The advantage is tight integration if you already use Carta for fund administration or if your portfolio companies use Carta for their cap tables. Strong fund forecasting and modeling capabilities. The interface is modern and relatively intuitive. Good choice if you're already in the Carta ecosystem.
+**[Carta Fund Forecasting](https://carta.com/funds/) (formerly Tactyc)**: Carta acquired Tactyc and integrated it into their platform. The advantage is tight integration if you already use Carta for fund administration or if your portfolio companies use Carta for their cap tables. Strong fund forecasting and modeling capabilities. The interface is modern and relatively intuitive. Good choice if you're already in the Carta ecosystem.
 
-**Vestberry**: European-based platform popular with European funds but used globally. Strong portfolio analytics and visualization. Good LP reporting capabilities. Interface feels modern and is relatively easy for fund ops teams to learn.
+**[Vestberry](https://www.vestberry.com/)**: European-based platform popular with European funds but used globally. Strong portfolio analytics and visualization. Good LP reporting capabilities. Interface feels modern and is relatively easy for fund ops teams to learn.
 
-**Standard Metrics**: Built specifically for institutional LPs and fund managers. Strong focus on standardized reporting and data aggregation across multiple funds.
+**[Standard Metrics](https://www.standardmetrics.io/)**: Built specifically for institutional LPs and fund managers. Strong focus on standardized reporting and data aggregation across multiple funds.
 
-**The decision**: It really comes down to integrations with your fund management provider and your fund ops team's preference.
+**[Fundra](https://fundra.app/)**: Newer entrant focused on firm-wide adoption and flexibility. Strong on aggregating portfolio company updates automatically and making data accessible beyond the finance team. Worth evaluating if you want more customization than traditional platforms offer.
+
+## Things to Consider When Evaluating
+
+Beyond core functionality, there are a few things worth thinking about when choosing a platform.
+
+**Ecosystem lock-in**: Some platforms, particularly Carta, want you in their full ecosystem—fund administration, cap table management, portfolio company equity. This can be convenient if you're already committed, but makes switching costs high. If you use a different fund administrator or want flexibility, make sure the platform works well standalone.
+
+**Data model flexibility**: Fund operations involves messy data. Companies have multiple funding rounds, complex cap tables, and valuations that change quarterly. Some platforms are rigid—fixed fields, fixed workflows, fixed reports. Others let you customize. The tradeoff is that rigid platforms are faster to set up but frustrating when your process doesn't match their assumptions. Ask how the platform handles edge cases specific to your fund.
+
+**Cross-team usability**: Fund ops software often ends up siloed in the finance team, even when investment teams would benefit from access. If your goal is firm-wide visibility into portfolio performance, evaluate whether the interface is intuitive enough for non-finance users. A platform your CFO tolerates but your investment team ignores creates knowledge silos.
+
+**Fund modeling realism**: Fund forecasting tools let you model scenarios—deployment pace, follow-on reserves, exit timing. These can be useful for LP communication and planning. But be realistic about their limits. VC returns are driven by outliers, not averages. A model built on "average conversion rates" may feel rigorous but miss how the industry actually works. Use forecasting for communication and planning, not as a source of truth about future performance.
+
+**Founder experience**: If your platform collects data directly from portfolio companies (financials, KPIs, updates), consider the founder experience. Multiple investors using different collection tools means founders get bombarded with redundant requests. Some platforms are more founder-friendly than others. This affects response rates and data quality.
 
 ## Making the Transition
 
 The hardest part of adopting fund operations software isn't choosing the platform. It's transitioning your data and getting your fund ops team to actually use it.
 
-**Onboard your fund ops team first**: Don't surprise your CFO or fund administrator with a new system. Involve them in the decision. Have them test the platforms. Get their buy-in. They need to use this daily. If they find it confusing or harder than their current process, they'll resist and you'll end up maintaining two systems.
+**Onboard your fund ops team first**: Don't surprise your CFO or fund administrator with a new system. Involve them in the decision. Have them test the platforms. Get their buy-in. They need to use this regularly. If they find it confusing or harder than their current process, they'll resist and you'll end up maintaining two systems.
 
 The best implementations start with "what will make this easier for the operations team?" not "what has the most features?" A system they actually use is better than a sophisticated system they work around.
 
@@ -79,10 +91,10 @@ This isn't the primary reason to implement fund operations software. But when yo
 
 ## The Bottom Line
 
-Buy fund operations software. Don't build it. This is financial infrastructure that needs to be correct, auditable, and maintained. Carta Fund Forecasting, Vestberry, and Standard Metrics all work well. Choose based on integration with your existing systems and what your fund ops team finds easiest to use.
+Buy fund operations software. Don't build it. This is financial infrastructure that needs to be correct, auditable, and maintained. Choose based on integration with your existing systems and what your fund ops team finds easiest to use.
 
 The exception: very large funds with significant engineering and operations resources have built custom fund operations platforms including LP portals, automated reporting, and investor relations tools. If you're managing multiple billion-dollar funds with dedicated platform teams, custom infrastructure might make sense. For everyone else, even large established funds, buying off the shelf is the right choice.
 
-This is not the exciting part of building a VC tech stack. But it's essential infrastructure that every fund needs. Get it set up correctly and let it run in the background while you focus on finding and supporting great companies.
+This is not the most exciting part of building a VC tech stack. But it's essential infrastructure that every fund needs. Get it set up correctly and let it run in the background while you focus on finding and supporting great companies.
 
 In the next chapter, we'll look at portfolio support tools, which help you add value to your portfolio companies after you invest.

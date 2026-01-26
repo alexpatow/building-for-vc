@@ -49,9 +49,9 @@ Before building anything sophisticated, see how far simple matching rules take y
 
 **Match on URLs**: Company websites are relatively unique and stable. If two records have the same domain (stripe.com), they're almost certainly the same company. Normalize the URLs first (remove protocol, remove www, remove trailing slashes, lowercase everything), then compare. This catches most matches.
 
-**Match on LinkedIn URLs**: LinkedIn company pages have stable identifiers in their URLs (linkedin.com/company/stripe). If two records share the same LinkedIn URL, they're the same company. Same approach: normalize then compare.
+**Match on LinkedIn URLs**: LinkedIn company pages have stable identifiers in their URLs (linkedin.com/company/stripe). If two records share the same LinkedIn URL, they're the same company. Same approach: normalize then compare. This also works well for people data.
 
-**Match on email domains**: For people, if two records have the same email domain and similar names, they might be the same person (though be careful with large companies where many people share a domain).
+**Match on email addressses**: If you don't have reliable LinkedIn URLs for people, email addresses are usually the next best thing.
 
 **Exact string matches**: After normalizing names (lowercase, remove punctuation, standardize "Inc" vs "Incorporated"), exact string matches catch many cases. "Stripe Inc" and "Stripe, Inc." become "stripe inc" and match.
 
@@ -68,15 +68,14 @@ Before investing in sophisticated entity resolution, consider whether you actual
 **Examples where single-source works**:
 
 - Analyzing total funding in a market? Use PitchBook exclusively.
-- Tracking employee counts? Use LinkedIn data only.
-- Understanding investor networks? Pick one source (Harmonic or Specter) and stick with it.
+- Tracking employee counts? Use LinkedIn data from one of the [People Data Providers](/guide/part-3-technical-foundations/data-providers/people-data) only.
 - Portfolio valuations? Use your fund operations system as the single source of truth.
 
-**When you actually need entity resolution**: Cross-source analysis where each source provides different valuable data. For example, Crunchbase has good early-stage company coverage, PitchBook has better late-stage data, and LinkedIn has employee information. If you need all three types of data for the same company, you need entity resolution to link them. But if you can answer your question with just one source, don't create unnecessary complexity.
+**When you actually need entity resolution**: Cross-source analysis where each source provides different valuable data. For example, Crunchbase has good early-stage company coverage, PitchBook has better late-stage data, and People Data Labs has employee information. If you need all three types of data for the same company, you need entity resolution to link them. But if you can answer your question with just one source, don't create unnecessary complexity.
 
 **The pragmatic approach**: Start by identifying which questions you're trying to answer. For each question, can you answer it with a single data source? If yes, use that source exclusively for that use case. Only invest in entity resolution when you have validated use cases that genuinely require combining multiple sources.
 
-This saves enormous engineering effort. Entity resolution is hard. Avoiding it when possible is smart, not lazy.
+This saves enormous engineering effort. **Entity resolution is hard.** Avoiding it when possible is smart, not lazy.
 
 ## Entity Resolution as a Service
 
@@ -131,7 +130,6 @@ When comparing two company records to decide if they're the same entity, match o
 - **LinkedIn URL**: Strongest signal. LinkedIn profiles have stable IDs.
 - **Email**: If you have email addresses from multiple sources, exact match is strong signal.
 - **Name + Company**: If first name, last name, and current company all match, very likely the same person.
-- **Name + Location**: Supporting evidence but weaker than company (many people share names in large cities).
 
 **The incremental matching workflow**:
 

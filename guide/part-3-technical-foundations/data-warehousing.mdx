@@ -20,7 +20,7 @@ Most funds don't start with a data warehouse. They start with a CRM, maybe some 
 **The right time to set up a data warehouse**: After your CRM is set up and being used consistently. The CRM is your source of truth for deal flow and relationships. A data warehouse extends that by:
 
 - Tracking historical changes (you can see how your pipeline evolved over time, not just current state)
-- Combining CRM data with external sources (merge your deal flow with funding data from PitchBook, employee data from LinkedIn, etc.)
+- Combining CRM data with external sources (merge your deal flow with funding data from PitchBook, etc.)
 - Running analyses that would be painful in your CRM's query interface
 - Serving as an audit log of activity (who talked to which companies, when deals moved stages, what data changed)
 
@@ -34,7 +34,7 @@ Even if you're not immediately running complex analyses, having a data warehouse
 
 Before migrating to a specialized warehouse, consider Postgres extensions: **[pg_mooncake](https://www.mooncake.dev/pgmooncake/)** (Iceberg/Delta Lake format on S3) or **[Hydra](https://github.com/hydradatabase/columnar)** (columnar storage, 200x+ speedups for analytics). These let you keep Postgres while getting analytics database benefits.
 
-**For larger funds: Snowflake, BigQuery, or Redshift**. When Postgres performance degrades (millions of companies, complex aggregations), migrate to a specialized warehouse. Snowflake (industry standard, cloud-agnostic, expensive), BigQuery (fast, Google ecosystem, query-based pricing), or Redshift (AWS integration, cheapest if committed to AWS). Choose based on your cloud ecosystem.
+**For larger funds: Snowflake, BigQuery, or Redshift**. When Postgres performance degrades (millions of companies, complex aggregations), migrate to a specialized warehouse. [Snowflake](https://www.snowflake.com/en/) (industry standard, cloud-agnostic, expensive), [BigQuery](https://cloud.google.com/bigquery) (fast, Google ecosystem, query-based pricing), or [Redshift](https://aws.amazon.com/redshift/) (AWS integration, cheapest if committed to AWS). Choose based on your cloud ecosystem.
 
 **Migration path**: Start with Postgres. Migrate when query performance becomes painful. The migration is straightforward - you're already structuring data in a warehouse pattern, just moving to a more powerful database.
 
@@ -110,7 +110,7 @@ With data in a warehouse, these queries are straightforward SQL. Without it, the
 
 **Tools like Hex for quick dashboards**
 
-When you do need dashboards, tools like [Hex](https://hex.tech/) or [Mode](https://mode.com/) let you write SQL queries against your warehouse and turn them into interactive visualizations. These are much faster to build than custom dashboards, and they're easy to iterate on.
+When you do need dashboards, tools like [Hex](https://hex.tech/) or [Mode](https://mode.com/) let you write SQL queries against your warehouse and turn them into interactive visualizations. These are much faster to build than custom dashboards, and they're easy to iterate on and share with the team.
 
 At Inflection, we use Hex. When a GP wants to see something, we can spin up a dashboard in an hour or two: write SQL queries against the warehouse, add visualizations, share a link. This responsiveness is valuable. You're not waiting weeks for data engineering to build custom dashboards. You're answering questions as they come up.
 
@@ -120,7 +120,6 @@ At Inflection, we use Hex. When a GP wants to see something, we can spin up a da
 - Market maps (companies in specific sectors, with funding, stage, growth data)
 - Portfolio tracking (company metrics over time, which companies need attention)
 - Investor analysis (which co-investors appear frequently, warm intro paths to founders)
-- Research synthesis (companies matching your thesis areas, gaps in coverage)
 
 These aren't universal. What your fund analyzes depends on your strategy, stage, and what questions your investment team cares about. The warehouse makes it possible to answer whatever questions come up.
 

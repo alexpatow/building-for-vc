@@ -7,7 +7,7 @@ description: "Common integration patterns, validating API responses, handling we
 
 Much of the technical work at a VC fund is building glue between tools. Connecting meeting notes to your CRM, data providers to your warehouse, portfolio data to dashboards. Some integrations exist out of the box, but many require custom code.
 
-This chapter covers common integration patterns, validation strategies, webhook handling, and rate limits. The focus is on practical patterns that work for VC funds.
+This chapter covers common integration patterns, validation strategies, webhook handling, and rate limits.
 
 ## Common Integration Patterns
 
@@ -19,30 +19,24 @@ The integrations you build fall into a few common patterns.
 - CRM → data warehouse for analysis
 - Email → CRM to track outreach
 - Calendar → CRM to log meetings
-- Portfolio company dashboards (Pry, Numeric) → your data warehouse for consolidated metrics
 
 Some of these have out-of-box integrations. Many require custom code to map fields, handle authentication, and deal with differences in data models.
 
-**Data vendor → your systems**: Pulling data from external providers and loading it into your infrastructure. Examples:
+**Data vendor → your systems**: Pulling data from external providers and loading it into your infrastructure.
 
-- PitchBook API → data warehouse for funding data
-- People Data Labs → database for employee/people data (LinkedIn-like data)
-- Harmonic/Specter → sourcing tool or data warehouse
-- Crunchbase → database for company data
-
-These integrations usually run on schedules (nightly data syncs) or in response to specific events (when you add a company to your CRM, enrich it with PitchBook data).
+These integrations usually run on schedules (nightly data syncs) or in response to specific events (when you add a company to your CRM, enrich it with PitchBook data). See [Accessing Data](/guide/part-3-technical-foundations/data-providers/accessing-data) for how vendors deliver data.
 
 **Internal service integrations**: If you're building multiple services (research platform, sourcing tool, internal APIs), they need to talk to each other. Your research platform might need portfolio company data from your data warehouse. Your sourcing tool might need to check your CRM to avoid suggesting companies you've already passed on.
 
 **LLM/AI integrations**: Many funds are building features that use LLMs. These require integrations with OpenAI, Anthropic, or other providers. Often combined with your own data (RAG systems pulling from your research or CRM).
 
-The common thread is that you're moving data between systems, transforming it to fit different schemas, and handling failures when things break.
+The common thread: you're moving data between systems, transforming it to fit different schemas, and handling failures when things break.
 
-## Validating API Responses: Your Most Important Defense
+## Validating API Responses
 
 The biggest source of problems in integrations is trusting external APIs to return what you expect. API schemas change. Vendors return errors in unexpected formats. Required fields are sometimes null. Data types don't match documentation.
 
-**Never trust external APIs**. Validate everything that comes in and everything that goes out.
+**Never trust external APIs.** Validate everything.
 
 **Use validation libraries**
 
@@ -70,13 +64,12 @@ const company = CompanySchema.parse(data) // Throws if invalid
 const result = CompanySchema.safeParse(data) // Returns success/error
 if (!result.success) {
   console.error("Invalid data from API:", result.error)
-  // Handle the error
 }
 ```
 
 ```python
 # Python with Pydantic
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 from datetime import datetime
 from typing import Optional
 
@@ -87,7 +80,7 @@ class Company(BaseModel):
     funding_total: Optional[float] = None
     employee_count: Optional[int] = None
 
-    @validator('funding_total')
+    @field_validator('funding_total')
     def funding_must_be_positive(cls, v):
         if v is not None and v < 0:
             raise ValueError('funding must be positive')
@@ -102,184 +95,86 @@ try:
     company = Company(**data)
 except ValidationError as e:
     print(f'Invalid data from API: {e}')
-    # Handle the error
 ```
 
 **Why this matters**
 
-Without validation, bad data silently flows into your system. A field that's supposed to be a number is suddenly a string. A required field is null. An enum field has a value you've never seen before. These errors cascade: your data warehouse has invalid data, your dashboards show wrong information, your analyses are incorrect.
+Without validation, bad data silently flows into your system. A field that's supposed to be a number is suddenly a string. A required field is null. These errors cascade: your data warehouse has invalid data, your dashboards show wrong information, your analyses are incorrect.
 
-With validation, you catch errors at the boundary. When an API returns bad data, you know immediately. You can log the error, alert yourself, and handle it gracefully (retry, skip the record, use default values) rather than letting corrupted data spread through your systems.
+With validation, you catch errors at the boundary. When an API returns bad data, you know immediately. You can log the error, alert yourself, and handle it gracefully rather than letting corrupted data spread through your systems.
 
 **Validate both inbound and outbound data**
 
-When you're calling external APIs, validate the data you're sending. This catches mistakes in your code before they hit the vendor's API. When you're exposing APIs for internal use, validate inputs from callers. This prevents bad data from entering your systems.
-
-Validation is defensive programming. It's the most important thing you can do to maintain sanity in a system with many integrations.
+When you're calling external APIs, validate the data you're sending. This catches mistakes in your code before they hit the vendor's API. When you're exposing APIs for internal use, validate inputs from callers.
 
 ## Webhook Handling
 
-Many vendors (especially CRM systems like Attio, Affinity) provide webhooks: they call your HTTP endpoint when events happen (company updated, deal stage changed, meeting logged). This is more efficient than polling their API constantly to check for changes.
+Many vendors (especially CRM systems) provide webhooks: they call your HTTP endpoint when events happen (company updated, deal stage changed, meeting logged). This is more efficient than polling their API constantly.
 
 **Setting up webhooks**
 
-The first time is tricky. You need:
+You need:
 
-- An HTTPS endpoint that the vendor can reach (not localhost - use a service like ngrok for local development, deploy to production for real webhooks)
+- An HTTPS endpoint the vendor can reach (use [webhook.site](https://webhook.site/) for local development with dummy data)
 - To register your endpoint with the vendor (usually through their dashboard)
-- To handle webhook verification (vendors send a signature to prove the request actually came from them, not a malicious actor)
-
-Example webhook handler:
-
-```typescript
-// Next.js API route for Attio webhooks
-import { NextRequest, NextResponse } from "next/server"
-import crypto from "crypto"
-
-export async function POST(request: NextRequest) {
-  const body = await request.text()
-  const signature = request.headers.get("x-attio-signature")
-
-  // Verify webhook signature
-  const expectedSignature = crypto
-    .createHmac("sha256", process.env.ATTIO_WEBHOOK_SECRET!)
-    .update(body)
-    .digest("hex")
-
-  if (signature !== expectedSignature) {
-    return NextResponse.json({ error: "Invalid signature" }, { status: 401 })
-  }
-
-  // Parse and process the event
-  const event = JSON.parse(body)
-
-  // Handle idempotency - check if we've seen this event before
-  const eventId = event.id
-  const alreadyProcessed = await checkIfProcessed(eventId)
-  if (alreadyProcessed) {
-    return NextResponse.json({ success: true }) // Already handled
-  }
-
-  // Process the event
-  await handleEvent(event)
-
-  // Mark as processed
-  await markProcessed(eventId)
-
-  return NextResponse.json({ success: true })
-}
-```
+- To handle webhook verification (vendors send a signature to prove the request came from them)
 
 **Key considerations**
 
-**Verify signatures**: Always verify that webhooks actually came from the vendor. They send a signature (usually HMAC of the body using a shared secret). Verify this before processing the event.
+**Verify signatures**: Always verify that webhooks actually came from the vendor. They send a signature (usually HMAC of the body using a shared secret). Verify this before processing.
 
 **Handle idempotency**: Vendors may send the same webhook multiple times (network retries, their infrastructure issues). Make your webhook handler idempotent: processing the same event twice should be safe. Track event IDs you've seen and skip duplicates.
 
-**Return quickly**: Webhook handlers should return 200 OK quickly (within a few seconds). Don't do expensive processing in the webhook handler itself. Accept the webhook, queue the work (in a job queue like [BullMQ](https://bullmq.io/) or background task system), and return success. Process the work asynchronously.
+**Return quickly**: Webhook handlers should return 200 OK within a few seconds. Don't do expensive processing in the handler itself. Accept the webhook, queue the work, and return success. Process asynchronously.
 
-**After setup, webhooks are reliable**: The initial setup is tricky, but once working, webhooks are much more reliable than polling. You get real-time updates without constantly hitting the vendor's API.
+## Rate Limits and API Costs
 
-## Rate Limiting and Backoff Strategies
+External APIs have rate limits. PitchBook might allow 100 requests per minute. People Data Labs might allow 500 requests per day. Exceed these and you get 429 errors or get blocked.
 
-External APIs have rate limits. PitchBook might allow 100 requests per minute. People Data Labs (for LinkedIn data) might allow 500 requests per day. Exceed these limits and you get errors (429 Too Many Requests) or blocked.
+**API costs**
 
-**API costs: often pay per request or per entity**
+Beyond rate limits, many vendors charge per request or per entity returned. This changes how you think about API usage:
 
-Beyond rate limits, many vendors charge per request or per entity returned. People Data Labs might charge $0.01 per person record. PitchBook charges based on data access. Harmonic and Specter have usage-based pricing.
+- Only request data you actually need
+- Cache responses so you don't request the same data repeatedly
+- Batch requests when possible
+- Validate input before making API calls (don't waste money on requests that will fail)
 
-This changes how you think about API usage. You can't just make thousands of exploratory requests to see what's available. Each request costs money. Be thoughtful about:
-
-- Only requesting data you actually need (don't pull full company profiles if you just need basic info)
-- Caching responses so you don't request the same data repeatedly
-- Batching requests when possible (some APIs let you request multiple entities in one call)
-- Validating input before making API calls (don't waste money on requests that will fail)
-
-Monitor your API spending. It's easy to accidentally rack up large bills by making more requests than you intended. Set up alerts when spending exceeds thresholds.
+Monitor your API spending. Set up alerts when spending exceeds thresholds.
 
 **Always respect vendor limits**
 
-Don't try to work around rate limits by spinning up multiple API keys or using proxies. Vendors notice and will block you. Respect their limits.
+Don't try to work around rate limits by spinning up multiple API keys or using proxies. Vendors notice and will block you.
 
-**Exponential backoff strategy**
+**Exponential backoff**
 
-When you hit a rate limit or get a transient error (503 Service Unavailable, network timeout), retry with exponential backoff:
+When you hit a rate limit or get a transient error, retry with exponential backoff:
 
 1. First retry: wait 1 second
 2. Second retry: wait 2 seconds
 3. Third retry: wait 4 seconds
 4. Fourth retry: wait 8 seconds
-5. Give up after 5 attempts (or whatever limit makes sense)
+5. Give up after 5 attempts
 
-Add jitter (random variation in wait time) to prevent many clients from retrying simultaneously.
+Add jitter (random variation) to prevent many clients from retrying simultaneously.
 
-```typescript
-async function fetchWithRetry(url: string, maxRetries = 5) {
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      const response = await fetch(url)
+## Error Handling
 
-      if (response.status === 429) {
-        // Rate limited
-        const retryAfter = response.headers.get("retry-after")
-        const waitSeconds = retryAfter ? parseInt(retryAfter) : Math.pow(2, attempt) + Math.random() // Exponential backoff with jitter
-
-        await sleep(waitSeconds * 1000)
-        continue
-      }
-
-      if (response.ok) {
-        return response
-      }
-
-      // Other errors - decide if retriable
-      if (response.status >= 500) {
-        // Server error, might be transient
-        await sleep(Math.pow(2, attempt) * 1000)
-        continue
-      }
-
-      // Client error (4xx), don't retry
-      throw new Error(`API error: ${response.status}`)
-    } catch (error) {
-      if (attempt === maxRetries - 1) {
-        throw error
-      }
-      await sleep(Math.pow(2, attempt) * 1000)
-    }
-  }
-}
-```
-
-**Don't overwhelm with batch workers**
-
-If you're syncing thousands of companies from a data vendor, don't spin up 100 parallel workers that all hit the API simultaneously. You'll immediately hit rate limits. Use a queue with controlled concurrency: process requests serially or with limited parallelism (5-10 workers max), respecting the rate limit.
-
-## Error Handling and Retries
-
-Not all errors should be retried. Some are permanent (bad request, authentication failure), others are transient (network timeout, server temporarily unavailable).
+Not all errors should be retried. Some are permanent, others are transient.
 
 **Categorize errors**
 
-- **Retriable**: 429 (rate limit), 503 (service unavailable), 504 (timeout), network errors. These are temporary, retry with backoff.
-- **Non-retriable**: 400 (bad request), 401 (unauthorized), 403 (forbidden), 404 (not found). These won't succeed if you retry. Fix the problem or skip the request.
-- **Context-dependent**: 500 (server error) might be temporary or might indicate a bug in the vendor's API. Retry a few times, but not indefinitely.
+- **Retriable**: 429 (rate limit), 503 (service unavailable), 504 (timeout), network errors. Retry with backoff.
+- **Non-retriable**: 400 (bad request), 401 (unauthorized), 403 (forbidden), 404 (not found). Fix the problem or skip the request.
+- **Context-dependent**: 500 (server error) might be temporary or might indicate a vendor bug. Retry a few times, but not indefinitely.
 
-**Use transactions to avoid partial failures**
+**Use transactions**
 
-When working with databases (Postgres, etc.), wrap operations that need to succeed together in transactions. If anything fails, the transaction rolls back and you don't have partial state.
-
-Example: you're importing a company with funding rounds. You insert the company, then insert its funding rounds. If inserting a round fails, you want to roll back the company insertion too, not leave an orphaned company with no rounds.
+When working with databases, wrap operations that need to succeed together in transactions. If anything fails, the transaction rolls back.
 
 ```typescript
 await db.transaction(async (tx) => {
-  const company = await tx
-    .insert(companies)
-    .values({
-      id: data.id,
-      name: data.name,
-    })
-    .returning()
+  const company = await tx.insert(companies).values({ id: data.id, name: data.name }).returning()
 
   for (const round of data.funding_rounds) {
     await tx.insert(fundingRounds).values({
@@ -288,77 +183,48 @@ await db.transaction(async (tx) => {
       amount: round.amount,
     })
   }
-
   // If any insert fails, everything rolls back
 })
 ```
 
-**Present useful error messages**
+**Useful error messages**
 
-When something fails, present an error message that helps with debugging. Not "An error occurred." Instead: "Failed to sync company Acme Inc from PitchBook: Rate limit exceeded (429). Will retry in 60 seconds." Include context: what failed, why it failed, what happens next.
+When something fails, include context: what failed, why it failed, what happens next. Not "An error occurred." Instead: "Failed to sync company Acme Inc from PitchBook: Rate limit exceeded (429). Will retry in 60 seconds."
 
 ## Working with LLM Providers
 
-If you're building features that use LLMs, three key considerations:
+If you're building features that use LLMs:
 
-**Use an AI gateway for failover**. LLM providers have frequent outages and rate limits. Services like Vercel's AI SDK or LiteLLM provide automatic failover between providers (OpenAI → Anthropic when primary is down).
+**Use an AI gateway for failover**. LLM providers have frequent outages and rate limits. Services like [Vercel's AI SDK](https://ai-sdk.dev/) or [LiteLLM](https://www.litellm.ai/) provide automatic failover between providers.
 
-**Handle streaming responses**. LLM APIs stream tokens incrementally. Don't assume complete responses in one chunk.
+**Handle streaming responses**. When building UIs, you'll want LLM APIs to stream tokens incrementally.
 
-**Set timeouts**. LLM requests can take 30+ seconds. Set 60-90 second timeouts so slow providers don't block indefinitely.
+**Set timeouts**. LLM requests can take 30+ seconds. Set 60-90 second timeouts so slow requests don't block indefinitely.
 
-## Authentication and Data Delivery Patterns
+## Authentication Patterns
 
-Different vendors deliver data in different ways. Some provide APIs, others provide file exports.
+**API tokens**
 
-**API-based vendors**
+Most vendors provide REST APIs authenticated with bearer tokens. Store tokens securely:
 
-Most modern vendors (PitchBook, Harmonic, Specter) provide REST APIs. You authenticate with an API token (bearer token in the Authorization header) and make HTTP requests.
-
-Store API tokens securely (environment variables, or a secrets manager like AWS Secrets Manager). Don't commit them to git. Rotate them periodically.
-
-**File-based vendors**
-
-Some vendors provide flat files (CSV, Parquet, JSON) that you download or they upload to your S3 bucket. Examples: quarterly data dumps, historical archives, bulk exports.
-
-**Prefer Parquet over CSV/TSV**: If vendors offer multiple formats, always choose Parquet. It's columnar (faster for analytics), includes schema information (you know data types without guessing), compresses well (smaller files), and loads much faster into data warehouses. CSV/TSV files require parsing, have encoding issues, no schema, and are slower to work with. Ask vendors to provide Parquet if they don't already.
-
-Import these files into your data warehouse using tools like:
-
-- **[Dagster](https://dagster.io/)**: Data orchestration, can schedule file imports and transformations
-- **[Airflow](https://airflow.apache.org/)**: Workflow orchestration, similar to Dagster
-- **BigQuery Data Transfer Service**: If you use BigQuery, can automatically import files from S3/GCS
-
-File-based imports are usually scheduled (nightly, weekly) rather than real-time.
+- Use environment variables, not hardcoded in code
+- Use a secrets manager for production
+- Never commit tokens to git
+- Rotate periodically
 
 **User authentication for internal tools**
 
-For internal dashboards or tools your team uses, prefer OAuth when possible. This lets users log in with their existing accounts (Google, Microsoft) rather than managing separate passwords.
+For internal dashboards, prefer OAuth (Google, Microsoft) over managing separate passwords.
 
 For service-to-service authentication, use API tokens or service accounts. Don't use user credentials for automated processes.
 
-## Working with Data Vendors
+**Orchestrating data imports**
 
-A practical note on integrating with data vendors: their APIs change frequently, and you can influence their designs.
+For scheduled data imports, use orchestration tools:
 
-**APIs change frequently**
-
-Data vendors update their schemas, add new fields, deprecate old ones, change rate limits. Pay attention to notices from vendors (they usually email when making changes). Budget time to update your integration when schemas change.
-
-This happens more often than you'd expect. PitchBook might rename a field or change how they represent funding amounts. Harmonic might add new company attributes. Your code breaks when these changes happen if you haven't prepared for them.
-
-**Influence newer vendors**
-
-If you're working with a newer data vendor (especially startups building APIs), provide feedback on their API design. They want customers to succeed and are often open to suggestions.
-
-If their API returns data in an awkward format, tell them. If they're missing fields you need, ask for them. If rate limits are too restrictive, negotiate. This is win-win: they improve their product based on real usage, you get an API that's easier to work with.
-
-Established vendors are less flexible, but newer vendors building for the VC market often appreciate detailed feedback.
+- **[Dagster](https://dagster.io/)**: Data orchestration, can schedule imports and transformations
+- **[Airflow](https://airflow.apache.org/)**: Workflow orchestration, similar to Dagster
 
 ## The Bottom Line
 
-Much of the technical work at VC funds is glue code. Validate everything with Zod or Pydantic: never trust external APIs. Respect rate limits with exponential backoff. Use database transactions to avoid partial failures.
-
-For LLMs, use an AI gateway for failover. Pay attention to vendor API changes - they happen frequently.
-
-In the next chapter, we'll cover security and compliance: handling sensitive data, SEC regulations, access controls, and audit requirements for VC funds.
+Much of the technical work at VC funds is glue code. Validate everything with Zod or Pydantic. Respect rate limits with exponential backoff. Use transactions to avoid partial failures. For LLMs, use an AI gateway for failover.

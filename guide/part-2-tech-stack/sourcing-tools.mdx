@@ -3,6 +3,8 @@ title: "Sourcing Tools"
 description: "Understanding when automated sourcing actually creates value"
 ---
 
+import { CurrentYear } from "/snippets/current-year.jsx"
+
 ## Overview
 
 Sourcing is where every fund wants to start when they bring in their first data person. The pitch is compelling: use data to systematically find companies before your competition, build relationships early, get into deals proactively rather than reactively.
@@ -13,7 +15,7 @@ This chapter covers the history of sourcing infrastructure at VC funds, what sou
 
 ## The Historical Advantage
 
-Seven or eight years ago, funds that invested in sourcing infrastructure got real competitive advantage. EQT Ventures built Motherbrain. SignalFire created their talent network and technical signal tracking. Early Bird and Moonfire developed sophisticated data operations. These funds could systematically find companies others missed, reach out early, and build relationships before competitive fundraising processes.
+Around 2017-2018, funds that invested in sourcing infrastructure got real competitive advantage. EQT Ventures built Motherbrain. SignalFire created their talent network and technical signal tracking. Early Bird and Moonfire developed sophisticated data operations. These funds could systematically find companies others missed, reach out early, and build relationships before competitive fundraising processes.
 
 This worked because the infrastructure didn't exist yet. There were no purpose-built VC sourcing tools. Data providers had limited coverage. If you wanted systematic sourcing, you had to build it yourself. The funds that invested in this infrastructure got ahead and proved the model worked.
 
@@ -35,7 +37,7 @@ This is where many manual processes break down. You find 50 interesting companie
 
 **Enrichment**: Basic information isn't enough. You want context. Who are the founders? Where did they work before? Who's already invested? What technologies are they using? How much traction do they have? Enrichment layers on data from multiple sources to give you a fuller picture.
 
-The challenge is that no single data source has everything. LinkedIn has professional backgrounds. Crunchbase has funding data. GitHub shows technical activity. Web scrapers can detect technology stacks. Good sourcing tools combine multiple data sources to create a more complete view.
+The challenge is that no single data source has everything. LinkedIn has professional backgrounds. Crunchbase has funding data. GitHub shows technical activity. Good sourcing tools combine multiple data sources to create a more complete view.
 
 **Outreach**: Identifying companies is only half the work. You need to reach out. Sourcing tools help manage that process. Track who you've contacted. Follow up systematically. Measure response rates. Some tools integrate email sequencing, others just track outreach in your CRM.
 
@@ -49,21 +51,17 @@ Before deciding whether to build or buy sourcing tools, you should question whet
 
 But if you're investing pre-seed or at the earliest stage of seed, companies often don't exist in any dataset yet. They're two founders working nights and weekends. No website, no job postings, no press releases, no funding data. Sourcing tools can't find what isn't there.
 
-More fundamentally, pre-seed investment decisions aren't based on data you can source. You're betting on the founders' resilience, domain expertise, ability to execute, and judgment. These qualities can't be inferred from a LinkedIn profile or GitHub activity. You need conversations. Your deal flow comes from network and research, not systematic sourcing.
+More fundamentally, pre-seed investment decisions aren't based on data you can source. You're investing in the founders' resilience, domain expertise, ability to execute, and judgment. These qualities can't be inferred from a LinkedIn profile or GitHub activity. You need conversations. Your deal flow comes from network and research, not systematic sourcing.
 
-**Investment specificity creates a signal-to-noise problem**. If your criteria are relatively broad (B2B SaaS companies in the US with 10-50 employees), filters can narrow sourcing results effectively. You'll get some noise but manageable amounts.
+**Thesis-driven investing creates a signal-to-noise problem.** If your criteria are relatively broad (B2B SaaS companies in the US with 10-50 employees), filters work well. But thesis-driven funds with specific criteria (Hardware startups building autonomous vehicles for mining) get overwhelmed with noise. You get hundreds of companies that match broad filters but aren't actually relevant to your specific interest. Sorting through them takes more time than the sourcing saves. Your competitive advantage comes from understanding spaces better than others, and that understanding comes from research, not filtering databases.
 
-But if your investment criteria are very specific (AI infrastructure companies building developer tools for a particular technical workflow), broad sourcing creates overwhelming noise. You get hundreds of companies that technically match the filters but aren't actually relevant. Sorting through them takes more time than the sourcing saves.
-
-**Strategy determines whether sourcing creates value**. If you're thesis-driven and do deep research in specific areas, your advantage is understanding spaces better than other investors. Sourcing tools can help you discover companies in those spaces, but only if the companies exist in datasets and your criteria aren't so specific that filtering doesn't work.
-
-If you invest primarily through network and your competitive advantage is relationships, sourcing tools might not match your workflow at all. You're not trying to systematically find companies. You're nurturing relationships that lead to warm introductions.
+**Network-driven funds might not need sourcing at all.** If your competitive advantage is relationships that lead to warm introductions, you're not trying to systematically find companies. Sourcing tools don't match your workflow.
 
 **The uncomfortable truth**: Many early-stage, thesis-driven funds think they need sourcing tools because it sounds like the right thing to do. But their companies are too early for datasets, their criteria are too specific for filters, and their competitive advantage comes from research and relationships, not systematic discovery. Sourcing tools become shelf-ware.
 
 ## The Build vs. Buy Decision
 
-Don't build generic sourcing infrastructure. The tools exist (Harmonic, Specter, amongst others), they work well, and the data is commoditized. Building in 2026 is like building your own CRM instead of using something off-the-shelf.
+Don't build generic sourcing infrastructure. The tools exist (Harmonic, Specter, amongst others), they work well, and the data is commoditized. Building this in <CurrentYear /> is like building your own CRM instead of using something off-the-shelf.
 
 Harmonic and Specter aren't perfect. No sourcing tool will be. But they're good enough that rebuilding their entire platform internally doesn't make sense. You'll spend months recreating features they already have, and you'll end up with something similar but worse. Use that engineering time for things that actually differentiate your fund.
 
@@ -77,7 +75,9 @@ Harmonic and Specter aren't perfect. No sourcing tool will be. But they're good 
 
 **Specter**: Another purpose-built option with emphasis on technical signals and growth indicators. Similar feature set to Harmonic with slightly different data sources.
 
-**Crunchbase Pro or PitchBook**: Traditional funding databases. Useful for basic research and market mapping but not sophisticated enough for proactive sourcing on their own.
+**Crunchbase or PitchBook**: Traditional funding databases. Useful for basic research and market mapping but not sophisticated enough for proactive sourcing on their own.
+
+See [Signal Data Providers](/guide/part-3-technical-foundations/data-providers/signal-data) and [Company Data Providers](/guide/part-3-technical-foundations/data-providers/company-data) for more information.
 
 ## Real Example: When Sourcing Doesn't Work
 
@@ -90,6 +90,6 @@ Inflection tried sourcing tools. We're exactly the kind of fund that thinks we s
 
 ## The Bottom Line
 
-Sourcing is where every fund wants to start, but question whether you actually need it first. Many early-stage, thesis-driven funds find that companies are too early for datasets and criteria are too specific for effective filtering. For funds where sourcing works (Series A+, broad criteria), the tools are commoditized - buy Harmonic or Specter, don't build. The only exception is genuinely unique niches like relationship graph optimization (Rolodex) or specialized signal detection (Commit). Don't start with sourcing just because everyone else does.
+Sourcing is where every fund wants to start, but question whether you actually need it first. Many early-stage, thesis-driven funds find that companies are too early for datasets and criteria are too specific for effective filtering. For funds where sourcing works (Series A+, broad criteria), the tools are commoditized, don't build. The only exception is genuinely unique niches like relationship graph optimization or specialized signal detection. Don't start with sourcing just because everyone else does.
 
 In the next chapter, we'll look at CRM and deal flow management, which is more universally valuable across fund types.

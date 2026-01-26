@@ -3,6 +3,8 @@ title: "Research Platforms"
 description: "How research platforms create competitive advantage through clarity of thought, thesis development, and institutional knowledge."
 ---
 
+import { CurrentYear } from "/snippets/current-year.jsx"
+
 ## Overview
 
 The best advantage you have as an investor is clarity of thought. When everyone else is chasing the same hot deals, clarity lets you see opportunities others miss. When markets shift, clarity lets you adapt your thesis instead of following the herd.
@@ -57,7 +59,7 @@ This is where tools like Notion fall short. They're great at hierarchical organi
 
 ## The Build vs. Buy Decision
 
-Research platforms are the strongest candidate for building internally because they're so specific to how your fund thinks. Generic tools work for storing notes, but they struggle to support the full workflow from macro research to published thesis. There's also a lack of VC-specific tools in the market currently (2026).
+Research platforms are the strongest candidate for building internally because they're so specific to how your fund thinks. Generic tools work for storing notes, but they struggle to support the full workflow from macro research to published thesis. There's also a lack of VC-specific tools in the market in <CurrentYear />.
 
 **When building makes sense**:
 
@@ -83,15 +85,11 @@ Building takes significant time. Three to six months for something genuinely use
 
 Research platforms are most valuable at funds that compete on clarity of thought:
 
-**Thesis-driven funds**: If your competitive advantage comes from deep conviction about where technology and markets are going, research platforms are core infrastructure. You need to capture how you're thinking about a space, evolve that thinking over months, and eventually publish it to demonstrate your perspective. This is the foundation of your strategy.
+**Thesis-driven funds**: If your competitive advantage comes from deep conviction about where technology and markets are going (and making "moonshot bets"), research platforms are core infrastructure. You need to capture how you're thinking about a space, evolve that thinking over months, and eventually publish it to demonstrate your perspective. This is the foundation of your strategy.
 
 **Funds that publish thinking**: If you write articles, publish reports, or create content demonstrating your expertise, a research platform becomes your content engine. All your research feeds into published pieces. You're not starting from scratch every time you write. You're synthesizing months of accumulated insights.
 
 **Collaborative research teams**: If multiple people research adjacent areas and you want their insights to connect, you need infrastructure for networked thinking. One person researches AI, another researches developer tools, a third researches infrastructure. The connections between their work create unique insights.
-
-**Proactive sourcing**: If you reach out to founders in spaces you find interesting rather than waiting for inbound, you need deep research to back up those conversations. You're not responding to pitches. You're demonstrating you understand the space better than other investors.
-
-**Early-stage investing where conviction matters**: At seed stage, you're betting on markets and founders before there's much quantitative data. Your conviction comes from deep research about the space. Research platforms help you develop and maintain that conviction.
 
 Don't prioritize research platforms if you invest reactively based on network deal flow, don't develop public theses, are a solo GP with simple note-taking needs, or focus on late-stage deals where diligence is mostly quantitative analysis of business metrics.
 
@@ -111,9 +109,9 @@ The weakness is that Notion is hierarchical by design, not network-first. You ca
 
 When to use: Teams that need easy collaboration, funds with more structured research processes, quick setup without technical complexity, good enough solution while you figure out what's missing.
 
-**Custom-built platforms**: Funds serious about research as competitive advantage often build custom. Usually web-based (React or Next.js frontend, Postgres backend) with strong full-text search (pg_search or pg_vector extensions for semantic search).
+**Custom-built platforms**: Funds serious about research as competitive advantage often build custom. Usually web-based (for Inflection: Next.js frontend, Postgres backend) with strong full-text search (pg_search or pg_vector extensions for semantic search).
 
-The key technical challenges are more about product design than technology. How do you model relationships between research entities? What makes relevant connections surface naturally? How do you build publishing workflows that feel smooth? How do you ensure that the experience is as good as your competition: Claude, ChatGPT, and Perplexity?
+The key technical challenges are more about product design than technology. How do you model relationships between research entities? What makes relevant connections surface naturally? How do you build publishing workflows that feel smooth? How do you ensure that the research experience is as good as your competition: Claude, ChatGPT, and Perplexity?
 
 When to use: Research is core competitive advantage, you've outgrown existing tools and know exactly what you need, you have engineering resources, thesis development and publishing are central to your strategy.
 

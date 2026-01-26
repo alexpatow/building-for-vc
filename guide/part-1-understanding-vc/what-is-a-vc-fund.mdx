@@ -11,9 +11,9 @@ Think of this as your glossary and mental model for how VC works. You don't need
 
 ## Resources
 
-- **[The Business of Venture Capital, 3rd Edition](https://www.amazon.se/-/en/Business-Venture-Capital-Third-Structuring/dp/1119639689)** by Mahendra Ramsinghani - Comprehensive overview of fund structures, legal frameworks, and the LP-GP relationship
-- [**Venture Deals** by Brad Feld and Jason Mendelson](https://www.amazon.se/-/en/Venture-Deals-Smarter-Lawyer-Capitalist/dp/1119594820/ref=pd_lpo_d_sccl_1/259-5033149-9306011?pd_rd_w=ZdNmw&content-id=amzn1.sym.7d0a2f69-66fb-4c7e-903c-ce17ff0b2ad4&pf_rd_p=7d0a2f69-66fb-4c7e-903c-ce17ff0b2ad4&pf_rd_r=7G0ME1NJHNK2BFR6N0AH&pd_rd_wg=QBk3V&pd_rd_r=e4f436f3-feda-4d0d-9214-35f50071aa71&pd_rd_i=1119594820&psc=1) - Essential reading on how VC deals work
-- [**Secrets of Sand Hill Road**](https://www.amazon.se/-/en/Secrets-Sand-Hill-Road-Capital_and/dp/0753553961/ref=sr_1_1?crid=ZKSGJILFAMK8&dib=eyJ2IjoiMSJ9.jyx30XfinMsTpzoGq7gzxQ.-73Lxa4MbBDc8BXZxFxFO2Zi8pK--6pbbnrDo_EucY8&dib_tag=se&keywords=secrets+of+sand+hill+road&qid=1768495828&sprefix=**Secrets+of+Sand+Hill+Road**,aps,116&sr=8-1) by Scott Kupor - Inside look at how VC firms operate
+- **[The Business of Venture Capital, 3rd Edition](https://www.amazon.com/dp/1119639689)** by Mahendra Ramsinghani - Comprehensive overview of fund structures, legal frameworks, and the LP-GP relationship
+- [**Venture Deals**](https://www.amazon.com/dp/1119594820) by Brad Feld and Jason Mendelson - Essential reading on how VC deals work
+- [**Secrets of Sand Hill Road**](https://www.amazon.com/dp/0753553961) by Scott Kupor - Inside look at how VC firms operate
 
 ## The Players: LPs, GPs, and Portfolio Companies
 
@@ -23,7 +23,7 @@ At its core, a venture capital fund involves three groups: Limited Partners who 
 
 Limited Partners, or LPs, are the investors in a venture capital fund. They're the ones providing the capital that eventually gets invested in startups. LPs come in many forms: pension funds managing retirement savings for teachers and firefighters, university endowments looking to fund scholarships, family offices managing wealth for wealthy families, and sometimes corporations looking to gain strategic exposure to emerging technologies.
 
-The word "limited" is important here. LPs have limited involvement in the fund's day-to-day operations and limited liability for the fund's debts. They commit capital to the fund but don't make investment decisions or sit in partner meetings debating which startup to back. Their role is largely passive: they commit money, receive regular reports on how that money is being deployed, and eventually receive distributions when portfolio companies exit.
+The word "limited" is important here. LPs have limited involvement in the fund's day-to-day operations. They commit capital to the fund but don't make investment decisions or sit in partner meetings debating which startup to back. Their role is largely passive: they commit money, receive regular reports on how that money is being deployed, and eventually receive distributions when portfolio companies exit.
 
 This limited involvement comes with significant confidentiality. LP identities and their commitment amounts are typically kept private. An LP might not want it publicly known that they're investing in venture capital, or they might not want other GPs to know the size of their commitments elsewhere. This confidentiality shapes everything from how data is secured to who can access what information in any software you build.
 
@@ -33,7 +33,7 @@ It's also crucial to understand that when an LP commits \$10 million to a fund, 
 
 On the other side are the General Partners, or GPs. These are the investors you think of when you picture venture capitalists: the partners who source deals, conduct due diligence, make investment decisions, sit on boards, and work with portfolio companies. They're the ones running the fund's operations day to day.
 
-Unlike LPs, GPs have unlimited liability (in theory, though in practice this is often structured differently) and make all the decisions about how the fund's capital gets deployed. They decide which companies to invest in, how much to invest, what terms to negotiate, and when to exit.
+Unlike LPs, GPs make all the decisions about how the fund's capital gets deployed. They decide which companies to invest in, how much to invest, what terms to negotiate, and when to exit.
 
 GPs make money in two ways. First, they receive management fees, typically 2% of the committed capital per year. For a \$100 million fund, that's \$2 million annually to cover salaries, office space, travel, and all the operational costs of running the fund. These fees are paid regardless of how well the investments perform.
 
@@ -51,7 +51,7 @@ Once invested, the fund's relationship with a portfolio company is ongoing and m
 
 Portfolio companies send data to their investors constantly: revenue numbers, burn rate, cash runway, customer acquisition metrics, hiring updates, product milestones. The format varies wildly. Some funds have structured data collection through portals or templates, others receive casual email updates with PDFs attached. Some companies are religious about monthly updates; others go quiet for months then surface when they need help or are raising another round.
 
-The fund also provides value beyond capital. GPs make introductions to potential customers, help recruit executives, advise on strategy, connect companies to later-stage investors, and sometimes help navigate crises. This value-add varies dramatically by fund - some are highly engaged, others are passive financial investors. But even passive funds need to track their portfolio companies' progress to report to LPs and make follow-on investment decisions.
+The fund also provides value beyond capital. GPs make introductions to potential customers, help recruit executives, advise on strategy, connect companies to later-stage investors, and sometimes help navigate crises. This value-add varies dramatically by fund; some are highly engaged, others are passive financial investors. But even passive funds need to track their portfolio companies' progress to report to LPs and make follow-on investment decisions.
 
 Portfolio companies also create most of the complexity in a fund's data model. Each company goes through multiple financing rounds at different valuations. Ownership percentages change over time as new investors join and existing investors get diluted. Companies pivot, changing their business model and metrics. Some succeed spectacularly, some fail, most are in between. Some exit through acquisitions, some through IPOs, some through secondary sales, some die quietly.
 
@@ -137,7 +137,7 @@ Every field has its jargon, and venture capital is no exception. Here are the te
 
 **IRR (Internal Rate of Return)** is the annualized return accounting for the timing of cash flows. It's time-weighted, so returning 3x in 3 years is much better than returning 3x in 10 years, and IRR captures that difference. The calculation is complex. It's finding the discount rate where the net present value of all cash flows equals zero.
 
-**MOIC (Multiple on Invested Capital)** is the simplest: total value divided by total invested. 3x MOIC means you tripled the money, regardless of whether it took 3 years or 10 years. LPs care more about IRR because time matters, but MOIC is easier to understand and communicate.
+**MOIC (Multiple on Invested Capital)** is the simplest: total value divided by total invested. MOIC and TVPI both measure investment performance, but differ in their denominators: MOIC divides total value by invested capital, while TVPI divides total value by paid-in capital (including fees).
 
 ### Investment Instruments
 
@@ -147,7 +147,7 @@ Funds don't always receive simple equity. Different instruments have different t
 
 **Common Stock** is what founders and employees typically own. It has no special preferences or protections. Investors rarely take common stock except in unusual circumstances.
 
-**SAFE (Simple Agreement for Future Equity)** is a convertible instrument popular in early-stage investing, invented by Y Combinator. The investor gives the company money now, and the SAFE converts into equity later during a priced round. SAFEs have a valuation cap (the maximum valuation at which they convert) and/or a discount (investors get a better price than the next round). They're "simple" because they defer valuation negotiations until later.
+**SAFE (Simple Agreement for Future Equity)** is a convertible instrument popular in early-stage investing, invented by [Y Combinator](https://www.ycombinator.com/documents). The investor gives the company money now, and the SAFE converts into equity later during a priced round. SAFEs typically have a valuation cap (the maximum valuation at which they convert) and/or a discount (investors get a better price than the next round). They're "simple" because they defer valuation negotiations until later.
 
 **Convertible Note** is similar to a SAFE but structured as debt. The investor loans money to the company with interest, and the note converts to equity in a future priced round. Like SAFEs, they typically have a cap and/or discount. The key difference is that convertible notes have a maturity date and accrue interest, though in practice they almost always convert rather than being repaid.
 
@@ -159,9 +159,9 @@ Venture capital happens in stages, each with different characteristics, valuatio
 
 **Pre-Seed** is the earliest stage, often before the company has launched or has meaningful revenue. Rounds are typically \$100K-\$1M, often from angel investors, very early stage funds, or accelerators. Companies might just have a prototype or idea. High risk, very early.
 
-**Seed** is when the company has proven some concept but is still early. Rounds are typically \$500K-\$3M. The company might have initial product-market fit, some revenue, or strong early traction. Seed funds specialize in this stage, along with angel investors and some multi-stage funds doing early deals.
+**Seed** is when the company has proven some concept but is still early. Rounds are typically \$1M-\$5M. The company might have initial product-market fit, some revenue, or strong early traction. Seed funds specialize in this stage, along with angel investors and some multi-stage funds doing early deals.
 
-**Series A** is the first institutional round for most companies. Rounds typically \$3M-\$15M. The company has proven product-market fit and needs capital to scale. They usually have meaningful revenue or user growth. Series A funds look for clear metrics: revenue growth, customer acquisition, team strength. This is where things get more formal: boards, proper governance, structured metrics.
+**Series A** is the first institutional round for most companies. Rounds typically \$10M-\$20M. The company has proven product-market fit and needs capital to scale. They usually have meaningful revenue or user growth. Series A funds look for clear metrics: revenue growth, customer acquisition, team strength. This is where things get more formal: boards, proper governance, structured metrics.
 
 **Series B** is about scaling what works. Rounds typically \$15M-\$50M. The company has proven they can grow and now needs capital to expand: new markets, more sales people, larger team. Clear business model, strong revenue, maybe even profitability or a clear path to it.
 
@@ -170,6 +170,8 @@ Venture capital happens in stages, each with different characteristics, valuatio
 **Growth/Late Stage** rounds are the final stages before IPO or acquisition. Rounds can be \$100M-\$500M+. Companies are often profitable or nearly so, with hundreds of millions in revenue. These look more like PE deals than traditional venture.
 
 Why this matters: The stage determines everything about how you track the investment. Seed investments might not have board seats or detailed metrics. Series B+ investments require comprehensive tracking, board management, and detailed reporting. Your software needs to handle the complexity appropriate to each stage.
+
+Note on round sizes: These ranges are illustrative and vary significantly by geography, sector, and market conditions. US rounds tend to be larger than European rounds, and AI-focused companies have pushed averages higher since 2023. For current benchmarks, see the [PitchBook-NVCA Venture Monitor](https://nvca.org/wp-content/uploads/2026/01/q4-2025-pitchbook-nvca-venture-monitor.pdf) or [Crunchbase](https://news.crunchbase.com/venture/funding-rounds-average-mean-startups-charts/) funding data.
 
 ### Valuation Terms
 
@@ -213,6 +215,8 @@ For deals that pass screening, **due diligence** begins. This is where the fund 
 
 The **investment committee** (IC) is where investment decisions are made. Someone at the fund (the deal champion) presents the opportunity to the partnership. There's discussion, debate, questions. The committee decides: pass, invest, or "not now but circle back later." The decision might be subject to conditions: "yes, but only if we can lead the round" or "yes, but at this valuation, not their asking price."
 
+**Syndication** often happens next, especially at earlier stages. The lead investor rarely fills the entire round alone. They bring in other funds, angels, or existing investors to complete the round. This involves coordinating with other parties, sharing deal information (with founder permission), and sometimes negotiating allocation if the round is oversubscribed. At pre-seed and seed, rounds are frequently syndicated across many investors; at later stages, rounds typically have fewer but larger investors. The fund needs to track who else is in the deal and coordinate timing for closing.
+
 If the IC says yes, the **closing** process begins. Lawyers draft and negotiate documents. Terms get finalized. The company, fund, and other investors sign the paperwork. The fund issues a capital call to LPs. Money is wired. Equity is issued. The company is now officially in the portfolio.
 
 Finally, **post-investment** begins. The fund tracks the portfolio company's progress, supports them where possible, attends board meetings if they have a seat, participates in future financing rounds, and eventually helps guide the company toward an exit. This phase lasts years and generates most of the ongoing work for a fund.
@@ -253,7 +257,7 @@ Now that you understand how VC funds actually work, the technical implications b
 
 Every concept we covered translates directly into how you build software:
 
-**LPs and GPs** aren't just "users" in your system. They're different entities with different data access needs. LP data is confidential - GPs often can't see other LPs' information. GPs need collaborative access to deals and portfolio data. You need role-based access control that reflects these real-world boundaries.
+**LPs and GPs** aren't just "users" in your system. They're different entities with different data access needs. LP data is confidential - LPs often can't see other LPs' information. GPs need collaborative access to deals and portfolio data. You need role-based access control that reflects these real-world boundaries.
 
 **The distinction between management company and fund** means you need multi-entity data models from day one. Expenses, fees, and investments all flow through different legal entities. Reports need to aggregate data correctly across entities. Getting this wrong early means painful refactoring later.
 
