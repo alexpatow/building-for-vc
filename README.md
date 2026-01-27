@@ -6,15 +6,16 @@
 
 A comprehensive guide to building technology for venture capital funds, covering everything from understanding VC fundamentals to implementing production infrastructure.
 
-## About This Book
+## About This Guide
 
-This book is for engineers, data people, and technical operators building technology at venture capital funds. It covers:
+This guide is for engineers, data people, and technical operators building technology at venture capital funds. It covers:
 
 - **Part 1: Understanding VC** - How VC funds work, fund structures, and common mistakes when starting at a fund
 - **Part 2: The VC Tech Stack** - Research platforms, sourcing tools, CRM, fund operations, portfolio support, fundraising, and external presence
 - **Part 3: Technical Foundations** - Technology stack selection, data providers, modeling, entity resolution, data quality, warehousing, knowledge graphs, integrations, security, and emerging trends
+- **Resources** - Tools, templates, and references to help you build
 
-Written by someone who has built VC infrastructure at [Inflection](https://inflection.fund) and [EQT](https://eqtgroup.com), this book is opinionated, practical, and focused on helping you succeed.
+Based on real experience building VC infrastructure at [Inflection](https://inflection.fund) and [EQT](https://eqtgroup.com).
 
 ## Local Development
 
