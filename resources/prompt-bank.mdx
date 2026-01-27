@@ -293,10 +293,10 @@ A collection of prompts for common VC workflows. These are starting points, adap
 
 **General principles:**
 
-1. **Be specific about output format** — JSON, bullet points, or structured sections reduce hallucination and make parsing easier
-2. **Include examples** — Show the model what good output looks like
-3. **Set constraints** — "1-2 sentences per point" prevents verbose responses
-4. **Handle missing data explicitly** — Tell the model what to do when information isn't available
+1. **Be specific about output format**: JSON, bullet points, or structured sections reduce hallucination and make parsing easier.
+2. **Include examples**: Show the model what good output looks like.
+3. **Set constraints**: "1-2 sentences per point" prevents verbose responses.
+4. **Handle missing data explicitly**: Tell the model what to do when information isn't available.
 
 ---
 
@@ -308,10 +308,10 @@ Copy-pasting prompts works, but you can go further by integrating these workflow
 
 Both Claude and ChatGPT support integrations that connect your tools directly:
 
-- **Connectors** — Link your email, calendar, Google Drive, and other tools so the model can read and act on real data. Claude supports integrations through its connectors, and ChatGPT through plugins and actions. Connect your CRM or deal flow tool if supported.
-- **Claude Projects** — Create a project with your fund's investment criteria, sector focus, and portfolio context. Add prompts as project instructions so every conversation starts with the right context. [Claude Cowork](https://claude.com/blog/cowork-research-preview) takes this further by letting Claude work on tasks autonomously within a project.
-- **Custom GPTs** — Build a GPT with your prompts baked in. Upload your fund's thesis document, sector maps, or deal criteria as knowledge files.
-- **Settings and preferences** — Both Claude and ChatGPT let you set global preferences that apply to all conversations. Add a bio describing your role, fund focus, and how you like responses formatted. This context persists across sessions.
+- **Connectors**: Link your email, calendar, Google Drive, and other tools so the model can read and act on real data. Claude supports integrations through its connectors, and ChatGPT through plugins and actions. Connect your CRM or deal flow tool if supported.
+- **Claude Projects**: Create a project with your fund's investment criteria, sector focus, and portfolio context. Add prompts as project instructions so every conversation starts with the right context. [Claude Cowork](https://claude.com/blog/cowork-research-preview) takes this further by letting Claude work on tasks autonomously within a project.
+- **Custom GPTs**: Build a GPT with your prompts baked in. Upload your fund's thesis document, sector maps, or deal criteria as knowledge files.
+- **Settings and preferences**: Both Claude and ChatGPT let you set global preferences that apply to all conversations. Add a bio describing your role, fund focus, and how you like responses formatted. This context persists across sessions.
 
 This turns ad-hoc prompting into a consistent workflow your whole team can use.
 
@@ -319,17 +319,17 @@ This turns ad-hoc prompting into a consistent workflow your whole team can use.
 
 [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) lets you create a service that provides tools and data to Claude and other LLM clients. For VC workflows, an MCP server can:
 
-- **Expose tools** — Create callable functions that fetch data, run queries, or trigger actions (`get_company_data`, `search_portfolio`, `log_meeting_notes`)
-- **Manage prompts and skills** — Serve prompt templates and multi-step workflows from a central place, so the team uses consistent, tested prompts rather than ad-hoc variations
-- **Inject live data** — Connect to your CRM, data warehouse, or external APIs so the model has real context, not just what you paste in
-- **Add proprietary context** — Include your fund's investment criteria, sector taxonomy, or portfolio company data automatically
-- **Enforce consistency** — Everyone uses the same prompts and gets the same data, reducing variance across the team
+- **Expose tools**: Create callable functions that fetch data, run queries, or trigger actions (`get_company_data`, `search_portfolio`, `log_meeting_notes`).
+- **Manage prompts and skills**: Serve prompt templates and multi-step workflows from a central place, so the team uses consistent, tested prompts rather than ad-hoc variations.
+- **Inject live data**: Connect to your CRM, data warehouse, or external APIs so the model has real context, not just what you paste in.
+- **Add proprietary context**: Include your fund's investment criteria, sector taxonomy, or portfolio company data automatically.
+- **Enforce consistency**: Everyone uses the same prompts and gets the same data, reducing variance across the team.
 
 A basic MCP server for VC might expose:
 
-- `get_company_context(company_name)` — Pulls data from your CRM and data providers
-- `analyze_pitch_deck(pdf_url)` — Extracts metrics and generates a thesis summary
-- `check_deal_fit(company_info)` — Scores against your investment criteria
+- `get_company_context(company_name)`: Pulls data from your CRM and data providers.
+- `analyze_pitch_deck(pdf_url)`: Extracts metrics and generates a thesis summary.
+- `check_deal_fit(company_info)`: Scores against your investment criteria.
 
 See the [MCP documentation](https://modelcontextprotocol.io/introduction) for implementation details.
 
