@@ -83,6 +83,24 @@ Solo developers will be able to build and maintain even more ambitious systems. 
 
 You don't need to do anything now except be aware this is coming. When agent orchestration tools mature, the same principles from [Choosing Your Stack](/guide/part-3-technical-foundations/choosing-your-stack) apply: use boring, proven technology that AI tools understand. Use TypeScript and Next.js. Structure your code clearly. Write good documentation. These practices make both current AI tools and future agent orchestration more effective.
 
+**Personal AI agents: Beyond development**
+
+The same pattern is emerging for personal productivity. Tools like [Clawdbot](https://clawd.bot/) (open source, runs locally) let you interact with an AI assistant through WhatsApp, Telegram, Slack, or iMessage. The agent has full system access: it can read files, execute commands, manage your calendar, send emails, and automate workflows across 50+ integrations.
+
+This is worth watching as inspiration for what autonomous agents can do. But approach with caution: giving an agent full system access has real security implications. Understand what you're installing before running it on a machine with access to fund data.
+
+**Sandboxed environments for agent execution**
+
+As agents gain more autonomy, sandboxing becomes critical. Running AI-generated code or giving agents system access on your local machine is risky. A new category of infrastructure is emerging to address this: isolated execution environments purpose-built for agents.
+
+- [Modal Sandboxes](https://modal.com/products/sandboxes): Container-based execution with sub-second startup, network controls for restricting outbound access, and scaling to 50,000+ concurrent sandboxes.
+- [Vercel Sandbox](https://vercel.com/docs/vercel-sandbox): Ephemeral Linux VMs designed for AI agents and code generation, with SDK-first integration.
+- [Sprites](https://sprites.dev/): Hardware-isolated Firecracker VMs with persistent state, checkpointing, and layer 3 network policies.
+
+These platforms let you run untrusted code without exposing your production systems or local machine. The key features for security are network isolation (preventing data exfiltration), ephemeral environments (no persistent access), and resource limits (preventing runaway processes).
+
+If you're building agent-powered features that execute code or access external systems, consider running them in sandboxed environments rather than on your local machine or production infrastructure.
+
 ## File-Native Agents: Beyond RAG and Knowledge Graphs
 
 For the past two years, the standard approach to helping AI systems work with large document collections has been RAG (Retrieval Augmented Generation): chunk documents into pieces, embed them as vectors, store in a vector database, retrieve relevant chunks based on query similarity, stuff them into context.
