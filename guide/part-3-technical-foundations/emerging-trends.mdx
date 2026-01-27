@@ -11,7 +11,7 @@ Large language models are the most significant technology shift for VC infrastru
 
 But LLMs are becoming baseline, not cutting-edge. Every fund is using ChatGPT. Every engineer is using Claude Code or Cursor. The competitive advantage isn't that you're using LLMs, it's how you're using them and what you're building on top of them.
 
-This chapter covers emerging trends that matter for VC technology: connecting AI to your internal data through MCP, the evolution from single coding sessions to orchestrated agent workflows, why file-native agents are replacing RAG systems, and what hype to ignore. The focus is on practical developments that will change how you build over the next 1-2 years, not speculative futurism.
+This chapter covers emerging trends that matter for VC technology: connecting AI to your internal data through MCP, the evolution from single coding sessions to orchestrated agent workflows, why file-native agents are replacing RAG systems, and what hype to ignore.
 
 ## MCP: Connecting AI to Your Internal Data (or Just Use CLI Tools)
 
@@ -43,6 +43,8 @@ The mechanism (MCP vs. CLI vs. something else) matters less than the outcome: AI
 **LLM providers moving up the stack**
 
 This trend represents LLM providers (Anthropic, OpenAI, etc.) moving beyond just providing model APIs to building full development environments with data access. Claude Code isn't just a better coding assistant - it's becoming a platform for building and using internal tools. The new [Claude Cowork](https://support.claude.com/en/articles/13345190-getting-started-with-cowork) and [Claude in Excel](https://support.claude.com/en/articles/12650343-claude-in-excel) are further examples of LLM providers moving into the application layer.
+
+The latest development is [MCP Apps](https://blog.modelcontextprotocol.io/posts/2026-01-26-mcp-apps/), which allow MCP servers to expose UI components directly to the LLM client. Instead of just providing tools that return text, an MCP server can now render interactive interfaces: forms, charts, tables, approval workflows. This blurs the line between "AI assistant" and "application platform" even further.
 
 Watch this space. The tooling will evolve, standards may change, but the direction is clear: AI tools will increasingly integrate with your internal systems rather than operating in isolation.
 
@@ -85,7 +87,7 @@ You don't need to do anything now except be aware this is coming. When agent orc
 
 **Personal AI agents: Beyond development**
 
-The same pattern is emerging for personal productivity. Tools like [Clawdbot](https://clawd.bot/) (open source, runs locally) let you interact with an AI assistant through WhatsApp, Telegram, Slack, or iMessage. The agent has full system access: it can read files, execute commands, manage your calendar, send emails, and automate workflows across 50+ integrations.
+The same pattern is emerging for personal productivity. Tools like [Moltbot](https://molt.bot/) ([formerly Clawdbot](https://x.com/moltbot/status/2016058924403753024), open source, runs locally) let you interact with an AI assistant through WhatsApp, Telegram, Slack, or iMessage. The agent has full system access: it can read files, execute commands, manage your calendar, send emails, and automate workflows across 50+ integrations.
 
 This is worth watching as inspiration for what autonomous agents can do. But approach with caution: giving an agent full system access has real security implications. Understand what you're installing before running it on a machine with access to fund data.
 
