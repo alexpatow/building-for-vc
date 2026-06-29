@@ -15,7 +15,7 @@ This guide is for engineers, data people, and technical operators building techn
 - **Part 3: Technical Foundations** - Technology stack selection, data providers, modeling, entity resolution, data quality, warehousing, knowledge graphs, integrations, security, and emerging trends
 - **Resources** - Tools, templates, and references to help you build
 
-Based on real experience building VC infrastructure at [Inflection](https://inflection.fund) and [EQT](https://eqtgroup.com).
+Based on real experience building VC infrastructure through [Boolean Industries](https://boolean.industries) and at [EQT](https://eqtgroup.com) and [Inflection](https://inflection.fund).
 
 ## Local Development
 
@@ -61,7 +61,7 @@ This site uses Mintlify's GitHub integration. Changes pushed to the main branch 
 
 If you find errors, have suggestions, or want to contribute additional content, please open an issue or pull request.
 
-For detailed contribution guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md). Feel free to reach out on [LinkedIn](https://www.linkedin.com/in/alexpatow/) or via email at [ap@ınflection.fund](mailto:ap@inflection.fund).
+For detailed contribution guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md). Feel free to reach out on [LinkedIn](https://www.linkedin.com/in/alexpatow/) or via email at [ap@boolean.industries](mailto:ap@boolean.industries).
 
 ### Code Quality and Formatting
 

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is a technical book for engineers, data people, and technical operators building technology at VC funds. It's opinionated, practical, and based on real experience building VC infrastructure at Inflection and EQT.
+This is a technical book for engineers, data people, and technical operators building technology at VC funds. It's opinionated, practical, and based on real experience building VC infrastructure through Boolean Industries and at EQT and Inflection.
 
 ## Writing Voice and Tone
 
@@ -35,9 +35,9 @@ This is a technical book for engineers, data people, and technical operators bui
 - "For funds under 50 people, use [X]. Larger funds might need [Y]."
 - "This works if you're technical. If you're not, buy [vendor] instead."
 
-**Real examples from experience**: Reference actual work at Inflection and EQT when relevant. Be specific:
+**Real examples from experience**: Reference actual work through Boolean Industries, EQT, and Inflection when relevant. Be specific:
 
-- ✅ "At Inflection, we use Attio for CRM and sync it to Postgres nightly."
+- ✅ "For one fund client, we use Attio for CRM and sync it to Postgres nightly."
 - ❌ "Some funds use CRM systems and might integrate them with databases."
 
 **Strong opinions, weakly held**: Take clear positions but acknowledge alternatives and admit uncertainty when it exists.
@@ -52,8 +52,8 @@ This is a technical book for engineers, data people, and technical operators bui
 
 ```mdx
 <Tip>
-  **Author note**: At Inflection, we tried building this ourselves and it was a mistake. Save
-  yourself the pain.
+  **Author note**: At one fund I worked with, we tried building this ourselves and it was a mistake.
+  Save yourself the pain.
 </Tip>
 ```
 
@@ -72,7 +72,7 @@ const CompanySchema = z.object({
 **Real examples clearly labeled**: When providing case studies or specific examples:
 
 ```mdx
-**Example: At Inflection, we use Mistral for PDF reading**
+**Example: For one fund client, we use Mistral for PDF reading**
 
 When processing pitch decks...
 ```
