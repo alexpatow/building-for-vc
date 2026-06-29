@@ -37,7 +37,7 @@ This is a technical book for engineers, data people, and technical operators bui
 
 **Real examples from experience**: Reference actual work through Boolean Industries, EQT, and Inflection when relevant. Be specific:
 
-- ✅ "For one fund client, we use Attio for CRM and sync it to Postgres nightly."
+- ✅ "At Inflection, we used Attio for CRM and synced it to Postgres nightly."
 - ❌ "Some funds use CRM systems and might integrate them with databases."
 
 **Strong opinions, weakly held**: Take clear positions but acknowledge alternatives and admit uncertainty when it exists.
@@ -52,8 +52,8 @@ This is a technical book for engineers, data people, and technical operators bui
 
 ```mdx
 <Tip>
-  **Author note**: At one fund I worked with, we tried building this ourselves and it was a mistake.
-  Save yourself the pain.
+  **Author note**: At Inflection, we tried building this ourselves and it was a mistake. Save
+  yourself the pain.
 </Tip>
 ```
 
@@ -72,7 +72,7 @@ const CompanySchema = z.object({
 **Real examples clearly labeled**: When providing case studies or specific examples:
 
 ```mdx
-**Example: For one fund client, we use Mistral for PDF reading**
+**Example: At Inflection, we used Mistral for PDF reading**
 
 When processing pitch decks...
 ```

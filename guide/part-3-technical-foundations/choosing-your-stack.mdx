@@ -25,7 +25,7 @@ The technology decisions you make have direct consequences for what you can acco
 
 ## The Default Stack
 
-My default stack for web applications and APIs is:
+At Inflection, our default stack for web applications and APIs was:
 
 - **[Next.js](https://nextjs.org/)**: React framework with built-in routing, API routes, server-side rendering
 - **[TypeScript](https://www.typescriptlang.org/)**: JavaScript with static typing
@@ -71,7 +71,7 @@ This stack isn't exciting. It's boring, mature, widely-used technology. That's e
 
 The default stack covers most of what you'll build. But sometimes you need something it doesn't provide. The rule is: pick one or two new technologies per project, not more.
 
-**For Kepler**, a research platform I helped build, we introduced **[Tiptap](https://tiptap.dev/)** to create a Notion-like editing experience. This made sense because:
+**For Kepler** (Inflection's research platform), we introduced **[Tiptap](https://tiptap.dev/)** to create a Notion-like editing experience. This made sense because:
 
 - The editing experience was core to the product's value
 - Tiptap is mature, well-funded, and widely used
@@ -126,7 +126,7 @@ If the existing tools work and serve GPs well, continue building on them. Your f
 
 **If you do rewrite, do it incrementally.** Don't announce "I'm rewriting everything, it'll be ready in 3 months." Build the new version alongside the old one, migrate features one by one, and deprecate the old system only when the new one is proven. This keeps GPs working while you improve infrastructure.
 
-I was blessed to have no legacy code at one fund, but if we'd inherited working tools, the default would be to keep them running and iterate rather than rebuild.
+At Inflection, I was blessed to have no legacy code, but if we'd inherited working tools, the default would be to keep them running and iterate rather than rebuild.
 
 ## Lean on Managed Services
 
@@ -186,7 +186,7 @@ Technology is a means to an end. The end is helping your fund deploy capital mor
 
 ## The Bottom Line
 
-Use boring, proven technology that lets you ship fast. That's Next.js, TypeScript, Postgres, and Vercel. For data work, Python when you need it.
+Use boring, proven technology that lets you ship fast. At Inflection, that was Next.js, TypeScript, Postgres, and Vercel. For data work, Python when you need it.
 
 Only introduce new technology (like Tiptap for Kepler) when it solves a problem the default stack doesn't address. Pick one or two new technologies per project, not more. Ensure they're well-maintained and financially backed.
 
