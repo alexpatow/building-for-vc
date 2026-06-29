@@ -76,17 +76,6 @@
             ]
           }
         ]
-      },
-      {
-        "tab": "Resources",
-        "icon": "folder-open",
-        "groups": [
-          {
-            "group": "Resources",
-            "pages": ["resources/index", "resources/prompt-bank"],
-            "expanded": false
-          }
-        ]
       }
     ]
   },
