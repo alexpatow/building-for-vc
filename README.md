@@ -13,7 +13,6 @@ This guide is for engineers, data people, and technical operators building techn
 - **Part 1: Understanding VC** - How VC funds work, fund structures, and common mistakes when starting at a fund
 - **Part 2: The VC Tech Stack** - Research platforms, sourcing tools, CRM, fund operations, portfolio support, fundraising, and external presence
 - **Part 3: Technical Foundations** - Technology stack selection, data providers, modeling, entity resolution, data quality, warehousing, knowledge graphs, integrations, security, and emerging trends
-- **Resources** - Tools, templates, and references to help you build
 
 Based on real experience providing engineering services for venture capital and private equity through [Boolean Industries](https://boolean.industries), and at [EQT](https://eqtgroup.com) and [Inflection](https://inflection.fund).
 
@@ -38,8 +37,6 @@ building-for-vc/
 │   ├── part-1-understanding-vc/
 │   ├── part-2-tech-stack/
 │   └── part-3-technical-foundations/
-└── resources/                       # Tools, templates, and references
-    └── index.mdx
 ```
 
 ## Content Format
