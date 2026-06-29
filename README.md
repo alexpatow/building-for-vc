@@ -15,7 +15,7 @@ This guide is for engineers, data people, and technical operators building techn
 - **Part 3: Technical Foundations** - Technology stack selection, data providers, modeling, entity resolution, data quality, warehousing, knowledge graphs, integrations, security, and emerging trends
 - **Resources** - Tools, templates, and references to help you build
 
-Based on real experience building VC infrastructure through [Boolean Industries](https://boolean.industries) and at [EQT](https://eqtgroup.com) and [Inflection](https://inflection.fund).
+Based on real experience providing engineering services for venture capital and private equity through [Boolean Industries](https://boolean.industries), and at [EQT](https://eqtgroup.com) and [Inflection](https://inflection.fund).
 
 ## Local Development
 

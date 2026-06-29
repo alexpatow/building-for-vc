@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is a technical book for engineers, data people, and technical operators building technology at VC funds. It's opinionated, practical, and based on real experience building VC infrastructure through Boolean Industries and at EQT and Inflection.
+This is a technical book for engineers, data people, and technical operators building technology at VC funds. It's opinionated, practical, and based on real experience providing engineering services for venture capital and private equity through Boolean Industries, and at EQT and Inflection.
 
 ## Writing Voice and Tone
 
