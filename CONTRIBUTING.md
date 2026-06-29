@@ -176,7 +176,7 @@ description: "Brief description for SEO and navigation"
 
 - **Open an issue** for questions, bugs, or feature requests
 - **Start a discussion** for broader topics or ideas
-- **Reach out directly** to [Alex Patow on LinkedIn](https://www.linkedin.com/in/alexpatow/)
+- **Reach out directly** to [Alex Patow on LinkedIn](https://www.linkedin.com/in/alexpatow/) or [alex@boolean.industries](mailto:alex@boolean.industries)
 
 ## License
 
