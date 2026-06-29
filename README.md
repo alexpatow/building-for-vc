@@ -61,7 +61,7 @@ This site uses Mintlify's GitHub integration. Changes pushed to the main branch 
 
 If you find errors, have suggestions, or want to contribute additional content, please open an issue or pull request.
 
-For detailed contribution guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md). Feel free to reach out on [LinkedIn](https://www.linkedin.com/in/alexpatow/) or via email at [ap@boolean.industries](mailto:ap@boolean.industries).
+For detailed contribution guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md). Feel free to reach out on [LinkedIn](https://www.linkedin.com/in/alexpatow/) or via email at [alex@boolean.industries](mailto:alex@boolean.industries).
 
 ### Code Quality and Formatting
 
