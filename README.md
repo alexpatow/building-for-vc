@@ -6,6 +6,8 @@
 
 A comprehensive guide to building technology for venture capital funds, covering everything from understanding VC fundamentals to implementing production infrastructure.
 
+Read the guide at [buildingfor.vc](https://buildingfor.vc).
+
 ## About This Guide
 
 This guide is for engineers, data people, and technical operators building technology at venture capital funds. It covers:
