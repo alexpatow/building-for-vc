@@ -3,13 +3,7 @@ title: "Data Provider Considerations"
 description: "Cost, vendor relationships, and things to think about when working with data providers."
 ---
 
-## Overview
-
-Data providers are foundational infrastructure, but they're also expensive and require ongoing management. This page covers cost considerations, how to work with vendors, and things to keep in mind.
-
 ## Cost Considerations
-
-Data providers are expensive. Budget for them appropriately and understand different pricing models.
 
 ### Pricing Models
 
@@ -19,24 +13,17 @@ Data providers are expensive. Budget for them appropriately and understand diffe
 
 **Per-seat pricing:** Pay per user who has access (common for platforms with dashboards, less common for APIs). Usually, you buy the API access on top of per-seat pricing for data providers with per-seat pricing.
 
-### Cost Management Strategies
+Price a concrete job before you sign. Suppose an associate wants a market map of 5,000 companies refreshed monthly. Find out whether a search, each page of results, and each company enrichment consume separate credits. A dashboard subscription can look affordable right up until you try to reproduce the same search through the API.
 
-- **Start with what you actually need:** Don't subscribe to every vendor. Figure out your critical use cases and buy data for those first.
+### Cost Management Strategies
 
 - **Monitor spending:** Set up alerts when API usage or costs exceed thresholds. It's easy to accidentally rack up bills with per-request pricing.
 
-- **Cache data:** Don't request the same company data repeatedly. Cache responses (in your database or Redis) with appropriate TTLs. This saves money and respects rate limits.
-
-<Danger>
-  Some data providers have strict rules about how you can cache data. Always check their terms
-  before implementing caching strategies.
-</Danger>
+- **Cache repeat requests.** Check which fields the contract lets you store and for how long.
 
 - **Use bulk exports when possible:** If you need to load lots of data into your warehouse, bulk exports are usually cheaper than making thousands of API requests.
 
 - **Negotiate:** Negotiate based on your expected usage, especially between vendors. Some vendors offer discounts for bulk purchases or long-term commitments.
-
-### Budget Planning
 
 Data costs can easily exceed infrastructure costs (servers, databases, etc.). Factor this into your overall technology budget from the start (ideally before you start building out the team). Costs scale with fund size and data needs.
 
@@ -44,19 +31,15 @@ Data costs can easily exceed infrastructure costs (servers, databases, etc.). Fa
 
 ### APIs Change Frequently
 
-Data vendors update their APIs more often than you'd expect. They rename fields, change data formats, add new attributes, deprecate old endpoints. Your integrations can break when this happens, but you can mitigate this risk by following best practices (see [Data Modeling](/guide/part-3-technical-foundations/data-modeling)).
+A vendor can change a field’s type or remove an endpoint. Validate responses at the boundary so you can tell a schema change from a company with missing data. See [Integrations](/guide/part-3-technical-foundations/integrations-and-apis).
 
 Pay attention to vendor communications. They usually announce breaking changes weeks in advance via email or their changelog. Set up notifications so you see these announcements. Budget time to update your integrations when schemas change.
 
 ### Collaborate with Newer Vendors
 
-If you're working with a newer data vendor, establish trust and provide feedback on their API design. They want customers to succeed and are often open to suggestions.
-
 If their API returns data in an awkward format, tell them. If they're missing fields you need, ask for them. If rate limits are too restrictive, negotiate. If they only provide CSV but you need Parquet, request it.
 
-This is win-win: they improve their product based on real usage, you get an API that's easier to work with. Established vendors are less flexible, but newer vendors appreciate detailed feedback.
-
-### Support and Documentation
+### Test the support channel
 
 Vendor quality varies significantly in support and documentation:
 
@@ -64,38 +47,12 @@ Vendor quality varies significantly in support and documentation:
 - Some have minimal docs, slow support, no community
 - Some provide developer relations people who help with integration
 
-Factor this into vendor selection. If you're building critical infrastructure on a vendor's data, you need good documentation and reliable support. Don't just evaluate the data quality, evaluate whether you can actually build on top of it.
+Ask support about a missing field or an ambiguous record during your trial. The response tells you what it’ll be like to rely on that vendor when a feed breaks.
 
 ## Data Quality
 
-Not all data providers are equally accurate or comprehensive. Quality varies significantly between vendors and even within the same vendor for different data types.
-
-### Accuracy vs Speed
-
 Some vendors prioritize accuracy (verify information before publishing, resulting in lag). Others prioritize speed (publish quickly, may have more errors).
 
-Choose based on your use case.
+Look at the costs of a miss. A missing seed round can be fine in a first-pass market map, but it changes a co-investment analysis if it systematically excludes smaller deals. For a sourcing feed, a correct signal that arrives six months late can be as useless as a missing one.
 
-### Coverage Differences
-
-Vendors excel at different:
-
-- **Stages:** Some are better for early-stage, others for growth/late-stage
-- **Geographies:** Strong US coverage vs weak international
-- **Sectors:** Deep tech, bio, fintech specializations
-
-### Test with Portfolio Companies
-
-The best way to evaluate vendor accuracy is to test against your portfolio companies, companies where you know the ground truth. Check if funding amounts match, if team data is current, if descriptions are accurate.
-
-This tells you what each vendor is actually good for and where they fall short.
-
-### Data Freshness
-
-Vendors update at different cadences (real-time, daily, weekly, monthly). Know how fresh the data is and don't present stale data as current.
-
-## The Bottom Line
-
-Data providers are foundational infrastructure. You need external data about companies, funding, people, and markets.
-
-Choose vendors based on what data you actually need. Don't subscribe to everything. Test accuracy using your portfolio companies.
+Check the stage, geography, and sectors your fund covers. For a repeatable comparison, use the [portfolio-company test in Data Quality](/guide/part-3-technical-foundations/data-quality). A vendor can be excellent on US funding rounds and still miss the European seed deals you care about.

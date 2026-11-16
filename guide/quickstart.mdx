@@ -3,54 +3,15 @@ title: "Quick Reference"
 description: "Find what you need quickly based on your role, experience level, or specific technical challenge."
 ---
 
-## Reading Paths
+## Where to start
 
-Different readers will find different parts of this guide most valuable. Choose your path:
+- **New to VC?** Start with [how a fund works](/guide/part-1-understanding-vc/what-is-a-vc-fund), then [look at your own fund’s portfolio](/guide/part-1-understanding-vc/understanding-your-vc-fund).
+- **First technical hire?** [Common Mistakes](/guide/part-1-understanding-vc/common-mistakes) covers the conversations to have early. [Putting It Together](/guide/part-2-tech-stack/putting-it-together) helps you choose the first project, including when you inherit an underused stack.
+- **Coming from investing or fund ops?** Pick a workflow in [The VC Tech Stack](/guide/part-2-tech-stack/introduction). If a vendor or engineer starts talking about a warehouse, start with [what it can tell you about last quarter’s pipeline](/guide/part-3-technical-foundations/data-warehousing).
 
-### New to VC Funds
+- **Hiring that person?** See [Hiring Your Data Team](/guide/part-1-understanding-vc/hiring-your-data-team).
 
-If you just joined a VC fund or are new to the venture capital industry:
-
-<Steps>
-  <Step title="Start with Part 1">
-    Read all four chapters sequentially to understand how VC works, analyze your specific fund,
-    avoid common mistakes, and build the right data team.
-  </Step>
-  <Step title="Identify Your Fund Type">
-    Use [Understanding Your VC Fund](/guide/part-1-understanding-vc/understanding-your-vc-fund) to
-    determine your fund's stage, volume, and strategy - this shapes everything you'll build.
-  </Step>
-  <Step title="Plan Before Building">
-    Apply lessons from [Common Mistakes](/guide/part-1-understanding-vc/common-mistakes) to avoid
-    jumping in too early and building the wrong thing.
-  </Step>
-</Steps>
-
-### Experienced with VC
-
-If you're already familiar with how venture capital works:
-
-<CardGroup cols={2}>
-  <Card
-    title="Common Mistakes"
-    icon="triangle-exclamation"
-    href="/guide/part-1-understanding-vc/common-mistakes"
-  >
-    Skip to the seven most common technical mistakes at VC funds.
-  </Card>
-  <Card
-    title="Technical Foundations"
-    icon="gear"
-    color="#4B5563"
-    href="/guide/part-3-technical-foundations/choosing-your-stack"
-  >
-    Jump to Part 3 for deep dives on data modeling, integrations, and architecture.
-  </Card>
-</CardGroup>
-
-### Building Specific Features
-
-Looking for guidance on a specific technical challenge?
+## Find a chapter by task
 
 <Accordion title="Data & Infrastructure">
 
@@ -65,15 +26,16 @@ Looking for guidance on a specific technical challenge?
 
 - **[Integrations and APIs](/guide/part-3-technical-foundations/integrations-and-apis)** - Webhooks, rate limiting, validation
 - **[Entity Resolution](/guide/part-3-technical-foundations/entity-resolution)** - Matching companies across data sources
-- **[Data Providers](/guide/part-3-technical-foundations/data-providers)** - API vs file delivery, authentication
+- **[Accessing Data](/guide/part-3-technical-foundations/data-providers/accessing-data)** - APIs, bulk files, and authentication
 
 </Accordion>
 
 <Accordion title="Tools & Platforms">
 
+- **[Choosing Your Stack](/guide/part-3-technical-foundations/choosing-your-stack)** - The default stack and when to deviate
 - **[The VC Tech Stack](/guide/part-2-tech-stack/introduction)** - Complete survey of what tools matter
 - **[CRM & Deal Flow](/guide/part-2-tech-stack/crm-and-deal-flow)** - Choosing and implementing
-- **[Research Platforms](/guide/part-2-tech-stack/research-platforms)** - Building your thesis engine
+- **[Research Platforms](/guide/part-2-tech-stack/research-platforms)** - Connecting research across the team
 - **[Portfolio Support](/guide/part-2-tech-stack/portfolio-support)** - Different approaches and strategies
 
 </Accordion>
@@ -81,38 +43,6 @@ Looking for guidance on a specific technical challenge?
 <Accordion title="Security & Compliance">
 
 - **[Security & Compliance](/guide/part-3-technical-foundations/security-and-compliance)** - What matters, what doesn't
-- **[Common Mistakes](/guide/part-1-understanding-vc/common-mistakes)** - Understanding confidentiality requirements (see [mistake #5](/guide/part-1-understanding-vc/common-mistakes#mistake-%235%3A-not-understanding-data-sensitivity-and-compliance))
+- **[Common Mistakes](/guide/part-1-understanding-vc/common-mistakes)** - Understanding confidentiality requirements (see [mistake #5](/guide/part-1-understanding-vc/common-mistakes#mistake-%235-not-understanding-data-sensitivity-and-compliance))
 
 </Accordion>
-
-## Common Questions
-
-<AccordionGroup>
-  <Accordion title="Should I build or buy software for my fund?">
-    This depends on your fund's stage, resources, and specific needs. See:
-    - [Common Mistakes, #2](/guide/part-1-understanding-vc/common-mistakes#mistake-%232%3A-not-aligning-on-buy-vs-build-strategy)
-    - Part 2: The VC Tech Stack for category-by-category guidance
-  </Accordion>
-
-<Accordion title="What technology stack should I use?">
-  [Choosing Your Stack](/guide/part-3-technical-foundations/choosing-your-stack) covers technology
-  choices with VC-specific reasoning. The short answer: use boring, proven technology that AI coding
-  tools understand well (TypeScript/Python, Next.js, Postgres).
-</Accordion>
-
-<Accordion title="How do I model VC data correctly?">
-  [Data Modeling](/guide/part-3-technical-foundations/data-modeling) covers the critical distinction
-  between companies and deals, plus all the entity types you need to track. This is one of the most
-  common areas where developers go wrong.
-</Accordion>
-
-<Accordion title="What data providers should I use?">
-  [Data Providers](/guide/part-3-technical-foundations/data-providers) covers data providers by
-  category (company data, people data, signals), plus how to evaluate vendors and work with their
-  APIs.
-</Accordion>
-
-  <Accordion title="How do I handle data security and compliance?">
-    [Security and Compliance](/guide/part-3-technical-foundations/security-and-compliance) covers what's actually sensitive, what audit requirements matter, and how to balance security with productivity. Also see [Common Mistakes, #5](/guide/part-1-understanding-vc/common-mistakes#mistake-%235%3A-not-understanding-data-sensitivity-and-compliance).
-  </Accordion>
-</AccordionGroup>

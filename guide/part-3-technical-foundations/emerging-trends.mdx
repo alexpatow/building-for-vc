@@ -3,11 +3,7 @@ title: "Emerging Trends"
 description: "Decision APIs, smarter agent harnesses, and Claude and ChatGPT becoming application platforms - what changes for VC infrastructure."
 ---
 
-## Overview
-
 The useful question has changed from "where can we add an LLM?" to "how much of this workflow do we still need to build?" Model providers now supply more of the execution environment, integrations, and application experience. Meanwhile, decision models offer another way to put AI inside software without generating a written answer at every step.
-
-For a small technical team at a fund, these changes affect where you spend your time: buying an application, connecting data to an existing assistant, building a narrow workflow, or maintaining a custom product.
 
 ## Claude and ChatGPT Are Becoming Application Platforms
 
@@ -25,9 +21,33 @@ Keep a dedicated interface where it earns its place: comparing a pipeline of com
 
 Your investment shifts toward reliable data access, reusable instructions, and integration with the fund's records. Keep company IDs, source documents, and completed outputs available outside a single assistant's conversation history. If you change providers, you shouldn't have to reconstruct the portfolio from chat transcripts.
 
-**People across the fund can build on the same foundation**
+## Files, Retrieval, and Structured Data
 
-An investor may assemble a research workflow in an assistant while fund ops builds an interface in [Lovable](https://docs.lovable.dev/). You can support both with the same data and access controls. The [Common Mistakes chapter](/guide/part-1-understanding-vc/common-mistakes#you-dont-have-to-build-every-application-yourself) covers this division of work; [Security and Compliance](/guide/part-3-technical-foundations/security-and-compliance) covers the boundaries underneath it.
+For that founder briefing, the CRM can tell you when the team last met the company. The meeting notes tell you what the founder said. An agent with file tools can search those notes and follow links to the original memos. Keep documents in formats your team can maintain. Markdown works well for text research; PDFs and spreadsheets need suitable readers. You don't need to migrate everything into a git repository to make it useful to an agent.
+
+This is a good starting point for bounded tasks: compare these five memos, summarize this board pack, or find our previous research on a company. Keep links to the source documents so someone can check the answer.
+
+**When retrieval earns its place**
+
+Retrieval-augmented generation (RAG) means finding relevant evidence and providing it to the model. Vector search is one option; keyword search and database queries can also supply that evidence. An agent searching files is still retrieving information.
+
+Larger context windows don't make retrieval obsolete. You still need to find the right material, respect access permissions, handle updates, and control the cost of repeatedly reading documents. Compacted session summaries can lose details, so keep the underlying evidence available.
+
+For a shared research assistant over years of memos, indexed search may be more useful than repeatedly scanning folders. Try keyword search first, then semantic or hybrid search if the questions need it. Check whether the system finds the right evidence before judging how convincing its answers sound.
+
+[turbopuffer](https://turbopuffer.com/docs) supports vector and full-text search with metadata filtering, so you can combine semantic similarity with keyword matching in a RAG pipeline. Its storage architecture is built around object storage, with memory and SSD caching for queries.
+
+**Use structured data for structured questions**
+
+Ask your database which companies raised a Series A last quarter. Don't ask an agent to infer the list from a folder of documents when you already have funding-round records. Use SQL for filters, counts, and aggregations, as covered in [Data Warehousing](/guide/part-3-technical-foundations/data-warehousing).
+
+A [knowledge graph](/guide/part-3-technical-foundations/knowledge-graphs) can help with relationship questions such as paths between founders, employers, and co-investors. Those relationships remain useful even when a model can read longer documents. Start with relationships in your relational database and add graph infrastructure when actual queries justify it.
+
+**Test before adding infrastructure**
+
+Collect questions your team actually asks and identify the evidence needed to answer them. Include questions where the right response is "we don't have enough information." Compare file search with indexed retrieval on answer accuracy, source coverage, permissions, latency, and cost.
+
+These approaches can work together: query the CRM for companies, retrieve relevant memos, then read the original documents for detail.
 
 ## MCP, APIs, and CLI Tools
 
@@ -68,8 +88,6 @@ For a fund workflow, the useful harness improvements are concrete:
 - Validate extracted figures and retry the failed step, rather than rerunning the entire board-pack analysis
 - Save intermediate work and pause for a reviewer before updating shared records
 - Escalate an ambiguous case to a stronger model or a person
-
-Decision APIs could provide some of those routing and checking steps. That's an architectural option to evaluate, not a reason to replace deterministic checks with model calls.
 
 Before writing a custom harness, check what your agent product or SDK already handles. Own the fund-specific workflow and data connections; avoid maintaining a second implementation of session management just to run a weekly briefing.
 
@@ -114,38 +132,6 @@ You don't need to write the skill from scratch. Do the same task a few times wit
 
 When an agent needs to execute code, services such as [Modal Sandboxes](https://modal.com/products/sandboxes), [Vercel Sandbox](https://vercel.com/docs/vercel-sandbox), and [Sprites](https://sprites.dev/) provide isolated execution environments. Compare persistence, network controls, credential handling, and how a run is stopped or recovered. The security chapter covers how to limit access around those environments.
 
-## Files, Retrieval, and Structured Data
-
-Start with the simplest way to give an agent the evidence it needs. For a small collection of investment memos, that may mean searching files and reading the relevant documents. You don't need a vector database just to try answering questions about your research.
-
-**When working directly with files makes sense**
-
-An agent with file tools can search filenames and text, read documents, and follow references. Keep documents in formats your team can maintain. Markdown works well for text research; PDFs and spreadsheets need suitable readers. You don't need to migrate everything into a git repository to make it useful to an agent.
-
-This is a good starting point for bounded tasks: compare these five memos, summarize this board pack, or find our previous research on a company. Keep links to the source documents so someone can check the answer.
-
-**When retrieval earns its place**
-
-Retrieval-augmented generation (RAG) means finding relevant evidence and providing it to the model. Vector search is one option; keyword search and database queries can also supply that evidence. An agent searching files is still retrieving information.
-
-Larger context windows don't make retrieval obsolete. You still need to find the right material, respect access permissions, handle updates, and control the cost of repeatedly reading documents. Compacted session summaries can lose details, so keep the underlying evidence available.
-
-For a shared research assistant over years of memos, indexed search may be more useful than repeatedly scanning folders. Try keyword search first, then semantic or hybrid search if the questions need it. Check whether the system finds the right evidence before judging how convincing its answers sound.
-
-[turbopuffer](https://turbopuffer.com/docs) supports vector and full-text search with metadata filtering, so you can combine semantic similarity with keyword matching in a RAG pipeline. Its storage architecture is built around object storage, with memory and SSD caching for queries.
-
-**Use structured data for structured questions**
-
-Ask your database which companies raised a Series A last quarter. Don't ask an agent to infer the list from a folder of documents when you already have funding-round records. Use SQL for filters, counts, and aggregations, as covered in [Data Warehousing](/guide/part-3-technical-foundations/data-warehousing).
-
-A [knowledge graph](/guide/part-3-technical-foundations/knowledge-graphs) can help with relationship questions such as paths between founders, employers, and co-investors. Those relationships remain useful even when a model can read longer documents. Start with relationships in your relational database and add graph infrastructure when actual queries justify it.
-
-**Test before adding infrastructure**
-
-Collect questions your team actually asks and identify the evidence needed to answer them. Include questions where the right response is "we don't have enough information." Compare file search with indexed retrieval on answer accuracy, source coverage, permissions, latency, and cost.
-
-These approaches can work together: query the CRM for companies, retrieve relevant memos, then read the original documents for detail.
-
 ## Model Choice and Evaluation
 
 Don't bake one model ranking into your architecture. A decision model, a fast general model, and a more capable reasoning model can serve different steps of the same workflow.
@@ -162,11 +148,7 @@ Engineering teams outside VC have the resources to experiment with tooling you m
 
 These write-ups can be more useful than another model announcement. Look at how teams assemble context, make environments reproducible, and bring people into review. You can borrow individual pieces for your fund's setup without building the whole platform.
 
-**General tech communities**
-
-- **[X](https://x.com)**: Follow engineers building in the AI space, VC tech practitioners, and companies building tools for VCs. The signal-to-noise ratio is low, but you'll see emerging tools and approaches before they're widely adopted.
-
-- **[Hacker News](https://news.ycombinator.com)**: The Show HN section surfaces new tools and libraries. The comments often contain practical wisdom from people who've tried things in production. Good for understanding what's actually working versus what's just hype.
+**Hacker News** is worth reading for the comments alone. On [Show HN](https://news.ycombinator.com/show), you can try a tool and read the discussion with the person who built it. Look for the replies from people who’ve tried to solve the same problem.
 
 **VC-specific resources**
 
@@ -175,9 +157,3 @@ These write-ups can be more useful than another model announcement. Look at how 
 - **[VC Stack](https://www.vcstack.com/data-software-tools)**: Directory of data providers and software for VC funds. Useful for finding options before you decide to build.
 
 - **[Vestberry VC Day](https://vcday.vestberry.com/)**: Conferences focused on VC operations and technology. Good for understanding what funds of all sizes are building and what tools are emerging in the ecosystem.
-
-## The Bottom Line
-
-Try the existing application layer before building another interface. Claude, ChatGPT, and specialist products increasingly supply workflows that used to require a custom tool.
-
-Decision APIs are worth testing for classification, routing, and scoring inside those workflows. Smarter harnesses can handle the surrounding execution: context, state, retries, and review. Your fund's data, workflow definitions, and evaluation examples make these pieces useful together.

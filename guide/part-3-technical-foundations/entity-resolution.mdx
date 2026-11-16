@@ -3,19 +3,15 @@ title: "Entity Resolution"
 description: "Determining which records across different data sources refer to the same real-world entity - one of the hardest and most important data problems in VC."
 ---
 
-## Overview
+If a partner wants total funding in a market and one provider covers it, run the analysis there. For employee counts, a single [people-data source](/guide/part-3-technical-foundations/data-providers/people-data) may also cover the question. You need entity resolution when the answer depends on joining records from different places.
 
-When pulling company data from multiple sources (Crunchbase, PitchBook, LinkedIn, your CRM), the same company appears differently in each. "Acme Inc," "Acme Corporation," "Acme," "ACME, Inc.", all the same company, but your system doesn't know that.
+For example, you want funding rounds from PitchBook, hiring history from a people-data provider, and your team’s notes from the CRM. All three can name the same company differently. If you guess wrong, you can double-count its funding or miss that a partner already passed.
 
-Entity resolution is determining which records refer to the same real-world entity. Without it, you can't aggregate data, build accurate analytics, or track companies properly. It's one of the hardest and most important data problems in VC. Getting it right was significant to EQT's Motherbrain.
-
-This chapter covers why it matters, how to approach it (start simple, build up only when necessary), and what it takes to build your own system. Spoiler: start with URL matching and avoid building a full system as long as possible.
+Getting this right was a big part of what made EQT’s Motherbrain work. Each provider assigns its own IDs. Before you can ask which founders worked together or which investors backed the same companies, you need to know when two of those IDs refer to the same company or person.
 
 ## The Entity Resolution Problem
 
-**Company name variations**: "Stripe, Inc." vs "Stripe" vs "Stripe Payments" vs "Stripe Inc" (no period). These are all the same company, but string matching fails. Companies also rebrand ("Facebook" became "Meta"), get acquired (should "Instagram" be separate from Meta or merged?), and use different legal names in different jurisdictions.
-
-**URL variations**: "stripe.com" vs "https://stripe.com" vs "www.stripe.com" vs "stripe.com/". Same domain, different formats. Some sources include the protocol, others don't. Some include www, others don't. Trailing slashes are inconsistent.
+**Company name variations**: You might see ‘Stripe, Inc.’, ‘Stripe Inc’, and ‘Stripe Payments’ across three sources. Punctuation is easy to normalize. Whether a payments subsidiary and its parent should share a record depends on whether you’re tracking a brand or the legal entity that signed a deal.
 
 **Location variations**: "San Francisco, CA" vs "San Francisco, California" vs "SF" vs "San Francisco, CA, USA". Same location, different representations. Some sources use city and state, others add country, others use abbreviations.
 
@@ -25,63 +21,27 @@ This chapter covers why it matters, how to approach it (start simple, build up o
 
 **Missing data**: Not every source has every field. Crunchbase might have a LinkedIn URL, but PitchBook doesn't. One source has founding date, another doesn't. You need to match entities even with incomplete information.
 
-The fundamental challenge is that there's no universal, stable identifier for companies or people across all data sources. Each source assigns their own IDs. You need to create mappings between these IDs to know when records refer to the same entity.
-
 ## Why Entity Resolution Matters for VC
 
-Without entity resolution, your data infrastructure breaks in multiple ways.
+A sourcing feed surfaces Acme Robotics just before the pipeline meeting. Under its former name, the CRM already has the partner’s pass notes and the milestone they asked the founders to come back with. Linking the records changes the conversation from “who’s going to reach out?” to “did they hit that milestone?”
 
-**Analytics are wrong**: If "Acme Inc" and "Acme Corporation" are both in your database as separate companies, your portfolio size is overstated. Your market maps show duplicate companies. Your metrics count the same funding round twice if it appears in both Crunchbase and PitchBook under slightly different names.
-
-**You can't aggregate data**: You want to combine Crunchbase's funding data with PitchBook's valuation data and LinkedIn's employee count for the same company. Without entity resolution, you can't merge these data sources. You're stuck with fragmented, incomplete information about each company.
-
-**Knowledge graphs break**: If the same company appears as multiple nodes in your graph, relationships are split incorrectly. Investors appear to have invested in fewer companies than they actually did. People appear to work at multiple companies simultaneously. Competitive relationships are missed.
-
-**Sourcing is inefficient**: Your sourcing tool identifies "Acme Inc" as a potential investment. But you already passed on this company three months ago when it appeared in your CRM as "Acme Corporation." Without entity resolution, you waste time re-evaluating the same companies.
-
-**Portfolio tracking fails**: You invested in a company, but your fund operations system, CRM, and data warehouse all have different records for this company with no linkage. When the company raises a Series B (triggering a markup), you have to manually update multiple systems because they can't automatically recognize it's the same company.
-
-This isn't a nice-to-have. Entity resolution is foundational to making any cross-source data system work correctly.
+The same problem shows up in analytics. Matching Acme across two funding feeds lets you bring its rounds together. You still need to check whether the two entries for its Series A describe one round before you add up the money raised. In a network graph, splitting Acme across two nodes can hide a warm introduction because the founder is attached to one node and your co-investor to the other.
 
 ## Start Simple: See How Far You Can Get
 
-Before building anything sophisticated, see how far simple matching rules take you.
+**Match on company websites.** Parse the URL and compare the hostnames. For example, `stripe.com`, `https://www.stripe.com/`, and a link to a page on the Stripe website can all point you to the same company. Lowercase the hostname and standardize a leading `www.`. Keep the original URL too. Two startups hosted on the same publishing platform can share a hostname, and subsidiaries sometimes share their parent’s website.
 
-**Match on URLs**: Company websites are relatively unique and stable. If two records have the same domain (stripe.com), they're almost certainly the same company. Normalize the URLs first (remove protocol, remove www, remove trailing slashes, lowercase everything), then compare. This catches most matches.
+**Match on LinkedIn URLs.** Compare the profile itself. Stripping tracking parameters from `linkedin.com/company/stripe/?trk=feed` still leaves you with the company’s page. Stripping the whole path leaves you with LinkedIn. Keep company and personal profiles separate, and use the provider’s profile ID when it supplies one.
 
-**Match on LinkedIn URLs**: LinkedIn company pages have stable identifiers in their URLs (linkedin.com/company/stripe). If two records share the same LinkedIn URL, they're the same company. Same approach: normalize then compare. This also works well for people data.
-
-**Match on email addressses**: If you don't have reliable LinkedIn URLs for people, email addresses are usually the next best thing.
+**Match people on email addresses.** A direct email address is a useful second signal when a LinkedIn URL is missing. A shared inbox such as `info@example.com` tells you very little about which founder you met. An old work email can also explain why two records for the same person disagree.
 
 **Exact string matches**: After normalizing names (lowercase, remove punctuation, standardize "Inc" vs "Incorporated"), exact string matches catch many cases. "Stripe Inc" and "Stripe, Inc." become "stripe inc" and match.
 
-These simple rules will catch 70-80% of matches without any sophisticated infrastructure. Implement these first. Only move to more complex solutions when simple matching stops working.
+Measure how many records those rules resolve and inspect a sample of the matches. The remaining cases tell you whether you need fuzzy matching, better source data, or someone who knows the companies.
 
 **Why this matters**: Building an entity resolution system is expensive in engineering time and ongoing maintenance. Every hour spent on entity resolution is an hour not spent on research platforms, deal flow tools, or portfolio support. If simple rules handle most cases, that might be enough for your fund's scale.
 
-## Sometimes You Can Avoid Entity Resolution Entirely
-
-Before investing in sophisticated entity resolution, consider whether you actually need to combine data sources for your use case.
-
-**Use single authoritative sources**: Instead of stitching together funding data from Crunchbase, PitchBook, and your CRM, pick the best source for funding data (probably PitchBook) and use only that for market analysis. Don't try to combine them. This avoids the entity resolution problem entirely for that use case.
-
-**Examples where single-source works**:
-
-- Analyzing total funding in a market? Use PitchBook exclusively.
-- Tracking employee counts? Use LinkedIn data from one of the [People Data Providers](/guide/part-3-technical-foundations/data-providers/people-data) only.
-- Portfolio valuations? Use your fund operations system as the single source of truth.
-
-**When you actually need entity resolution**: Cross-source analysis where each source provides different valuable data. For example, Crunchbase has good early-stage company coverage, PitchBook has better late-stage data, and People Data Labs has employee information. If you need all three types of data for the same company, you need entity resolution to link them. But if you can answer your question with just one source, don't create unnecessary complexity.
-
-**The pragmatic approach**: Start by identifying which questions you're trying to answer. For each question, can you answer it with a single data source? If yes, use that source exclusively for that use case. Only invest in entity resolution when you have validated use cases that genuinely require combining multiple sources.
-
-This saves enormous engineering effort. **Entity resolution is hard.** Avoiding it when possible is smart, not lazy.
-
 ## Entity Resolution as a Service
-
-Before building your own system, consider whether services exist that solve this problem for you.
-
-**Services available**: Several vendors offer entity resolution as a service:
 
 - **[Senzing](https://senzing.com/)**: Real-time entity resolution focused on messy people and organization data. Available on AWS Marketplace, deploys in your infrastructure for data privacy and compliance. Good for company matching with inconsistent names and addresses.
 
@@ -95,19 +55,13 @@ These products differ in what they resolve, how you deploy them, and whether the
 
 **Use a library before writing a matching engine**: [Splink](https://moj-analytical-services.github.io/splink/index.html) is an open-source option for probabilistic record linkage. It gives you matching machinery, but you still need to prepare the data, evaluate matches, and run the pipeline. It isn't a finished application for your investment team.
 
-**Give non-technical colleagues a review workflow**: Start with your CRM's existing duplicate-management tools for CRM cleanup. For matches across sources, use a review queue in your existing internal tool: show records side by side, the fields that support the match, and options to accept, reject, or defer. Record who decided and preserve enough history to undo a mistake.
-
 **Keep your own canonical IDs**: Store vendor IDs as mappings to your internal entities. You can replace the matching engine without changing every application's company IDs. Check that you can export both mappings and review decisions before committing to a vendor.
 
 Buy when a service performs well on your data and saves enough ongoing work to justify its cost. Use simple rules or a library when they cover your needs. Either way, budget for human review.
 
 ## Building Your Own Entity Resolution Service
 
-When simple matching stops working and existing services or libraries don't meet your needs, you may need a custom system. This is where it gets hard.
-
 **The canonical ID approach**: Assign one internal ID per entity. Every company or person gets exactly one canonical ID in your system. All records from external sources (Crunchbase, PitchBook, LinkedIn, your CRM) map to these canonical IDs. When you query for a company, you query by canonical ID, which pulls data from all sources that reference that entity.
-
-This canonical ID becomes your "golden record" or "single source of truth" for each entity. External IDs come and go, but your canonical ID is stable.
 
 **Matching strategies for companies**:
 
@@ -115,9 +69,7 @@ When comparing two company records to decide if they're the same entity, match o
 
 - **Name**: Fuzzy string matching with normalization. Convert to lowercase, remove punctuation, standardize abbreviations ("Inc", "Corp", "Ltd"). Use string similarity algorithms (Levenshtein distance, Jaro-Winkler) to catch typos and minor variations.
 
-- **URL/Domain**: As mentioned earlier, this is your strongest signal. If domains match, very high confidence it's the same company.
-
-- **LinkedIn URL**: Similarly strong signal if available.
+- **Domain and LinkedIn page.** If a name change breaks the text match, a shared company page and a consistent domain history may still let you link the records. If those identifiers point to different companies, send the pair to review.
 
 - **Location**: City and country provide supporting evidence. "San Francisco" and "SF" should normalize to the same value. Location alone isn't sufficient (multiple companies in the same city), but combined with name similarity it strengthens confidence.
 
@@ -125,30 +77,44 @@ When comparing two company records to decide if they're the same entity, match o
 
 - **Description similarity**: Company descriptions can be compared using embeddings or keyword analysis. If two companies with similar names also have similar descriptions, higher confidence they're the same entity.
 
-**Probabilistic matching**: Instead of requiring exact matches on all fields, use a scoring system. If name is 90% similar, domain matches, and location matches, that's high confidence (>95%) they're the same entity. If only name is 70% similar and location matches, that's medium confidence (60-80%), might need human review. Define thresholds for automatic matching, human review, and rejection.
+**Probabilistic matching.** Score candidate pairs using several signals. Check the scores against matches and mismatches your team has verified, then set thresholds for automatic matching, review, and rejection.
+
+For example, two records called Acme in San Francisco are worth comparing. If both identify the same founder and company page, you have much stronger evidence. If one sells logistics software and the other is a fintech with a different founding team, the name and city alone would give you a bad merge. Look at examples on either side of your threshold before you put it into production.
 
 **Matching strategies for people**:
 
-- **LinkedIn URL**: Strongest signal. LinkedIn profiles have stable IDs.
-- **Email**: If you have email addresses from multiple sources, exact match is strong signal.
-- **Name + Company**: If first name, last name, and current company all match, very likely the same person.
+- **LinkedIn profile.** Compare the full personal profile or its ID across sources.
+- **Email.** An exact match on an individual address can connect a CRM contact to a founder record.
+- **Name and employer.** Use employment dates as well as names. An old record for Alex Smith at one company and a new record for Alexander Smith at another could be the same person after a move. Two people with the same name at a large employer could also be different people.
 
 **The incremental matching workflow**:
 
 When a new company record arrives from a data source:
 
-1. Check if it has a URL or LinkedIn URL that matches an existing canonical entity → if yes, link it
-2. If no URL match, check for high-confidence name + location match → if yes, link it
-3. If medium confidence match, flag for human review
-4. If no match found, create a new canonical entity
+1. Look up the source and its record ID. If you’ve already mapped that record, use its existing mapping unless new evidence calls it into question.
+2. Look for candidates by normalized domain, LinkedIn profile, or name and location. Compare the other fields before linking a new source record.
+3. Link high-confidence matches. Show ambiguous pairs to a reviewer, including the evidence for and against the match.
+4. If there’s no plausible match, create a canonical entity and save the source mapping so the next import can find it.
 
-This workflow runs every time you ingest data from external sources.
+### What gets stored after a match
+
+Suppose a fund has three records for the same business. The CRM calls it Acme and has the partner’s notes. The funding provider calls it Acme Robotics Inc. and supplies two rounds. The people-data feed has an older name, Acme Systems. Once someone confirms the match, keep the three records and map them to one internal company ID. A CRM record ID and a funding-provider ID might both happen to be 42, so include the source when looking up an external ID.
+
+| Source       | Source ID | Internal company ID | Evidence                                       |
+| ------------ | --------- | ------------------- | ---------------------------------------------- |
+| CRM          | 42        | 701                 | Company record reviewed by the deal lead       |
+| Funding feed | 42        | 701                 | Website and company profile agree              |
+| People feed  | 319       | 701                 | Reviewer confirmed the former name and founder |
+
+Now a partner can pull up Acme and see all three sources. You still have to decide which source to use for headcount and which reported the round. And if the people feed was actually describing another company, you can move that one mapping without detaching the original deal notes. If you’d overwritten everything with a single merged row, you’d have to reconstruct where each fact came from.
 
 ## Human-in-the-Loop: You'll Need It
 
 Automated matching will never be 100% accurate. You will have false positives (incorrectly merged entities) and false negatives (incorrectly split entities). You need tooling for humans to review and correct mistakes.
 
-**Review interface**: Show suggested matches with confidence scores. A human reviews the match (looking at names, URLs, descriptions, and any other data) and confirms or rejects it. This is especially important for medium-confidence matches where the algorithm isn't sure.
+**Review interface.** For CRM cleanup, start with the CRM’s own duplicate tools. For cross-source matches, show colleagues the two records, where each came from, and which fields matched. Let them confirm, reject, or defer a pair and keep their decision.
+
+Record who made the decision and why. If an associate has already ruled out a pair, the next nightly import should remember that. If the provider later supplies a missing company page, the reviewer can see what changed.
 
 **Merge interface**: When you discover two canonical entities that should be one (the algorithm missed a match), you need to merge them. This means:
 
@@ -163,38 +129,18 @@ Automated matching will never be 100% accurate. You will have false positives (i
 - Decide which external references belong to which entity (this is hard - you're untangling merged data)
 - Recalculate any analytics or relationships that were affected by the incorrect merge
 
-**Why you need these interfaces**: You will make mistakes. Automated matching will incorrectly merge "Acme Inc" (a fintech company in SF) with "Acme Corp" (a logistics company in NYC) because the names are similar and the algorithm wasn't confident enough to reject. You'll need to split them. Or the algorithm will miss that "Facebook" and "Meta" are the same company because they have different names and URLs. You'll need to merge them.
-
-These aren't edge cases. At scale, with hundreds of thousands of entities, you'll do splits and merges regularly. Build the tooling to make it easy, ideally for non-technical team members who understand the domain.
-
 ## Common Pitfalls
 
 **Matching too aggressively**: False positives are painful. If you incorrectly merge two different companies, all their data gets mixed together. Investors, employees, funding rounds, relationships: all incorrectly attributed to a single entity. This corrupts your analytics and is hard to untangle. Be conservative with automatic matching. When in doubt, flag for human review.
 
 **Matching too conservatively**: False negatives are also painful. If you don't merge the same company across sources, you have duplicate entities, fragmented data, and wrong analytics. Finding the right balance between false positives and false negatives is the art of entity resolution.
 
-**Not handling name changes over time**: Companies rebrand. Facebook became Meta. Google became Alphabet (with Google as a subsidiary). Your entity resolution needs to handle temporal changes. The same canonical entity might have multiple names over its history. Store name changes with effective dates so you know what to call the company at different points in time.
+Review some records your rules left unmatched as well as the pairs they joined. Looking only at accepted matches can make a system look excellent while it quietly leaves half the market map in duplicate. Choose the threshold for the job: a suggested duplicate in a CRM is cheap to dismiss, but an automatic merge that reassigns board materials is expensive to undo.
+
+For a vendor trial, give each candidate the same export of known matches, known non-matches, and uncertain pairs. Include companies that share a name, companies that changed their domain, founders who moved, and records with a missing website. Keep the uncertain ones separate when you score the results. A product that sends the hard cases to an analyst may be doing exactly what you want.
+
+Look at the review queue with the person who will own it. If the tool produces fifty suggested merges a week, can that person see the source records, explain a decision to the deal lead, and undo yesterday’s mistake? Include that work when you compare the managed service with running your own rules.
+
+**Name changes over time.** Keep former names and domains with the dates they were in use. When an analyst looks up Acme Systems from an old memo, they should find the company now called Acme Robotics and still be able to tell which name appeared in the memo.
 
 **Not handling acquisitions properly**: Is Instagram a separate entity from Meta? For some purposes yes (you want to track Instagram as a product), for others no (financially it's part of Meta). You might need different entity models for different use cases: legal entities (separate companies) vs. operational entities (products within a parent company).
-
-**No interface for fixing mistakes**: If the only way to merge or split entities is by manually editing database records, your non-technical team can't help. Mistakes will accumulate because fixing them is too hard. Build interfaces that make corrections easy.
-
-**Assuming automated matching is enough**: Even with sophisticated algorithms, human review is necessary. Budget time for reviewing medium-confidence matches and investigating reported issues. This is ongoing operational work, not one-time setup.
-
-**Not preserving history**: When you merge or split entities, log what happened and when. You might need to undo a merge. You might need to understand why analytics changed after an entity resolution update. Audit trails matter.
-
-## The Bottom Line
-
-Entity resolution is incredibly difficult. It's also fundamental to making multi-source data systems work correctly. Without it, you have duplicates, fragmented data, and wrong analytics.
-
-Start simple. Match on URLs and LinkedIn URLs. Normalize strings and do exact matching. See how far these basic rules take you. For many funds, especially smaller ones, this might be sufficient.
-
-Evaluate services and open-source libraries before building a matching engine. Compare them on your own data, include review costs, and keep your canonical IDs independent of the vendor.
-
-When you need to build your own system, use the canonical ID approach: one ID per entity, all external data maps to it. Match on multiple fields (name, URL, location, LinkedIn). Use probabilistic scoring to determine confidence. Automatically merge high-confidence matches, flag medium-confidence for human review.
-
-Build interfaces for splitting and merging entities. You will need them. Mistakes happen at scale, and you need tooling to fix them easily.
-
-Entity resolution was part of the secret sauce that made EQT's Motherbrain powerful. It's not a solved problem. It requires continuous investment and refinement.
-
-In the next chapter, we'll cover data quality and validation, which builds on entity resolution. Once you have canonical entities, you need to ensure the data about those entities is accurate, complete, and trustworthy.

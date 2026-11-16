@@ -3,21 +3,9 @@ title: "Fund Operations"
 description: "Understanding fund operations software - capital management, LP reporting, and the financial infrastructure every fund needs."
 ---
 
-## Overview
-
-Fund operations software handles the financial and administrative side of running a venture fund. Capital calls, distributions, LP reporting, portfolio valuations, compliance, and fund performance tracking. This is the infrastructure that keeps your fund running legally and financially.
-
-Many smaller funds, especially first-time fund managers, start with Excel spreadsheets. This can work for Fund I when you have a small number of LPs and a handful of investments. But as you scale into Fund II and Fund III, the migration debt piles up. You're managing multiple funds with different vintages, overlapping LPs with different commitment amounts across funds, and growing portfolio complexity. What was manageable in spreadsheets becomes error-prone and time-consuming.
-
-The right time to implement proper fund operations software is before you raise your second fund. Migrating one fund's historical data is manageable. Migrating two or three funds with years of capital calls, distributions, and portfolio changes is much harder.
-
-Unlike research platforms (which some funds might build) or sourcing tools (which some funds don't need), fund operations software is something every fund needs and should buy off the shelf. This is financial infrastructure. Don't build it yourself.
-
-This chapter covers what fund operations software actually does, how to choose between the main platforms, and how to make the transition smooth for your fund ops team.
+For most funds, I’d buy the software that handles capital calls, distributions, and LP reporting. A large firm with dedicated engineering and fund ops teams may have the expertise to build and maintain its own. If your first fund is running on spreadsheets, migrate before you raise Fund II. Reconstructing the history gets harder with every follow-on and distribution.
 
 ## What You Actually Need
-
-Fund operations software handles several core functions that every venture fund needs.
 
 **Capital management**: Track capital commitments from LPs, calculate how much to call from each LP when you need to draw down funds for investments, and maintain records of who has contributed what and when. When you invest in a company, the system helps you calculate the capital call amounts and generate notices. The actual issuance of capital calls and wire transfers typically happens through your fund administrator or banking systems, but the platform tracks everything for your records.
 
@@ -32,8 +20,6 @@ Fund operations software handles several core functions that every venture fund 
 **Fund forecasting**: Model out future fund performance. What happens if you deploy capital faster or slower? When will you need to make capital calls? When are distributions likely? What's the projected IRR and TVPI at different exit scenarios? This helps you manage the fund proactively and communicate with LPs about future expectations.
 
 **Compliance and audit**: Maintain the documentation and records that auditors and regulators require. Track management fee calculations, expense allocations, and financial statements. When your annual audit happens, the system should have everything the auditors need.
-
-**Fundraising support**: Beyond ongoing operations, these systems can generate materials useful for fundraising your next fund. Track record tear sheets, portfolio summaries, performance metrics presented in LP-friendly formats. This becomes valuable when you're raising your next fund and need to show your track record.
 
 ## Choosing a Platform
 
@@ -51,8 +37,6 @@ Several platforms serve the venture fund operations space. All handle core funct
 
 ## Things to Consider When Evaluating
 
-Beyond core functionality, there are a few things worth thinking about when choosing a platform.
-
 **Ecosystem lock-in**: Some platforms, particularly Carta, want you in their full ecosystem: fund administration, cap table management, portfolio company equity. This can be convenient if you're already committed, but makes switching costs high. If you use a different fund administrator or want flexibility, make sure the platform works well standalone.
 
 **Data model flexibility**: Fund operations involves messy data. Companies have multiple funding rounds, complex cap tables, and valuations that change quarterly. Some platforms are rigid. Fixed fields, fixed workflows, fixed reports. Others let you customize. The tradeoff is that rigid platforms are faster to set up but frustrating when your process doesn't match their assumptions. Ask how the platform handles edge cases specific to your fund.
@@ -65,11 +49,7 @@ Beyond core functionality, there are a few things worth thinking about when choo
 
 ## Making the Transition
 
-The hardest part of adopting fund operations software isn't choosing the platform. It's transitioning your data and getting your fund ops team to actually use it.
-
 **Onboard your fund ops team first**: Don't surprise your CFO or fund administrator with a new system. Involve them in the decision. Have them test the platforms. Get their buy-in. They need to use this regularly. If they find it confusing or harder than their current process, they'll resist and you'll end up maintaining two systems.
-
-The best implementations start with "what will make this easier for the operations team?" not "what has the most features?" A system they actually use is better than a sophisticated system they work around.
 
 **Transition quickly**: The worst situation is maintaining two systems of record for your fund's finances. Dual entry creates errors, inconsistency, and extra work. Set a hard cutoff date. Move all data into the new system. Deprecate the old system. Don't let "we'll transition gradually" drag on for months.
 
@@ -79,22 +59,4 @@ Plan the transition during a quiet period if possible. After you've closed quart
 
 **Start with the basics**: Don't try to configure every feature on day one. Get capital management, portfolio tracking, and LP reporting working first. You can add fund forecasting models, portfolio metrics tracking, and sophisticated analytics later. The core operations need to work before you optimize.
 
-## Beyond Operations: Fundraising Value
-
-Fund operations software isn't just for managing your current fund. It becomes valuable when you're raising your next fund.
-
-**Track record materials**: When you raise Fund II, you need to show Fund I's track record. Portfolio company performance, investment pace, realized returns, DPI and TVPI metrics. A good operations platform can generate these materials in formats LPs expect. You're not building presentation materials from scratch or manually pulling data from spreadsheets.
-
-**Portfolio summaries**: LPs want to see your portfolio companies, investment dates, check sizes, current valuations, and performance. Operations platforms can generate these summaries automatically with current data. As portfolio companies raise new rounds or exit, the system updates. Your fundraising materials stay current.
-
-**Performance metrics**: IRR, TVPI, DPI, MOIC calculated consistently and presented in standard formats. LPs compare these metrics across many funds. Having clean, auditable data from your operations platform makes fundraising more credible than metrics calculated in spreadsheets.
-
-This isn't the primary reason to implement fund operations software. But when you're raising your next fund, you'll be grateful you have clean historical data and can generate track record materials quickly.
-
-## The Bottom Line
-
-Buy fund operations software. Don't build it. This is financial infrastructure that needs to be correct, auditable, and maintained. Choose based on integration with your existing systems and what your fund ops team finds easiest to use.
-
-The exception: very large funds with significant engineering and operations resources have built custom fund operations platforms including LP portals, automated reporting, and investor relations tools. If you're managing multiple billion-dollar funds with dedicated platform teams, custom infrastructure might make sense. For everyone else, even large established funds, buying off the shelf is the right choice.
-
-In the next chapter, we'll look at portfolio support tools, which help you add value to your portfolio companies after you invest.
+When you raise the next fund, the same records supply investment dates, check sizes, valuations, and distributions for the track record. [Fundraising](/guide/part-2-tech-stack/fundraising) covers how those materials reach prospective LPs.

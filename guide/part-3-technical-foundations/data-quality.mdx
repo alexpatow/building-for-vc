@@ -3,21 +3,13 @@ title: "Data Quality and Validation"
 description: "How to minimize data quality problems, surface uncertainty, and maintain trust with your investment team despite the inherent messiness of external data."
 ---
 
-## Overview
-
 You will show bad data to a GP. It's inevitable. A company in your market map that shut down two years ago. Funding amounts that are wrong. Employee counts that are wildly inaccurate. A competitor analysis that misses obvious competitors or includes companies that aren't actually competitive. This happens to everyone building data infrastructure for VC.
-
-The question isn't whether you'll have data quality problems. The question is how you minimize them, how you surface them when they exist, and how you maintain trust with your investment team when bad data inevitably makes it through.
 
 Data quality in VC is particularly challenging because you're aggregating data from multiple external sources, none of which are perfect. Crunchbase has gaps. PitchBook has errors. LinkedIn data is stale. Your CRM has whatever your team bothered to enter. Company websites lie. Every data source has different coverage, accuracy, and freshness characteristics.
 
 Unlike operational systems where you control data entry and can enforce validation rules, VC data comes from the outside world. You don't control when companies update their information. You can't force data vendors to be more accurate. You're playing defense, trying to catch errors before they damage your credibility with the people who make investment decisions.
 
-This chapter covers how to think about data quality in VC, how to choose and validate data sources, how to handle conflicting information, and how to build trust with your investment team despite the inherent messiness of external data.
-
 ## Selecting and Evaluating Data Sources
-
-Not all data is equally trustworthy. Data quality starts with choosing the right sources and understanding what you can trust them for.
 
 **The trust hierarchy**
 
@@ -31,75 +23,49 @@ Not all data is equally trustworthy. Data quality starts with choosing the right
 
 Take 10-20 portfolio companies and check vendor accuracy: funding data, employee counts, descriptions, update speed. This reveals which vendors are reliable for which data types. Use this analysis to pick your authoritative source for each data type. Don't guess.
 
+Make one row per company and one column per field you actually buy the feed for. Use the round amount you know from closing documents, the date the round closed, and the date the vendor first reported it. A correct amount reported three months late is still useful for historical analysis. For an alert that’s supposed to tell a partner who is raising this week, it’s a miss.
+
+Keep a place for ‘unknown’ in the results. If your firm didn’t participate in a round and you don’t know the amount, you can’t score the vendor as wrong. Ask an associate to look at the disagreements: the vendor might be counting a seed extension separately while fund ops includes it in the original round. That tells you more about whether you can use the feed than a single accuracy percentage.
+
 **Pick one source per use case**
 
-The best way to avoid data quality problems is to not merge sources unnecessarily. Analyzing total market funding? Pick PitchBook and use only that. Don't combine multiple sources, entity resolution creates new errors. Only merge when each source provides unique value and it's required for the type of analysis you're doing.
+Choose an authoritative source for each figure. If you do need to combine records from several vendors, [Entity Resolution](/guide/part-3-technical-foundations/entity-resolution) covers how to match them.
 
 ## The Validation Challenge
 
-You want validation rules that catch errors before bad data reaches your investment team. In theory, this makes sense. In practice, it's much harder than you'd expect.
-
-**Why automated validation is limited**
-
 In operational systems, you can validate that email addresses have @ symbols, that phone numbers are numeric, that dates are in the future for scheduled events. These rules work because the domain is constrained and you control data entry.
 
-VC data doesn't work like this. Should Seed Rounds be less than \$1B? Usually, but Thinking Machines raised \$2B right off the bat. Should valuations increase with each round? Usually, but down rounds happen. Should funding dates be chronological? Usually, but sometimes rounds are announced retroactively. Should employee counts increase over time? Usually, but companies do layoffs.
-
-Every validation rule you write will have exceptions. Real companies don't follow clean patterns. Markets are messy. You'll either have rules so strict they flag too many false positives (wasting time investigating legitimate data), or rules so loose they miss real errors.
-
-**Domain knowledge over automation**
+A valid number can still be a surprise. Down rounds happen, employee counts fall after layoffs, and a round announced today may have closed last quarter. Those cases are worth checking before a validation rule drops them.
 
 The most effective validation is humans with industry knowledge reviewing data. Someone who knows the fintech space will immediately spot that "Stripe raised a $10M Series A in 2023" is wrong because Stripe raised their Series A over a decade ago. Someone who follows AI infrastructure companies will know which competitors belong in a market map. Automated systems won't catch these errors because they lack context.
 
 This is why **you should know the industries and markets your fund focuses on**. If you're building data infrastructure for a fintech fund, learn fintech. If you're supporting a deep tech fund, understand deep tech. Domain knowledge is your best validation tool.
 
-**The gut feel test**
-
 When you build an analysis, look at it yourself before showing it to anyone. Does it pass the gut feel test? If you're showing a market map of 200 AI companies and you've never heard of 150 of them, something is probably wrong with your sourcing criteria. If funding totals seem way too high or too low compared to what you know about the market, investigate. Your intuition catches problems that automated validation misses.
-
-This is another reason why domain knowledge matters. You need a gut feel for what's reasonable.
 
 ## Handling Data Staleness
 
-Data gets stale. Companies update their information irregularly. Data vendors scrape on their own schedules. Your CRM is only as fresh as your last conversation with a company. Staleness is inevitable, but you can manage it.
-
-**Surface freshness to users**
-
 Always show when data was last updated. If you're displaying employee count, show "500 employees (as of Dec 2024)." Don't present stale data as if it's current.
-
-This does two things. First, it sets appropriate expectations. Users know whether to trust the data for current decisions. Second, it shifts responsibility. If a GP uses 6-month-old employee counts and makes a decision based on that, they knew the data was old. You're not hiding staleness.
-
-**Push vendors to refresh**
 
 Some data vendors have refresh or rescrape endpoints. If you need current data on a specific company, you can request that they update it. This works for high-priority companies (companies you're actively diligencing, portfolio companies) but doesn't scale to refreshing your entire database daily.
 
 Use selective refresh strategically. When you're preparing a market map for Monday's partner meeting, refresh the key companies in that market over the weekend. Don't try to keep everything fresh all the time.
 
-**Know when staleness matters**
-
 For some use cases, stale data is fine. If you're analyzing funding trends over the past five years, using data from three months ago is perfectly adequate. If you're building a list of potential competitors for a portfolio company, employee counts from six months ago are probably close enough.
-
-Staleness matters most for real-time decision-making. If a GP is deciding whether to take a meeting with a company this week, you want current information. If you're doing background research on a market, last quarter's data is fine.
-
-Understand which of your use cases are time-sensitive and prioritize freshness there.
 
 ## Building Trust with GPs
 
-You will show bad data to your investment team. How you handle it determines whether they trust you going forward.
-
 **Demo to friendly associates first**. Before presenting to partners, show it to a junior associate who knows the market. They'll spot embarrassing mistakes before decision-makers see them. An associate telling you "Airbnb didn't raise a Series A in 2023" is much better than a GP saying it in front of the partnership.
 
-**Always cite sources**. "Funding data from PitchBook, as of January 2026." "Employee counts from LinkedIn." This sets expectations (people know PitchBook is reliable, LinkedIn is approximate) and lets you shift blame when data is wrong. "This is what PitchBook reported" is better than "this is what I analyzed."
+**Cite the source next to the figure.** “500 employees on LinkedIn” and “500 employees reported by the CFO” give the deal team different answers to “how sure are we?”
 
-**Entity resolution makes blame-shifting harder**. When you merge multiple sources and the data is wrong, whose fault is it? The vendor, the matching algorithm, or your choice of which source to trust? This is a hidden cost of entity resolution. Single-source analyses let you point to the provider when things are wrong.
+Keep the source for each field when you combine records. A single ‘last updated’ timestamp for the company profile is misleading if the employee count came in yesterday but the valuation hasn’t changed since 2022. When a partner spots an error, you want to know which feed and which observation produced it.
 
 **Learn from each mistake**. When bad data reaches GPs, figure out why and fix the root cause. Report errors to vendors. Improve entity resolution. Don't use low-trust data for high-stakes analysis. Each mistake is a chance to improve your infrastructure.
 
 **Accept imperfection**. Even with perfect processes, external data will have errors. Set this expectation with your team: "We use PitchBook, which is generally accurate but has occasional errors." Better than promising perfect data and failing to deliver.
 
 ## Prevention and Detection
-
-Good data quality comes from both preventing bad data from entering your systems and detecting it when it does.
 
 **Prevention: Good ingestion practices**
 
@@ -110,8 +76,6 @@ When you ingest data from external sources:
 - Version your data so you can see what changed and when
 - Flag data from low-trust sources so it doesn't get used inappropriately
 
-These practices don't prevent all errors, but they prevent careless mistakes and make debugging easier when problems arise.
-
 **Detection: Monitoring for obvious errors**
 
 Set up automated tests that run frequently to catch data quality issues before they reach users. [dbt](https://www.getdbt.com/) tests are particularly good for this. They let you define tests in SQL that run against your data warehouse and alert you when things break.
@@ -119,35 +83,7 @@ Set up automated tests that run frequently to catch data quality issues before t
 **Examples of useful dbt tests for VC data:**
 
 - Uniqueness: Each company should have only one canonical ID
-- Not null: Required fields like company name, founding date are populated
+- Not null: Every company has a name. Leave the founding date empty if the source doesn't know it.
 - Relationships: Every investment references a valid company and investor
 
 Run these tests frequently (daily or after each data ingestion). When tests fail, you get alerts before bad data reaches dashboards or analyses.
-
-**Human review for important analyses**
-
-Anything that will be seen by GPs or partners should have human review. You look at it (gut feel test), a friendly associate looks at it (domain knowledge check), and only then does it go to decision-makers. This doesn't scale to every query, but for high-stakes deliverables, human review is essential.
-
-## The Bottom Line
-
-Data quality in VC is hard. You're aggregating external data you don't control, from sources with different accuracy and freshness characteristics, for users who make high-stakes decisions based on that data. You will show bad data to GPs. It's inevitable.
-
-Your job is to minimize errors, surface uncertainty when it exists, and maintain trust despite the inherent messiness of external data.
-
-**Understand trust levels**: Internal data > established vendors > scraped data. Use this to guide what data you use for what purposes.
-
-**Use portfolio companies to validate**: Test vendor accuracy against companies you know well. Use this to pick authoritative sources for each data type.
-
-**Pick one source per problem**: Don't try to merge PitchBook and signal providers for the same use case. Pick the best source and stick with it. Entity resolution creates new opportunities for errors.
-
-**Domain knowledge over automation**: Automated validation rules have limited value. Humans with industry knowledge catch more errors than algorithms.
-
-**Surface freshness**: Always show when data was last updated. Don't present stale data as current.
-
-**Always cite sources**: Let users know where data came from so they can calibrate trust and so you can shift blame when vendors are wrong.
-
-**Demo to friendly associates first**: Catch embarrassing mistakes before they damage credibility with GPs.
-
-**Accept imperfection**: External data will have errors. Set expectations appropriately rather than promising perfect data.
-
-In the next chapter, we'll cover data warehousing and analytics: once you have data (imperfect as it is), how do you structure it, analyze it, and surface insights that GPs actually use?

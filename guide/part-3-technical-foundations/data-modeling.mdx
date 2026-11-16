@@ -3,17 +3,60 @@ title: "Data Modeling for Venture Capital"
 description: "How to structure VC data, the critical distinction between companies and deals, and practical patterns for modeling the investment lifecycle."
 ---
 
-## Overview
+## Companies vs. Deals: The Critical Distinction
 
-How you model your data determines what you can analyze, how fast you can build features, and whether your systems adapt as needs evolve. This chapter covers core entities, the critical distinction between companies and deals, temporal data handling, and practical patterns from building real VC systems.
+**A company is an entity that exists independently of your fund.** Stripe is a company. It has founders, funding rounds, employees, a product, customers. Stripe exists whether or not your fund ever talks to them.
 
-## Core Entities and Relationships
+**A deal is your fund's relationship with a company.** You sourced Stripe, you met with the founders, you decided to invest (or pass), you negotiated terms, you closed the investment. The deal represents your fund's interaction with that company.
 
-Your data model will vary based on what you're building (CRM, research platform, portfolio dashboard), but most VC systems share common entities.
+Your fund can have multiple deals with the same company. You might:
 
-**Companies** - Startups you might invest in, portfolio companies, competitors. Core attributes: name, description, website, founding date, location, sector, stage. Companies are the center of your data model.
+- Pass on their seed round (Deal 1: Status = Passed)
+- Invest in their Series A two years later (Deal 2: Status = Closed)
+- Consider a follow-on in their Series B (Deal 3: Status = In Diligence)
 
-**Deals** - Your fund's relationship with a company (covered in detail in the next section). One company can have multiple deals: you might pass on their seed round, then invest in their Series A.
+Each deal has different properties: deal source, who at your fund is leading it, what stage it's at, when you first talked to them, what your investment thesis was, what terms you negotiated. These properties belong to the deal, not the company.
+
+Suppose two partners are looking at the same startup through different vehicles. They share the company website, founders, and past financing rounds. One vehicle can pass because of stage while the other takes the deal to IC. If changing the first record to ‘passed’ takes the company off both partners’ pipelines, you’ve put the decision on the wrong object.
+
+Meanwhile, company properties (employee count, funding history, product description) are shared across all deals. If you update Stripe's employee count, that change applies regardless of which deal you're looking at.
+
+```sql
+-- Companies table
+CREATE TABLE companies (
+  id UUID PRIMARY KEY,
+  name TEXT NOT NULL,
+  website TEXT,
+  description TEXT,
+  founded_date DATE,
+  location TEXT,
+  sector TEXT,
+  stage TEXT,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+);
+
+-- Deals table
+CREATE TABLE deals (
+  id UUID PRIMARY KEY,
+  company_id UUID REFERENCES companies(id), -- Foreign key to company
+  fund_id UUID REFERENCES funds(id), -- Which of our vehicles is considering this deal
+  deal_name TEXT, -- "Stripe Series A"
+  status TEXT, -- Sourced, Meeting, Diligence, IC, Term Sheet, Closed, Passed
+  source TEXT, -- How we found this company (warm intro, Harmonic, conference)
+  lead_investor UUID REFERENCES people(id), -- Who at our fund is leading
+  initial_contact_date DATE,
+  last_activity_date DATE,
+  investment_amount NUMERIC,
+  ownership_percentage NUMERIC,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+);
+```
+
+When you query deals, you join to companies to get company information. When you're analyzing companies (building market maps, tracking sectors), you query companies directly without caring about deals.
+
+## Other entities to model
 
 **People** - Founders, executives, employees. Core attributes: name, email, LinkedIn URL. People connect to companies through roles, not direct relationships.
 
@@ -23,11 +66,13 @@ Your data model will vary based on what you're building (CRM, research platform,
 
 **Funding Rounds** - Capital raised by companies. Attributes: round type, amount, valuation, dates, investors. Expect messiness: unreported SAFE notes, incomplete data from vendors, unannounced rounds. Your data model needs to handle uncertainty (covered in "Dealing with Messy Reality" below).
 
-**Investors and Funds**
+**LPs (Limited Partners)** - Individuals and institutions who invest in your fund. Required for fund operations tools or LP portals. LPs can be individuals (HNWIs with personal info) or institutions (pension funds, endowments with organizational info). Model with a type field and nullable columns, or separate tables if managed differently.
+
+The list above isn't exhaustive. Depending on what you're building, you might also model: board seats, advisors, customers (for B2B portfolio companies), competitors, acquisitions, exits, fund entities (if you manage multiple funds), and more. Start with the entities your application actually needs, not a comprehensive schema you think you might need someday.
+
+### Investors and funds
 
 Other VC firms, angels, corporate investors who participate in rounds. You care about investors for co-investment patterns, warm intro paths, and understanding who's active in your sectors.
-
-**Distinguish the investor from the vehicle that wrote the check. Capture the detail you actually know.**
 
 One firm can manage several funds with different mandates. For your own investments, you need to know which fund or SPV invested: ownership, reserves, and returns belong to that vehicle. Keep decisions such as a fund passing on a deal in your deal records, not in a table of completed round participations.
 
@@ -74,77 +119,9 @@ CREATE TABLE funding_round_participants (
 
 The composite foreign key prevents you from attaching one firm's fund to another investor's participation. If two vehicles from the same firm invest in a round, record each participation separately. Don't also count the firm-level vendor record as another investment. Preserve the source and when you observed it so you can reconcile later updates.
 
-Public announcements and vendor feeds vary in detail. Only fill in the specific fund when you have evidence for it. If your application only needs investor-level market research, you can start there and add vehicle detail when the workflow needs it.
-
-**LPs (Limited Partners)** - Individuals and institutions who invest in your fund. Required for fund operations tools or LP portals. LPs can be individuals (HNWIs with personal info) or institutions (pension funds, endowments with organizational info). Model with a type field and nullable columns, or separate tables if managed differently.
-
-The list above isn't exhaustive. Depending on what you're building, you might also model: board seats, advisors, customers (for B2B portfolio companies), competitors, acquisitions, exits, fund entities (if you manage multiple funds), and more. Start with the entities your application actually needs, not a comprehensive schema you think you might need someday.
-
-## Companies vs. Deals: The Critical Distinction
-
-The most important modeling decision in VC systems is separating companies from deals.
-
-**A company is an entity that exists independently of your fund.** Stripe is a company. It has founders, funding rounds, employees, a product, customers. Stripe exists whether or not your fund ever talks to them.
-
-**A deal is your fund's relationship with a company.** You sourced Stripe, you met with the founders, you decided to invest (or pass), you negotiated terms, you closed the investment. The deal represents your fund's interaction with that company.
-
-**Why separate them?**
-
-Your fund can have multiple deals with the same company. You might:
-
-- Pass on their seed round (Deal 1: Status = Passed)
-- Invest in their Series A two years later (Deal 2: Status = Closed)
-- Consider a follow-on in their Series B (Deal 3: Status = In Diligence)
-
-Each deal has different properties: deal source, who at your fund is leading it, what stage it's at, when you first talked to them, what your investment thesis was, what terms you negotiated. These properties belong to the deal, not the company.
-
-Meanwhile, company properties (employee count, funding history, product description) are shared across all deals. If you update Stripe's employee count, that change applies regardless of which deal you're looking at.
-
-**In practice, this means separate tables:**
-
-```sql
--- Companies table
-CREATE TABLE companies (
-  id UUID PRIMARY KEY,
-  name TEXT NOT NULL,
-  website TEXT,
-  description TEXT,
-  founded_date DATE,
-  location TEXT,
-  sector TEXT,
-  stage TEXT,
-  created_at TIMESTAMP,
-  updated_at TIMESTAMP
-);
-
--- Deals table
-CREATE TABLE deals (
-  id UUID PRIMARY KEY,
-  company_id UUID REFERENCES companies(id), -- Foreign key to company
-  deal_name TEXT, -- "Stripe Series A"
-  status TEXT, -- Sourced, Meeting, Diligence, IC, Term Sheet, Closed, Passed
-  source TEXT, -- How we found this company (warm intro, Harmonic, conference)
-  lead_investor UUID REFERENCES people(id), -- Who at our fund is leading
-  initial_contact_date DATE,
-  last_activity_date DATE,
-  investment_amount NUMERIC,
-  ownership_percentage NUMERIC,
-  created_at TIMESTAMP,
-  updated_at TIMESTAMP
-);
-```
-
-When you query deals, you join to companies to get company information. When you're analyzing companies (building market maps, tracking sectors), you query companies directly without caring about deals.
-
-This separation is fundamental to building VC software that works. If you try to embed deals into the companies table or vice versa, you'll create a mess that's hard to query and impossible to extend. As emphasized in [CRM and Deal Flow](/guide/part-2-tech-stack/crm-and-deal-flow) on CRM, this distinction is one of the most important architectural decisions you'll make.
+Suppose your CRM names the firm, one data provider names Fund II, and another just repeats the firm name. All three observations may concern one investment. Keep the source records so you can reconcile them when the vehicle is confirmed. Summing the three observations would inflate both participation and investment totals.
 
 ## Dealing with Messy Reality
-
-VC data is messy. Your data model needs to account for this rather than assuming perfect information.
-
-**Don't assume GPs make one investment per company**
-
-As covered above, model deals separately from companies. Your fund might invest multiple times, or pass then later invest, or invest then later decline a follow-on. The data model needs to support multiple deals per company.
 
 **Don't assume perfect funding round data**
 
@@ -196,6 +173,8 @@ With this structure, you can query "show me all founders who worked at Google" (
 
 If you tried to store current role and education as fields in the people table, you'd lose history and couldn't answer these questions.
 
+For an introduction, you may need to ask whether two people actually overlapped. If one left an employer in 2018 and the other joined in 2021, a shared company ID gives you a candidate connection, but the employment dates explain why the two may never have met. Keep an unknown end date distinguishable from a role you know has ended.
+
 ## Temporal Data and History
 
 Companies change constantly. Employee count grows. Funding rounds happen. Valuations change. Products pivot. You need to decide what history to keep and how to model it.
@@ -245,20 +224,35 @@ ORDER BY company_id, fetched_at DESC
 
 Now you have both: `pitchbook_company_changes` (full history) and `pitchbook_companies` (latest values). Applications usually query the latest values table. When you need to analyze "how did this company change over time?" you go back to the append-only table or create a custom table for those types of queries.
 
-**What history actually matters**
-
 For standard company datasets, storage cost is rarely the main reason to discard useful history. Keeping snapshots in staging tables can be simpler than predicting which changes will matter later. Size the data and estimate storage costs rather than assuming every source is cheap to retain.
 
 The practical considerations are query performance and data warehouse costs (if you're using Snowflake or BigQuery where you pay per query). But even there, you're usually querying the transformed and materialized "latest values" tables, not the full historical append-only tables.
 
 Retention and deletion are covered in [Security and Compliance](/guide/part-3-technical-foundations/security-and-compliance).
 
+A snapshot captured in June tells you what the vendor reported in June. If a round closed in March and the vendor first picked it up in May, those are two different dates. Use the closing date to analyze investment activity. Use the observation date if a partner asks what you could have known at the time.
+
+### Reconstructing what a partner could see
+
+Suppose you’re rebuilding a market map for an IC meeting held on April 1. Filtering the latest company table to firms founded before April gets you today’s descriptions and employee counts for those firms. It also includes companies the feed picked up in May. To recreate the information available for the meeting, filter the observations by when you received them, then take the last observation per company.
+
+The following query uses the fields in the history table above. The cutoff is the start of April 1 in the same time zone used for ingestion. Here the question is what the team knew **before** that date.
+
+```sql
+WITH observations AS (
+  SELECT company_id, name, employee_count, fetched_at,
+         ROW_NUMBER() OVER (
+           PARTITION BY company_id
+           ORDER BY fetched_at DESC, created_at DESC, id DESC
+         ) AS recency
+  FROM pitchbook_company_changes
+  WHERE fetched_at < '2025-04-01' AND company_id IS NOT NULL
+)
+SELECT company_id, name, employee_count, fetched_at
+FROM observations
+WHERE recency = 1;
+```
+
+A missing company here means you have no qualifying observation for it. That’s different from observing a company and receiving a null employee count. It’s also different from having a source that backfills historical estimates today. If you promise to reconstruct what the team actually saw, those distinctions matter.
+
 As you add more data sources, follow dbt's layered approach (staging → intermediate → marts) to stay organized. The [Data Warehousing](/guide/part-3-technical-foundations/data-warehousing) chapter covers this methodology in detail.
-
-## The Bottom Line
-
-Accept that VC data is messy: multiple investments per company, imperfect funding data, overlapping experiences. Your data model should handle uncertainty and incomplete information.
-
-Separate companies from deals. Use append-only tables for history and transform to latest values for queries. Start with what you need and add entities as your systems grow.
-
-In the next chapter, we'll cover more advanced entity resolution: matching the same company across different data sources when they use different names, formats, and identifiers.
