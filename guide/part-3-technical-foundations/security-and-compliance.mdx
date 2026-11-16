@@ -1,148 +1,167 @@
 ---
 title: "Security and Compliance"
-description: "Handling sensitive data, basic security principles, and working with compliance teams - what you need to know as a VC technologist."
+description: "Protecting fund data across internal tools, AI agents, and user-built applications - practical controls, vendor review, and incident response."
 ---
 
 ## Overview
 
-VC funds handle sensitive data. Information about LPs (limited partners) who invest in your fund. Material non-public information (MNPI) about companies you're evaluating or have invested in. Portfolio company financials, cap tables, and metrics. Internal investment memos with proprietary analysis. All of this needs to be protected both for regulatory reasons and to maintain trust with LPs, portfolio companies, and the founders you work with.
+Your fund's security model needs to work even when someone builds a new application in an afternoon. Investors, legal, and fund ops can increasingly build their own tools. Agents can search documents, query your CRM, and take actions across systems. That's useful, but it puts more responsibility on the infrastructure underneath them.
 
-This chapter isn't a comprehensive guide to SEC regulations or compliance frameworks. Those require specialized legal and compliance expertise that goes beyond technical implementation. Instead, this chapter covers what you need to know as someone building technology for a VC fund: what sensitive data exists, why it matters, basic security principles you should follow, and when to involve compliance and legal teams.
+You can't review every prompt or rely on everyone building an application to understand security. Make identity, permissions, data access, deployment, and logging reusable. A new application should inherit the fund's boundaries instead of inventing its own.
 
-The bottom line: take security seriously, use proven tools rather than building your own, and work closely with your fund's compliance officers and lawyers on anything related to regulatory requirements.
+This chapter covers the engineering work: protecting sensitive data, connecting AI tools safely, supporting applications built by colleagues, and preparing for things going wrong. Your compliance and legal teams determine which obligations apply. Your job is to make those obligations enforceable in the systems you build.
 
-## Sensitive Data and Why It Matters
+## Know What You're Protecting
 
-VC funds handle several types of sensitive data. Understanding what's sensitive and why it matters helps you make the right decisions about access controls, encryption, and retention policies.
+Start with the data and its permitted uses. "Internal" is too broad a classification to make useful access decisions.
 
-**LP (Limited Partner) PII**
+**LP information** includes contact details, tax identifiers, bank details, commitments, and subscription documents. Collect only what your workflow needs. If the fund administrator holds identity documents, your dashboard probably doesn't need another copy.
 
-Your LPs are individuals and institutions who have invested money in your fund. You have their personal information: names, addresses, social security numbers or tax IDs, bank account details, investment amounts. This is personally identifiable information (PII) that must be protected for both regulatory and trust reasons.
+**Company information** includes board materials, cap tables, financials, customer lists, and diligence documents. Confidential information can also be material non-public information (MNPI), but not every private company update automatically has that legal classification. Ask compliance how to handle it. Confidentiality obligations still matter regardless of the label.
 
-Private fund advisers managing $150M or more in AUM must register as RIAs with the SEC, which comes with specific compliance obligations around data handling. Funds below this threshold can often qualify as Exempt Reporting Advisers (ERAs) with lighter requirements. But regardless of registration status, LPs invest millions of dollars in your fund and need to trust you'll handle their information properly. Data breaches with LP PII can result in lawsuits and damaged LP relationships.
+**Investment research** includes memos, IC discussions, reference calls, and proprietary analysis. A memo may combine public research with restricted information. Don't make the whole document broadly accessible just because most of it is public.
 
-If you're building or buying fund operations software or LP portals, this data needs strong access controls. Most funds restrict LP data access to fund operations staff and partners.
+**Personal information** exists outside LP records too. Founder profiles, reference notes, recruiting records, emails, and meeting transcripts can contain personal data. A useful relationship tool doesn't need to retain every personal detail someone mentions.
 
-**Material Non-Public Information (MNPI)**
+For each source, record who owns it, who can access it, what uses are allowed, where it can be sent, and how long it should be retained. Include vendor licensing restrictions: being able to query a dataset doesn't necessarily mean you can redistribute it or send it to another service.
 
-When you're evaluating companies or working with portfolio companies, you learn things that aren't public: upcoming fundraising rounds, acquisition discussions, financial performance, product roadmaps, major hires or departures. This is MNPI, and mishandling it has legal consequences. SEC enforcement actions for improper handling of MNPI aren't theoretical - they happen, and they're expensive.
+## Build Access Controls Below the Application
 
-For engineers, the practical implication is that any system touching company data (CRM, data warehouse, research platforms) needs proper access controls. You can't have this data accessible to everyone at the fund, and you definitely can't expose it publicly or to unauthorized parties.
+Use an established identity provider and authentication libraries. Require MFA, preferably phishing-resistant methods where supported, and use SSO so access can be removed centrally. Authentication establishes who someone is. You still need to decide what they're allowed to do.
 
-**Portfolio Company Data**
+**Enforce authorization on the server**. Check access on every request, including downloads, exports, background jobs, and agent tool calls. A hidden button or a filtered frontend list isn't an access control. The [OWASP authorization guidance](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) is a useful implementation reference.
 
-Your portfolio companies share sensitive information with you: detailed financials, metrics, cap tables, customer lists, strategic plans. They trust you to keep this confidential. Leaking portfolio company data damages your reputation and makes it harder to work with companies in the future. Other founders hear about it, and your ability to build relationships suffers.
+**Combine roles with access to specific records and sources**. "Partner" or "associate" is a starting point, not a complete policy. Someone may have access to one company's board materials but not another's, or to company research but not LP records. Preserve source permissions when you ingest documents. A summary combining several sources must not expose restricted information to someone who couldn't read those sources.
 
-When you're building portfolio dashboards or analytics systems, consider who should have access. Usually partners and investment team members need access, but not everyone at the fund.
+**Keep the caller's identity through the whole request**. If a partner builds an app and shares it with an associate, the app must use the associate's permissions when they open it. Don't silently run every request with the creator's credentials. Scheduled jobs need an explicitly scoped service identity and an owner.
 
-**Internal Investment Analysis**
+**Use database controls where they help**. Row-Level Security (RLS) can enforce per-company or per-user boundaries, but only if queries run with the intended identity and policy context. Database owners and privileged service accounts may bypass those policies. Test the actual application's connection and execution path, not just a query run as a restricted test user.
 
-Your investment memos, due diligence notes, IC (investment committee) discussions, and proprietary research represent your fund's intellectual property. Competitors would love to know what you're looking at, what your thesis is, and how you evaluate companies. While this isn't regulated the same way as MNPI or LP PII, it's still sensitive and needs protection.
+**Test denied access**. Check what happens when someone changes a company ID in a request, opens another LP's document URL, calls an API directly, or uses a session after access is revoked. Include search indexes, caches, exports, and generated summaries. A correct dashboard filter doesn't prove those paths are protected.
 
-When building or buying research platforms or CRM systems, think about access controls and who can see what information.
+Remove access when people leave or change roles. Revoke sessions and integration tokens as well as disabling the main account. Review service accounts and shared links too; they don't disappear when someone leaves.
 
-**The bottom line**: You're handling data that has regulatory requirements (LP PII, MNPI), relationship consequences (LP trust, portfolio company trust), and legal liability (SEC enforcement, lawsuits). The specific regulations are complex and require legal expertise to interpret correctly. Work with compliance officers and lawyers who understand what applies to your fund's specific situation.
+## Give People a Safe Way to Build
 
-## Basic Security Principles
+As discussed in [Common Mistakes](/guide/part-1-understanding-vc/common-mistakes#you-dont-have-to-build-every-application-yourself), the engineer doesn't have to build every application. You do need to provide a foundation people can build on without making security decisions from scratch.
 
-**Use proven tools**: Don't write your own authentication, encryption, or access control. Use OAuth providers ([Google](https://support.google.com/cloud/answer/15549257?hl=en), [Okta](https://www.okta.com/)), authentication services ([Auth0](https://auth0.com/), [Clerk](https://clerk.com/)), and standard encryption libraries. Security is hard - use tools built by experts.
+Provide a small set of reusable pieces:
 
-**Encrypt data**: Use HTTPS everywhere (data in transit). Enable database encryption at rest (checkbox option in managed services). For LP PII or MNPI, consider application-level encryption.
+- A deployment template with authentication, server-side access checks, and logging already configured
+- Approved APIs or views that expose only the data a workflow needs
+- Separate development and production environments, using synthetic or minimized data for experiments
+- Centrally managed secrets and narrowly scoped integration permissions
+- A way to disable an application or revoke its access without taking down everything else
 
-**Implement access controls**: Not everyone needs access to everything. Use role-based access control (RBAC): define roles (partner, associate, operations) and permissions (read portfolio data, edit CRM, view LP info). Use audit logs to track who accessed what. If you're building a multi-tenant application (for portfolio companies or LPs), implement Row-Level Security (RLS).
+A generated frontend shouldn't connect directly to your warehouse with a privileged credential. Put sensitive operations behind an API that checks identity and permissions. If your database platform supports direct client access, verify its policies and client credentials are safe for that use. Never ship a service-role key to the browser.
 
-**Principle of least privilege**: Give people and services only the minimum access needed. This limits damage if credentials are compromised.
+Keep an inventory of applications connected to fund systems: owner, users, data sources, permissions, deployment, and support expectations. Personal experiments become shared infrastructure surprisingly quickly. Agree when engineering review is needed, especially before granting sensitive access, enabling external sharing, or writing to authoritative records.
 
-**Keep data only as long as needed**: Define retention policies with your compliance team. RIAs typically must keep some data 5-7 years. Implement automatic deletion for other data.
+Review the resulting application, not just the instructions used to generate it. Check dependencies, public routes, storage access, secrets, and authorization. Run automated dependency and secret checks, then test the important boundaries yourself. A successful build and a reassuring AI review don't establish that an app is secure.
 
-## Working with Your Compliance and Legal Teams
+Make the supported route easy to use. If getting approved access takes weeks, people will find another way to get their work done.
 
-As an engineer or data person building systems for a VC fund, you're not expected to be a compliance expert. But you need to work with people who are.
+## AI Tools and Agents Change the Data Flow
 
-**Before building systems that handle sensitive data, ask:**
+An assistant connected to email, files, and your CRM is another application with access to fund data. A prompt doesn't make that access less consequential. Review what it can read, where it sends information, and what it can change.
 
-- What regulatory requirements apply to this data? (LP information has different requirements than CRM data about companies you're researching)
-- Who should have access to this data? (Define roles and permissions upfront)
-- How long should we keep this data? (Set retention policies early)
-- Do we need audit trails? (Usually yes for anything involving LP data or MNPI)
-- Are there specific security controls required? (Encryption, MFA, etc.)
+### Review the Whole Service, Not Just the Model
 
-Your compliance officer or external compliance consultant can answer these questions. They understand RIA regulations, SEC requirements, and what your fund's specific obligations are.
+Before connecting sensitive data, check the product and account configuration you're actually using:
 
-**When launching new tools, get compliance review**: Before you launch a new LP portal, portfolio dashboard, or research platform, have compliance review it. They'll check whether access controls are appropriate, whether data handling meets requirements, and whether you're missing anything important.
+- Can inputs, outputs, or uploaded files be used for training? Under what terms?
+- What is retained in chats, API logs, file storage, traces, and backups? Can retention be configured?
+- Who can install connectors, grant scopes, share results, or publish applications?
+- Can you audit usage, revoke access, and export or delete stored data?
 
-This isn't adversarial. Compliance teams want you to build good tools. They just need to make sure those tools don't create regulatory or legal problems.
+**Zero Data Retention (ZDR)** is worth asking for when you send confidential fund data to a model provider. It concerns retention of request content after processing, which is separate from whether the provider uses that content for training. Check the agreement and configuration for the exact product, model, and features you use: what content is covered, what metadata remains, and what exceptions apply. ZDR may require approval or disable features that store state. [Anthropic's scope documentation](https://privacy.claude.com/en/articles/8956058-i-have-a-zero-data-retention-agreement-with-anthropic-what-products-does-it-apply-to) illustrates why you need to check the specific service rather than assume an agreement covers every product.
 
-**Document your security and access controls**: Write down who has access to what systems, what data is stored where, what encryption you use, and how long you retain data. This documentation is useful for audits, for onboarding new team members, and for compliance reviews.
+Trace the rest of the request too. A model provider's ZDR agreement doesn't stop your application, gateway, tracing service, or connector from storing the same prompt and response. For a board-pack summarizer, check every place the uploaded PDF and extracted text pass through, including error logs.
 
-## Practical Implementation Guidance
+**Subprocessors** are the other companies a vendor uses to process data on its behalf. Review the vendor's current subprocessor list alongside its data processing agreement (DPA). Check what each company does, which data it receives, processing locations, and the arrangements for international transfers. Hosting, support, and safety review can involve different providers; a chosen hosting region alone doesn't describe the whole chain. [Anthropic lists its subprocessors in its Trust Center](https://trust.anthropic.com/).
 
-Here's how these principles translate to the systems you're actually building.
+Subscribe to subprocessor change notices and assign someone to review them. Separately assess services you connect yourself, such as an MCP server or automation platform: they may have their own terms and subprocessors outside your model provider's agreement.
 
-**For CRM systems**:
+Use approved work accounts and document which data each service can receive. Send only the fields and documents required for the task. Review again when you enable a new connector or capability; approval for a coding assistant isn't automatically approval to connect the whole document store.
 
-- Use SSO (single sign-on) with your company's identity provider so you can centrally manage access
-- Set up role-based permissions so not everyone can see all data
-- Enable audit logging if the CRM supports it
+### Treat Retrieved Content as Untrusted Input
 
-**For data warehouses** (Postgres, Snowflake, BigQuery):
+An agent reading an inbound email, pitch deck, website, or repository can encounter instructions planted in that content. This is indirect prompt injection. For example, a deck could tell an assistant to fetch an internal memo and send it to an external URL. The [OWASP prompt injection guidance](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) describes this class of attack.
 
-- Enable encryption at rest (checkbox in most managed services)
-- Use separate credentials for different services (your research platform should have different database credentials than your portfolio dashboard)
-- Limit access to production data - most people should use development/staging environments
-- Set up query logging so you can audit who accessed what data
+A system prompt telling the agent to ignore malicious instructions isn't a security boundary. Reduce what a compromised or mistaken agent can do:
 
-**For internal tools and dashboards**:
+- Start with narrowly scoped, read-only tools. Read-only access still needs limits on which data can be read and where results can go.
+- Enforce permissions in the tool backend using the caller's identity. Don't let the model choose which user's privileges to assume.
+- Separate retrieval from actions that send information externally or change records. Validate tool arguments and allowed destinations outside the model.
+- Require human approval for consequential actions, showing the exact recipient, records, and payload. Check permissions again when the action executes.
+- Limit steps, runtime, spending, and retries. Make it possible to stop a run and revoke its credentials.
 
-- Require authentication: don't build unauthenticated internal tools that anyone with the URL can access
-- Use HTTPS everywhere
-- Use an established auth framework ([NextAuth](https://next-auth.js.org/), [Clerk](https://clerk.com/)) rather than rolling your own
-- Consider IP allowlisting for particularly sensitive tools (only accessible from office network or VPN)
-- Implement session timeouts so inactive sessions don't stay logged in forever
+Keep audit records of the initiating user, tools called, records affected, approvals, and outcome. Log enough to investigate without indiscriminately storing sensitive prompts and responses.
 
-**For API integrations with external vendors**:
+### Connectors, MCP Servers, and Code Execution
 
-- Store API keys securely (environment variables or secrets manager, never in code)
-- Use separate API keys for production vs. development
-- Rotate API keys periodically (every 6-12 months)
-- Monitor API usage for anomalies (sudden spike in requests might indicate compromised credentials)
+Review connector scopes and the code you're installing. An MCP server, skill, plugin, or dependency may execute code or access data. A registry listing doesn't replace that review. For MCP integrations, follow the protocol's [security best practices](https://modelcontextprotocol.io/specification/latest/basic/security_best_practices), including appropriate token validation and avoiding token passthrough.
 
-**For data sharing with portfolio companies**:
+Run agent-generated code in an isolated environment with limited filesystem access, scoped credentials, and network restrictions. A sandbox with unrestricted outbound access can still send out any data you put inside it. Keep production administrator credentials out of agent environments.
 
-- Use authenticated, access-controlled systems rather than emailing spreadsheets
-- Use per-company access controls (Company A can only see their own data, not Company B's)
-- Track what data was shared with whom
-- Remove portfolio company access when projects finish
+Don't assume bringing everything in-house solves this. A local model connected to an overprivileged tool can still expose data or make unauthorized changes.
 
-## If You Want to Go Above and Beyond
+## Keep the Operational Basics Working
 
-The security principles covered above are sufficient for most small to mid-size VC funds. But if you want to implement additional security measures, or if your compliance team, LPs, or fund size require them, here are areas to consider:
+AI doesn't replace ordinary security work. It creates more places where weaknesses in that work can show up.
 
-**SOC 2 compliance**: SOC 2 certification demonstrates that your systems meet specific security, availability, and confidentiality standards. This is common for companies selling software to enterprises, and some larger funds pursue it (especially if LPs explicitly require it). For most small to mid-size funds building internal tools, it's not necessary, but it can provide additional assurance to LPs and portfolio companies about your data handling practices.
+**Protect accounts and devices**. Use managed devices, disk encryption, updates, and a process for lost laptops and compromised accounts. Protect email as carefully as the applications you build; password resets and sensitive documents often flow through it.
 
-**Penetration testing**: Regular penetration testing by security professionals can identify vulnerabilities in your systems before attackers do. For most funds, following security best practices is sufficient, but pentest results can provide additional confidence and are sometimes required by compliance teams or LPs at larger funds.
+**Encrypt and manage secrets**. Use HTTPS and managed encryption at rest. Put server credentials in a secrets manager or protected deployment configuration. Prefer short-lived, scoped credentials where supported. Follow the [OWASP secrets management guidance](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html): plan issuance, rotation, revocation, and recovery. Replace credentials immediately when exposed.
 
-**Data Loss Prevention (DLP)**: Enterprise DLP systems monitor file transfers, emails, and data movement to prevent sensitive information from leaving your organization. For most funds, basic access controls and encryption are sufficient, but DLP can add an extra layer of protection if you're handling particularly sensitive data or operating at significant scale.
+**Patch what you run**. Track application dependencies, integration code, and deployed services. Assign someone to act on security alerts. Fewer custom components mean fewer things you need to patch.
 
-**Advanced threat detection**: Enterprise-grade SIEM (security information and event management) systems aggregate logs from all your systems and use machine learning to detect potential security incidents. This is typically overkill for small to mid-size funds, but becomes more relevant at larger funds with sophisticated IT infrastructure.
+**Back up and restore**. Keep backups protected from the same account or mistake that could destroy production. Test restoring them. Syncing data to another system isn't necessarily a backup; it may sync the deletion too.
 
-Ask your compliance team what's actually required vs. what's nice to have for your fund's specific situation. For most smaller funds, the basic security principles covered earlier are sufficient. These advanced measures become more relevant as you scale.
+**Monitor meaningful events**. Watch for unusual downloads, permission changes, new integrations, unexpected external destinations, and failed access checks. Decide who receives alerts and what they should do.
+
+**Protect money movement**. Verify changes to bank details and payment instructions through an independently established channel. An authenticated email, plausible document, or agent-generated recommendation isn't sufficient approval to move money.
+
+## Compliance: Establish What Applies to Your Fund
+
+Don't turn a general guide into your fund's legal policy. Map obligations with compliance or counsel, then turn them into concrete requirements for access, processing, retention, and incident response.
+
+**US adviser status isn't determined by a single AUM threshold**. The exemption for advisers solely to qualifying venture capital funds is distinct from the private fund adviser exemption for advisers with less than $150 million in private fund assets under management in the United States. Eligibility and other obligations depend on the facts. See the [SEC's exemption rules](https://www.sec.gov/rules-regulations/2011/06/exemptions-advisers-venture-capital-funds-private-fund-advisers-less-150-million-assets-under), and have counsel confirm your position.
+
+**Check applicable incident-response requirements**. The amended US Regulation S-P requires covered institutions, including SEC-registered investment advisers, to maintain incident-response procedures and address service-provider oversight and notification obligations. The compliance dates were December 3, 2025 for larger entities and June 3, 2026 for smaller entities. Use the [SEC's compliance guide](https://www.sec.gov/files/rules/final/2024/regulation-s-p-small-entity-compliance-guide.pdf) to check scope with your compliance team. Don't assume every VC fund is covered, or that exemption from registration removes all privacy obligations.
+
+**Consider privacy beyond securities regulation**. Where GDPR applies, work with counsel on lawful processing, data minimization, processor arrangements, international transfers, and individuals' rights. Adding AI doesn't remove those obligations. The [European Commission's guidance](https://commission.europa.eu/law/law-topic/data-protection/information-business-and-organisations/obligations_en) is a starting point. Assess the specific use of AI too: a research assistant and a tool used to screen job applicants can raise different requirements.
+
+**Define retention by record type**. Avoid a blanket "keep everything" or "delete after five years" rule. Compliance should specify required records, retention periods, legal holds, and deletion procedures. Cover source documents, extracted data, embeddings, generated reports, logs, and backups. Document how deletion reaches derived copies and how expired data is handled after a restore. This also qualifies the append-only approach in [Data Modeling](/guide/part-3-technical-foundations/data-modeling#temporal-data-and-history): preserving useful history doesn't justify keeping personal or restricted data indefinitely.
+
+Document decisions in a form you can maintain: approved services, permitted data uses, access rules, owners, retention schedules, and review dates. Compliance review works better when you can show an actual data flow and the controls enforcing it.
+
+## Prepare for an Incident Before You Have One
+
+Have a short response plan with named contacts, an alternative communication channel, and access to the accounts needed to contain an incident. Include your IT provider, compliance lead, counsel, and relevant vendors. Know who can make decisions when the usual owner is unavailable.
+
+Practice a realistic scenario: an app exposes LP documents, a partner's account is compromised, or an agent sends board material to an external destination. Can you disable the integration, revoke tokens, preserve evidence, identify affected data, and restore service?
+
+Notification requirements vary. For example, where GDPR requires notification to a supervisory authority, the deadline is without undue delay and, where feasible, within 72 hours of awareness. Other rules and contracts can impose different obligations. Counsel should determine who must be notified and when. Escalate promptly so they have time to assess; don't wait for a complete forensic report.
+
+After containment, fix the underlying failure and check other applications using the same template or credentials. One insecure generated app may reveal a gap in the shared foundation.
+
+## Decide Where You Need Outside Help
+
+Use managed services, but understand which responsibilities remain yours. A provider can secure its infrastructure while your application still exposes every LP's records through a missing authorization check.
+
+A vendor's [SOC 2 report](https://www.aicpa-cima.com/resources/landing/system-and-organization-controls-soc-suite-of-services) can support due diligence. Read the scope, period, exceptions, and controls you're expected to operate. It doesn't prove that your configuration or application is secure. Whether your own fund needs an assurance report depends on its obligations and stakeholder needs.
+
+Get independent security review or penetration testing where the exposure warrants it, especially for LP portals, sensitive integrations, and applications that can act across systems. Choose monitoring and data-loss controls based on the data and capabilities involved. A five-person fund can still have a tool with access to every board pack.
+
+You don't need an enterprise security department to start. You do need someone accountable for the controls, a realistic operating process, and specialist help where your team lacks the expertise.
 
 ## The Bottom Line
 
-Security and compliance are important for VC funds. You handle sensitive data about LPs, portfolio companies, and your investment strategy. Mishandling this data has regulatory, legal, and reputational consequences.
+Make security part of the shared infrastructure. People across the fund can build useful applications, but identity, permissions, data handling, and deployment shouldn't depend on each builder getting every detail right.
 
-As someone building systems for a VC fund, follow these principles:
+Enforce access below the interface. Preserve source permissions through search and generated outputs. Give agents limited tools and contain the consequences of bad instructions or mistakes. Review vendors and connectors based on the data they actually receive.
 
-- Use proven tools for authentication, encryption, and access control, don't build your own
-- Encrypt data at rest and in transit
-- Implement role-based access controls and the principle of least privilege
-- Keep audit logs of who accessed what data
-- Define data retention policies and delete data when it's no longer needed
-- Work with your compliance and legal teams on regulatory requirements
+Keep the basics working: MFA, patching, secrets management, auditability, tested recovery, and prompt incident response. Agree on legal obligations and retention with compliance, then implement and test them.
 
-Most importantly, recognize what requires specialized expertise. You don't need to become an expert in SEC regulations or RIA compliance. You need to build systems that make it possible to meet those requirements, and you need to work with people who understand the legal side.
-
-Get compliance review before launching tools that handle sensitive data. Document your security controls. Use managed services that handle security fundamentals for you. And when in doubt, ask your compliance team.
-
-In the next chapter, we'll cover emerging trends in VC technology: MCP, AI agents, and what's worth paying attention to versus what's hype.
+The next chapter covers [emerging trends](/guide/part-3-technical-foundations/emerging-trends): where AI tooling helps and how to decide what's worth adopting.

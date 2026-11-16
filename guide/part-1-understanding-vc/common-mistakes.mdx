@@ -110,6 +110,36 @@ Over time, many of those "critical" needs changed. The fund evolved. More import
 
 </Tip>
 
+### AI Makes Code Cheaper. You Still Own the System.
+
+A partner sees you build a working prototype in an afternoon. The obvious question: "If AI can build this so quickly, why are we paying for all this software?"
+
+It's a fair question. AI coding tools make custom software worth considering for more problems. But generating the code is only part of the work. Someone still needs to understand the workflow, connect the data, handle permissions, check the output, deploy it, and fix it when an upstream API changes. You need to agree who owns each part. It doesn't all have to be you.
+
+Separate a demo from a tool the fund can depend on. A demo might process one clean pitch deck. A dependable workflow needs to handle scanned PDFs, missing fields, failed requests, and corrections without quietly putting wrong numbers in the CRM. Faster coding doesn't remove that work.
+
+Make the distinction explicit: "I can show you a prototype this week. Before we rely on it, we need to test it against real documents, agree who checks the results, and budget time to support it." Define what good enough means before you promise a delivery date.
+
+When comparing buy versus build, include your review and maintenance time, model usage, data subscriptions, and the cost of errors. Use AI to ship useful tools faster. Keep the same discipline about what you commit to owning.
+
+### You Don't Have to Build Every Application Yourself
+
+Tools like [Lovable](https://lovable.dev/) and [Claude Code](https://code.claude.com/docs/en/overview) open up another option: you maintain the shared infrastructure, while people across the fund build the applications they need. An investor builds a research dashboard. Someone in legal builds a document review workflow. Fund ops builds a reporting interface. They understand the work and can iterate on it directly.
+
+Your role changes. You provide reliable data, authentication, permissions, integrations, and a straightforward way to deploy. They own the workflow and decide whether the application is useful. You help them connect to the right systems and review what needs review before other people depend on it.
+
+Security is the foundation of this approach. You're letting more people build applications that touch confidential fund data. The infrastructure needs to enforce the boundaries even when the generated application gets something wrong. You can't rely on every person building a tool to understand authentication, authorization, or how data can leak through an integration.
+
+Enforce access in the backend for the signed-in user, down to the records and documents they're allowed to see. An application built by a partner shouldn't give everyone who opens it that partner's access. Keep credentials and integration permissions centrally managed, with only the access each application needs. Apply those boundaries to search results, exports, and model calls too. Hiding a field in the interface doesn't protect the underlying data.
+
+Give people a place to experiment with sample or limited data, separate from production. Provide a deployment path with authentication, access checks, logging, and a way to revoke access already in place. Check where data goes when an application calls an external model or service. Review access and data flows before connecting a new application to sensitive systems, and test that an unauthorized user is actually denied access. The [security and compliance chapter](/guide/part-3-technical-foundations/security-and-compliance) covers these controls in more detail.
+
+Start small. Help someone get one useful application running on that foundation, then make the setup reusable. The point is to let people experiment without asking them to design the fund's security model each time.
+
+Agree on ownership as the application grows. A personal research tool and a reporting workflow used by the whole fund need different levels of support. Before a prototype becomes part of the weekly process, decide who checks its output, handles failures, and maintains it if its creator moves on. Bring engineering into consequential changes, such as writing back to shared records or sending information externally.
+
+Don't make every experiment wait in your backlog. If someone has built something useful, help them make it reliable. You'll learn more from what people choose to build than from another round of requirements interviews. The value of the technical hire can be making the whole fund better at building, alongside the applications you deliver yourself.
+
 ## Mistake #4: Over-Engineering for Scale You Don't Have
 
 You're building a deal flow tool for a fund that sees 200 deals per year. You sit down to design the architecture. Microservices, obviously. Event-driven workflows for flexibility. Caching layers for performance. Kubernetes for orchestration. Horizontal scaling for growth. This is "best practice," after all. This is how you build software "the right way."
@@ -182,7 +212,7 @@ You demo it to the partners. They look at it. "This is nice," one says. "But it'
 
 You wanted to surprise them with a finished product. You were embarrassed to show ugly work-in-progress. You thought you understood the requirements from those initial conversations. The partners are busy with deals and you didn't want to bother them with constant check-ins. You're used to longer release cycles from your previous job where you'd ship quarterly.
 
-But internal tools need constant feedback. Partners are experts at investing, not at articulating product requirements. They think in terms of outcomes and workflows, not features and data models. Requirements evolve as they start using early versions and realize what actually matters in practice. Workflows evolve as the fund grows. Your initial understanding is always incomplete, no matter how many questions you asked. This isn't a failure on anyone's part. It's just how product development works when you're solving complex, nuanced problems.
+But internal tools need constant feedback. Partners are experts at investing, not at articulating product requirements. They think in terms of outcomes and workflows, not features and data models. Requirements evolve as they start using early versions and realize what actually matters in practice. Workflows evolve as the fund grows. Your initial understanding is always incomplete, no matter how many questions you asked.
 
 The cost of building wrong is severe. Three months of wasted time. Loss of trust (now they doubt you understand their needs). Missed opportunity cost (you could have been building the right thing). Technical debt from choosing the wrong architecture for the wrong problem.
 
@@ -228,12 +258,6 @@ You own the outcomes, not just the code. That's the real job.
 
 ## The Bottom Line
 
-These seven mistakes are common and understandable. Every technical person joining a VC fund faces some version of these challenges. The difference between success and frustration isn't talent or experience, it's knowing the mistakes exist and planning accordingly.
-
 Before you write any code, spend meaningful time understanding the fund. Align explicitly on buy versus build strategy. Be realistic about what you can accomplish with available resources. Start simple and add complexity only when you have specific problems to solve. Understand data sensitivity and confidentiality from day one. Build for auditability, not just functionality. Get feedback early and often. Communicate in outcomes, not technical implementations.
-
-Don't jump straight into building. Don't assume you know what's needed based on interviews alone. Don't over-engineer for hypothetical scale. Don't expose confidential data through modern development practices. Don't ignore compliance requirements until audit season. Don't build in a vacuum for months without feedback. Don't expect detailed specifications from non-technical partners. Don't use technical jargon when discussing solutions with GPs.
-
-The mistakes aren't failures. They're learning opportunities if you catch them early. Most developers make at least half of these mistakes in their first year. The goal isn't perfection. The goal is awareness and course correction.
 
 You've now learned the fundamentals of how VC works, how to analyze your specific fund, and the common mistakes to avoid. Next, we'll cover [hiring your data team](/guide/part-1-understanding-vc/hiring-your-data-team): when to hire, what to look for, and how the role evolves.
