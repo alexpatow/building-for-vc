@@ -3,9 +3,7 @@ title: "Accessing Data"
 description: "How data providers deliver data: APIs, file exports, and hybrid approaches."
 ---
 
-## Overview
-
-Data providers deliver data in two main ways: APIs and files. Each has different implications for how you build integrations and what you pay.
+Use an API to enrich one company while a partner is looking at it. If you need to rebuild a market map across the whole dataset every night, ask the vendor about bulk delivery before pricing it by the request.
 
 ## API-Based Delivery
 
@@ -25,6 +23,8 @@ Most modern vendors provide REST APIs. You authenticate with an API token, make 
 - API schemas change over time
 
 ## File-Based Delivery
+
+Before writing the importer, get two consecutive deliveries. Check whether each contains the whole dataset or only rows that changed. A company missing from a full export could have disappeared from the source. A company missing from a list of changes may simply have nothing new to report. Ask how deletions and corrections are represented.
 
 Almost all vendors also provide data as file exports: CSV, [Parquet](https://parquet.apache.org/), or JSON files that you download or they upload to your S3 bucket. This is common for bulk data (entire company database, historical funding data, periodic dumps).
 
@@ -53,11 +53,11 @@ JSON/[JSONL](https://jsonlines.org/) is also a decent choice, but typically more
 
 CSV/TSV files require parsing, have encoding issues, no schema, and are slower to work with.
 
-Ask vendors to provide Parquet if they don't already. Most modern vendors support it.
-
 ## Hybrid Approaches
 
 Some vendors offer both APIs (for real-time enrichment) and bulk exports (for loading your data warehouse). This is ideal: use the API for interactive features, use bulk exports to populate your data warehouse efficiently.
+
+Check that the API and the export use the same identifiers. If a partner finds a company in the live search, you want to open its record in yesterday’s warehouse data. Matching on an ID makes that a lookup. Matching on the name gives you an entity-resolution project.
 
 ## File Delivery Authentication
 

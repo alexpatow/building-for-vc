@@ -3,32 +3,15 @@ title: "Data Warehousing and Analytics"
 description: "When you need a data warehouse, which one to choose, how to structure your data using dbt, and how to use it for analytics GPs actually care about."
 ---
 
-## Overview
+Can your CRM tell you which deals were in diligence at the start of the quarter? If it only shows today’s pipeline, a daily snapshot is a simple way to keep that history.
 
-A data warehouse is a central repository where you store and analyze data from all your sources: CRM, data vendors, fund operations, portfolio companies, your research platform. Instead of querying different systems separately, you pull everything into one place where you can run analyses that span multiple data sources.
+A data warehouse brings data from different systems together for analysis. Suppose a partner asks what happened to the companies you passed on last year. The CRM has the pass decisions and the funding feed has the subsequent rounds. With both in the warehouse you can join them, then open the original deal notes for the companies that went on to raise.
 
-For VC funds, a data warehouse serves multiple purposes. It's an audit log of what happened in your systems (who talked to which companies, when deals moved through your pipeline, how data changed over time). It's the foundation for analytics and dashboards. It's where you run ad-hoc queries when a GP asks "how many Series A companies in fintech raised in the last 6 months?" And it's where you prepare data for tools like LLMs or knowledge graphs.
-
-You don't need a data warehouse on day one. But it's a good second step after you have your CRM set up. Even if you're not immediately running sophisticated analyses, building the infrastructure early creates a foundation that becomes more valuable as your fund scales.
-
-This chapter covers when you actually need a data warehouse, which one to choose, how to structure your data (following dbt best practices), and how to use it for analytics that GPs actually care about.
-
-## When You Actually Need a Data Warehouse
-
-Most funds don't start with a data warehouse. They start with a CRM, maybe some spreadsheets, and direct queries to data vendors. This works fine at first. But as you add more data sources, want to track changes over time, or need to run analyses that combine multiple sources, you hit the limits of this approach.
-
-**The right time to set up a data warehouse**: After your CRM is set up and being used consistently. The CRM is your source of truth for deal flow and relationships. A data warehouse extends that by:
-
-- Tracking historical changes (you can see how your pipeline evolved over time, not just current state)
-- Combining CRM data with external sources (merge your deal flow with funding data from PitchBook, etc.)
-- Running analyses that would be painful in your CRM's query interface
-- Serving as an audit log of activity (who talked to which companies, when deals moved stages, what data changed)
-
-Even if you're not immediately running complex analyses, having a data warehouse captures history. Six months from now, when a GP asks "how many companies did we talk to in Q3 and what happened to them?", you have the data. Without a warehouse, that history might be lost or scattered across systems.
-
-**Start simple**: Your first data warehouse might just be a daily snapshot of your CRM data. Load it into a database, maybe add some basic transformations, and you're done. As you add more data sources and more sophisticated analyses, the warehouse grows with you. But start with something simple that works rather than trying to build a comprehensive data platform from day one.
+If the team rarely records a pass in the CRM, start there. A warehouse can preserve the pipeline history you collect. It can’t reconstruct the meetings nobody logged.
 
 ## Choosing Your Data Warehouse
+
+Choosing a warehouse is mostly about the queries you're going to run and who has to look after it. The number of companies matters less than whether an analyst can run a market-wide join without slowing the CRM to a crawl.
 
 **For small funds: Start with Postgres**. If you're tracking tens of thousands of companies (not millions), Postgres works fine. It's simpler and cheaper than specialized warehouses, your team already knows it, and you can use the same database for applications and analytics.
 
@@ -72,9 +55,7 @@ flowchart LR
 
 ## Organizing Your Data: dbt Best Practices
 
-The right way to structure data in your warehouse follows [dbt best practices](https://docs.getdbt.com/best-practices). Rather than reinvent this, follow their guide. Here are the key principles:
-
-**Layered structure**: Staging → Intermediate → Marts
+If you’re setting up a warehouse, I’d start with [dbt’s best practice guides](https://docs.getdbt.com/best-practices). [How we structure our dbt projects](https://docs.getdbt.com/best-practices/how-we-structure/1-guide-overview) walks through a real directory layout and shows where each transformation belongs. Here’s how those layers map to fund data.
 
 - **Staging**: Raw data from sources, lightly cleaned (data types fixed, column names standardized, but otherwise unchanged). One staging model per source table. These models just make raw data easier to work with downstream.
 
@@ -84,35 +65,33 @@ The right way to structure data in your warehouse follows [dbt best practices](h
 
 **Why this structure works**: Staging isolates you from source changes (if PitchBook changes their schema, you fix the staging model, not every downstream model). Intermediate models are reusable (if multiple analyses need company funding data enriched from PitchBook, build it once in intermediate). Marts are optimized for consumption (denormalized, pre-aggregated, easy to query).
 
+If you’re new to dbt, each model here is a named SQL query. A later model can refer to an earlier one. That gives you somewhere to put the intermediate result that used to live in the second tab of a spreadsheet. A colleague can inspect that step separately when the final total looks wrong.
+
+### Following one source change
+
+Say the Monday pipeline report starts showing fewer companies in diligence. The CRM export still contains the deals, but someone renamed a stage. In a staging model you can inspect exactly what the CRM now calls that field. In an intermediate model you can map the new value to the fund’s definition of diligence. The partner-facing mart can keep exposing the same column as before. Fix the mapping once and you fix the dashboards that read it.
+
+Where you put a transformation matters. If you normalize the stage independently in Hex, the LP report, and a Slack bot, all three can produce different counts from the same CRM export. If one partner wants an exploratory grouping for a meeting, on the other hand, it’s fine for that to start in a notebook. Move it into a shared model once people start depending on the definition.
+
 **Incremental models**: For large tables with historical data (every deal flow snapshot, every change in company data), use incremental models that only process new or changed data rather than rebuilding the entire table. This keeps transformations fast as data grows.
+
+Consider a feed that revises last month’s funding rounds. If your incremental model only selects companies founded since its last run, those corrections never reach the portfolio view. Use the source’s update timestamp or ingestion batches to identify changed records, then rebuild the affected rows. The test is whether the incremental result agrees with a full rebuild for the same source data.
 
 **Tests**: Define tests in dbt for data quality (uniqueness, not null, relationships between tables, custom validations). These run automatically and alert you when data breaks, similar to what we covered in [Data Quality](/guide/part-3-technical-foundations/data-quality) on data quality.
 
 **Documentation**: Document your models, columns, and business logic in dbt. It generates a website showing your entire data model, lineage graphs (which models depend on which), and descriptions of what everything means. This is essential as your warehouse grows and new people need to understand the data.
 
-**Follow the guide**: The [dbt best practices](https://docs.getdbt.com/best-practices) guide goes into much more depth on how to structure projects, name things, write modular SQL, and optimize performance. Follow it. dbt has become the standard for a reason, and following their patterns makes your code easier for others (or future you) to understand.
+For a partner looking at a pipeline chart, lineage answers a very practical question. Which CRM field counted a deal as passed, and which transformation turned that field into the number on the chart? Document the definition where you calculate it, so someone tracing an unexpected jump can find the answer.
 
 ## Analytics and Dashboards
 
-The value of a data warehouse isn't just storing data. It's enabling analysis that helps your fund make better decisions.
-
-**What GPs actually use is very fund-specific**
-
 Different funds care about different metrics. A pre-seed fund might focus on pipeline metrics (how many companies talked to, conversion rates by source, time from first contact to investment). A growth equity fund might focus on portfolio performance (company growth rates, follow-on opportunities, markups/markdowns). A thesis-driven fund might focus on market coverage (how many companies tracked in each thesis area, market maps by sector).
-
-There's no universal dashboard that every fund needs. What matters is having data structured so you can quickly answer questions that come up.
-
-**The value is ad-hoc analysis**
 
 The biggest benefit of having a data warehouse isn't pre-built dashboards. It's being able to answer questions quickly when GPs ask them. "How many companies did we pass on in 2023 that later raised Series B from our target co-investors?" "Which of our portfolio companies are hiring in engineering?" "What's our average time from first meeting to investment decision?"
 
 With data in a warehouse, these queries are straightforward SQL. Without it, they require manually pulling data from multiple systems, matching companies, and piecing together answers. The warehouse makes ad-hoc analysis feasible.
 
-**Tools like Hex for quick dashboards**
-
 When you do need dashboards, tools like [Hex](https://hex.tech/) or [Mode](https://mode.com/) let you write SQL queries against your warehouse and turn them into interactive visualizations. These are much faster to build than custom dashboards, and they're easy to iterate on and share with the team.
-
-At Inflection, we used Hex. When a GP wanted to see something, we could spin up a dashboard in an hour or two: write SQL queries against the warehouse, add visualizations, share a link. This responsiveness is valuable. You're not waiting weeks for data engineering to build custom dashboards. You're answering questions as they come up.
 
 **Examples of common analyses**:
 
@@ -121,30 +100,4 @@ At Inflection, we used Hex. When a GP wanted to see something, we could spin up 
 - Portfolio tracking (company metrics over time, which companies need attention)
 - Investor analysis (which co-investors appear frequently, warm intro paths to founders)
 
-These aren't universal. What your fund analyzes depends on your strategy, stage, and what questions your investment team cares about. The warehouse makes it possible to answer whatever questions come up.
-
-## Common Mistakes
-
-Most mistakes in data warehousing come from either over-complicating things early or not following established patterns.
-
-**Over-complicating early**: Don't build sophisticated incremental models, complex transformations, and elaborate marts on day one. Start with basic staging models that load raw data, maybe a few simple transformations, and iterate from there. Add complexity only when you need it.
-
-**Not following dbt patterns**: If you're using dbt, follow their best practices. Don't invent your own project structure, naming conventions, or transformation patterns. The value of dbt is that it's a standard. When someone new joins or you need help, they can understand your code because it follows known patterns.
-
-**Choosing the wrong warehouse for your scale**: Snowflake for a 3-person fund is probably overkill. Postgres for a large fund with billions of rows is probably inadequate. Match your tool to your scale. Start simple (Postgres), graduate to specialized warehouses (Snowflake/BigQuery) when you need them.
-
-**Not capturing history**: If you're only storing current state (latest CRM snapshot), you lose the ability to analyze how things changed over time. Capture history from the start. This doesn't need to be sophisticated - even daily snapshots of your CRM let you reconstruct what your pipeline looked like at any point.
-
-**Building dashboards nobody uses**: Don't spend weeks building elaborate dashboards until you validate that people will use them. Start with ad-hoc SQL queries. When you find yourself running the same query repeatedly, that's when to build a dashboard. Let demand drive what you build.
-
-## The Bottom Line
-
-A data warehouse is good infrastructure to set up after your CRM is working. Even if you're not immediately running sophisticated analyses, it captures history and creates a foundation for analytics as your fund grows.
-
-Use dbt for transformations. Load raw data into your warehouse, transform it with dbt models following their best practices. This is simpler and more maintainable than custom ETL pipelines.
-
-Follow the [dbt best practices guide](https://docs.getdbt.com/best-practices) for organizing your data.
-
-The value of a warehouse is enabling ad-hoc analysis. You can quickly answer questions when GPs ask them, spin up dashboards with tools like Hex, and run analyses that combine multiple data sources. What specific analyses matter is fund-specific. What matters is having the infrastructure to answer questions quickly.
-
-In the next chapter, we'll cover knowledge graphs: when relationship-heavy queries matter for market mapping, competitor analysis, and network effects, and how to approach implementation.
+At Inflection, we used Hex. When a GP wanted to see something, we could spin up a dashboard in an hour or two: write SQL queries against the warehouse, add visualizations, share a link. This responsiveness is valuable. You're not waiting weeks for data engineering to build custom dashboards. You're answering questions as they come up.

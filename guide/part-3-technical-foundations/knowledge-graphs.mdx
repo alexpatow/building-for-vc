@@ -3,25 +3,13 @@ title: "Knowledge Graphs"
 description: "When relationship-heavy queries matter for VC - market mapping, competitor analysis, network effects - and how to approach implementation."
 ---
 
-## Overview
+Start with Postgres. Store investments, employment, and board seats as relationships you can query. Before adding a graph database, name a question the team asks often enough to justify keeping a second system in sync.
 
-Companies don't exist in isolation. They have investors, employees, competitors, customers, suppliers, and potential acquirers. Founders move between companies. Investors co-invest together. Companies get acquired by larger companies in adjacent markets. Understanding these relationships is often as important as understanding the companies themselves.
-
-Traditional relational databases are optimized for storing structured data in tables. They work well for tracking companies, investments, and people as individual entities. But when you need to query relationships between entities (who invested in companies that competed with this portfolio company? which founders worked together at previous companies? what's the network of potential acquirers for this company?), relational databases become awkward. You end up writing complex joins across many tables, and performance degrades as you traverse multiple levels of relationships.
-
-Knowledge graphs are designed specifically for relationship-heavy data. They represent entities as nodes and relationships as edges. Queries that would require complex joins in a relational database become natural graph traversals. This makes them particularly powerful for certain VC use cases: market mapping, competitor analysis, finding similar companies, tracking networks of people and investors, and understanding acquisition patterns.
-
-But knowledge graphs and graph databases come with their own complexity. They're harder to work with than relational databases. Most engineering teams are more comfortable with SQL than with graph query languages like [Cypher](https://neo4j.com/docs/getting-started/cypher/) or [Gremlin](https://tinkerpop.apache.org/gremlin.html). Graph databases have different performance characteristics and require different thinking about data modeling.
-
-This chapter covers what knowledge graphs are, why they matter for VC, when to use them versus sticking with relational databases, and how to approach implementation without over-complicating your infrastructure.
+For example, a partner wants to find founders who previously worked together. A company list won’t tell you that. Follow the founders’ employment records back to their previous company and compare the dates.
 
 ## What Are Knowledge Graphs?
 
-A knowledge graph represents information as a network of entities (nodes) and their relationships (edges). Instead of organizing data into tables with rows and columns, you organize it as a graph where each node represents something (a company, a person, an investor) and each edge represents a relationship between two nodes (works at, invested in, acquired by).
-
-**Nodes** are entities. In a VC knowledge graph, nodes might represent companies, people, investors, funding rounds, or products. Each node can have properties. A company node might have properties like name, founding date, sector, and description. A person node might have name, title, and LinkedIn URL.
-
-**Edges** are relationships between nodes. These can be directional (Alice works at Acme Corp) or bidirectional (Company A competes with Company B). Edges can also have properties. An "invested in" edge might have properties like investment date, amount, and ownership percentage. A "worked with" edge between two people might have properties indicating when and where they worked together.
+In a graph, companies and people are nodes. An edge connects two nodes and describes the relationship. An employment edge can carry start and end dates. Two investment edges can connect the same investor and company at different rounds.
 
 ```mermaid
 flowchart LR
@@ -46,9 +34,7 @@ This is a trivial example, but it illustrates how knowledge graphs map entities 
 
 **The difference from relational databases**: In a relational database, you might have a companies table, a people table, an investments table that links companies to investors, and an employment table that links people to companies. To answer "which companies did investors who funded my competitor also fund?" requires joining investments table to itself through companies, then joining again to get company details. In a graph database, you start at your competitor node, follow "invested in" edges to investor nodes, follow their other "invested in" edges to company nodes, and you're done.
 
-## Why Knowledge Graphs Matter for VC
-
-Venture capital is fundamentally about networks and relationships. Understanding these relationships helps with deal flow, diligence, portfolio support, and exits.
+## When a graph helps
 
 **Market mapping**: When you're researching a sector, you don't just want a list of companies. You want to understand how they relate to each other. Which companies compete directly? Which are upstream suppliers or downstream customers? Which companies were founded by people who worked together previously? A knowledge graph makes it natural to visualize and query these relationships, turning a flat list of companies into a network that shows market structure.
 
@@ -60,13 +46,31 @@ Venture capital is fundamentally about networks and relationships. Understanding
 
 **Identifying tech hubs**: Knowledge graphs reveal entrepreneurial concentrations. Which companies are "founder factories" (PayPal, Google, Stripe)? Which universities produce the most founders in your sectors? A graph query can show that 15 AI infrastructure companies were founded by people who worked at Meta's infrastructure team, suggesting a network worth watching.
 
+### Deciding whether to add a graph database
+
+**Use knowledge graphs when:**
+
+- Your core queries involve traversing multiple levels of relationships (find companies 2-3 hops away through investor networks)
+- You need to visualize network structure (market maps showing company relationships)
+- Relationship patterns are as important as entity attributes (co-investment networks, competitive clusters)
+- You're building recommendation systems based on graph similarity (companies similar to this one based on their network position)
+
+**Stick with relational databases when:**
+
+- Most queries are about entity attributes, not relationships (show me all Series A companies in fintech)
+- Your team is much more comfortable with SQL than graph query languages
+- You're still figuring out your data model and need flexibility to change it
+- Performance for your use cases is fine with relational databases
+
+**How to implement this**
+
+Keep companies, people, investments, and employment in Postgres. If you want a list of the other companies backed by a particular investor, a join on investor ID is enough. For an occasional network analysis, load the relevant rows into [NetworkX](https://networkx.org/) in Python. You can try a graph algorithm on last quarter’s data without having to operate a second database.
+
+If a tool needs to traverse that network every day, project the same IDs and relationships into a graph database and refresh them when the source changes. Keep stable IDs in the projection so an analyst can trace an unexpected connection back to the source record.
+
 ## GraphRAG: Knowledge Graphs for AI Systems
 
-An emerging application of knowledge graphs in VC is GraphRAG (Graph Retrieval-Augmented Generation). This combines knowledge graphs with large language models to improve how AI systems retrieve and reason about your data.
-
-**What is GraphRAG?**: Traditional RAG systems retrieve relevant documents or text chunks based on similarity to a query, then feed those chunks to an LLM to generate an answer. GraphRAG enhances this by using a knowledge graph to understand relationships between entities. Instead of just retrieving similar text, it can traverse the graph to find related information that might not be textually similar but is semantically connected.
-
-**Why it matters for VC**: When a GP asks "which companies in our portfolio are working on AI infrastructure?", a traditional RAG system might retrieve documents mentioning "AI infrastructure." But GraphRAG can understand that Company A's infrastructure product is used by Company B (even if that relationship isn't explicitly stated in searchable text), or that the founders of Company C previously worked at Company D which built similar technology. The knowledge graph captures these relationships, making retrieval smarter.
+Graph retrieval-augmented generation (GraphRAG) uses relationships to find evidence for a model. Suppose a GP asks for companies connected to a portfolio company’s founders. The founders’ employment records can lead you to research on a previous employer even if the memo never names the portfolio company.
 
 **Use cases**:
 
@@ -87,50 +91,7 @@ An emerging application of knowledge graphs in VC is GraphRAG (Graph Retrieval-A
 
 For most funds, this is still emerging territory. Traditional RAG systems work well for searching documents and research. GraphRAG becomes valuable when relationship-based reasoning is critical to answering questions. If you're already building a knowledge graph for market mapping or competitor analysis, adding GraphRAG capabilities might be a natural extension. But don't build a knowledge graph just to enable GraphRAG unless you have validated that relationship-based retrieval solves problems traditional search doesn't.
 
-## When to Use Knowledge Graphs vs. Relational Databases
-
-Knowledge graphs are powerful, but they're not always the right choice. The decision depends on your queries, your team's expertise, and your infrastructure maturity.
-
-**Use knowledge graphs when:**
-
-- Your core queries involve traversing multiple levels of relationships (find companies 2-3 hops away through investor networks)
-- You need to visualize network structure (market maps showing company relationships)
-- Relationship patterns are as important as entity attributes (co-investment networks, competitive clusters)
-- You're building recommendation systems based on graph similarity (companies similar to this one based on their network position)
-
-**Stick with relational databases when:**
-
-- Most queries are about entity attributes, not relationships (show me all Series A companies in fintech)
-- Your team is much more comfortable with SQL than graph query languages
-- You're still figuring out your data model and need flexibility to change it
-- Performance for your use cases is fine with relational databases
-
-**The hybrid approach (recommended):**
-
-For most VC funds, the right answer is to model everything in a relational database first, then build knowledge graph views or projections on top when you need relationship-heavy queries.
-
-**Why this works:**
-
-- Your team already knows SQL. Teaching everyone Cypher or Gremlin adds complexity.
-- Relational databases are well-understood, mature, and have great tooling.
-- Most of your queries are probably fine in SQL. It's only specific relationship queries that benefit from graphs.
-- You can start simple and add graph capabilities later when you validate the need.
-
-**How to implement this:**
-
-- Model your core data (companies, people, investors, deals) in Postgres or similar relational database
-- Ensure you capture relationships (investments, employment, board seats, partnerships)
-- For basic relationship queries, use SQL joins (they work fine for 1-2 levels of relationships)
-- When you need complex graph queries, either:
-  - Build a materialized view in a graph database (periodically sync data from the relational database to the graph database)
-  - Use graph algorithms directly on your relational data (libraries like [NetworkX](https://networkx.org/) in Python can build graphs from relational queries)
-  - Query your relational database and build graph structures in your application layer when needed
-
-This gives you the benefits of graph thinking without committing to graph databases before you need them.
-
 ## Implementation Considerations
-
-If you do decide to use a graph database (either as your primary store or as a secondary system), here are key considerations.
 
 **Graph database options:**
 
@@ -139,26 +100,12 @@ If you do decide to use a graph database (either as your primary store or as a s
 - **[Memgraph](https://memgraph.com/)**: In-memory graph database startup with focus on streaming data and real-time analytics. Compatible with Neo4j's Cypher query language.
 - **[FalkorDB](https://www.falkordb.com/)**: Graph database startup built on Redis, emphasizing low latency and high throughput. Also uses Cypher. Good for real-time applications.
 
-Note that Memgraph and FalkorDB are newer startups, whereas Neo4j and Neptune are more established with larger ecosystems and enterprise support.
-
 **Data modeling**: Graph data modeling is different from relational modeling. You need to think about what should be nodes vs. properties (is a funding round a node or a property of an investment edge?), how to model time-varying relationships (person worked at company from date X to date Y), and how to handle different relationship types with different semantics.
+
+A funding round makes the choice concrete. If you only want a path from an investor to a company, an investment edge with a date might be enough. If a GP asks who invested _together in the same round_, two edges pointing at a company won’t answer it. One investor could have entered at seed and the other five years later. Give the round its own identity and link both investors to that round.
 
 **Query performance**: Graph databases are optimized for traversals, but performance depends heavily on your graph structure and query patterns. Highly connected nodes (like major investors) can become bottlenecks. You may need to denormalize data or add specialized indexes.
 
 **Data freshness**: If you're maintaining both a relational database and a graph database, you need to keep them in sync. This usually means ETL processes that run periodically (nightly or weekly). Real-time sync is possible but adds significant complexity.
 
 **Team expertise**: Graph databases require different mental models than relational databases. Your team needs to learn graph query languages, understand graph algorithms, and think differently about data modeling.
-
-## The Bottom Line
-
-Knowledge graphs are powerful for relationship-heavy queries: market mapping, competitor analysis, network effects, and similarity calculations. They represent how companies, people, and investors connect, which is often as important as the entities themselves.
-
-But don't start with a graph database. Most VC funds should model their data in relational databases first. Relational databases are well-understood, your team knows SQL, and they work fine for most queries. Only when you have validated use cases for complex relationship queries should you add graph capabilities.
-
-The hybrid approach works best: model everything in Postgres or similar, then build knowledge graph projections on top when you need them. This could mean materializing data into Neo4j for specific analyses, using graph libraries on top of your relational data, or building graph views in your application layer.
-
-EQT's CompanyKG demonstrates the value of knowledge graphs for VC at scale: 1.17 million companies, 51 million relationships, powering market mapping, competitor analysis, and company similarity. But they built this as a research project on top of their existing Motherbrain platform, not as a replacement for it.
-
-If relationship queries become core to your competitive advantage, invest in proper graph infrastructure. Until then, model your relationships clearly in relational databases and build graph capabilities as needed.
-
-In the next chapter, we'll cover integrations and APIs: common patterns for connecting VC tools, validating API responses, handling webhooks and rate limits.

@@ -3,13 +3,9 @@ title: "Security and Compliance"
 description: "Protecting fund data across internal tools, AI agents, and user-built applications - practical controls, vendor review, and incident response."
 ---
 
-## Overview
-
 Your fund's security model needs to work even when someone builds a new application in an afternoon. Investors, legal, and fund ops can increasingly build their own tools. Agents can search documents, query your CRM, and take actions across systems. That's useful, but it puts more responsibility on the infrastructure underneath them.
 
 You can't review every prompt or rely on everyone building an application to understand security. Make identity, permissions, data access, deployment, and logging reusable. A new application should inherit the fund's boundaries instead of inventing its own.
-
-This chapter covers the engineering work: protecting sensitive data, connecting AI tools safely, supporting applications built by colleagues, and preparing for things going wrong. Your compliance and legal teams determine which obligations apply. Your job is to make those obligations enforceable in the systems you build.
 
 ## Know What You're Protecting
 
@@ -43,8 +39,6 @@ Remove access when people leave or change roles. Revoke sessions and integration
 
 ## Give People a Safe Way to Build
 
-As discussed in [Common Mistakes](/guide/part-1-understanding-vc/common-mistakes#you-dont-have-to-build-every-application-yourself), the engineer doesn't have to build every application. You do need to provide a foundation people can build on without making security decisions from scratch.
-
 Provide a small set of reusable pieces:
 
 - A deployment template with authentication, server-side access checks, and logging already configured
@@ -58,8 +52,6 @@ A generated frontend shouldn't connect directly to your warehouse with a privile
 Keep an inventory of applications connected to fund systems: owner, users, data sources, permissions, deployment, and support expectations. Personal experiments become shared infrastructure surprisingly quickly. Agree when engineering review is needed, especially before granting sensitive access, enabling external sharing, or writing to authoritative records.
 
 Review the resulting application, not just the instructions used to generate it. Check dependencies, public routes, storage access, secrets, and authorization. Run automated dependency and secret checks, then test the important boundaries yourself. A successful build and a reassuring AI review don't establish that an app is secure.
-
-Make the supported route easy to use. If getting approved access takes weeks, people will find another way to get their work done.
 
 ## AI Tools and Agents Change the Data Flow
 
@@ -108,8 +100,6 @@ Don't assume bringing everything in-house solves this. A local model connected t
 
 ## Keep the Operational Basics Working
 
-AI doesn't replace ordinary security work. It creates more places where weaknesses in that work can show up.
-
 **Protect accounts and devices**. Use managed devices, disk encryption, updates, and a process for lost laptops and compromised accounts. Protect email as carefully as the applications you build; password resets and sensitive documents often flow through it.
 
 **Encrypt and manage secrets**. Use HTTPS and managed encryption at rest. Put server credentials in a secrets manager or protected deployment configuration. Prefer short-lived, scoped credentials where supported. Follow the [OWASP secrets management guidance](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html): plan issuance, rotation, revocation, and recovery. Replace credentials immediately when exposed.
@@ -153,15 +143,3 @@ Use managed services, but understand which responsibilities remain yours. A prov
 A vendor's [SOC 2 report](https://www.aicpa-cima.com/resources/landing/system-and-organization-controls-soc-suite-of-services) can support due diligence. Read the scope, period, exceptions, and controls you're expected to operate. It doesn't prove that your configuration or application is secure. Whether your own fund needs an assurance report depends on its obligations and stakeholder needs.
 
 Get independent security review or penetration testing where the exposure warrants it, especially for LP portals, sensitive integrations, and applications that can act across systems. Choose monitoring and data-loss controls based on the data and capabilities involved. A five-person fund can still have a tool with access to every board pack.
-
-You don't need an enterprise security department to start. You do need someone accountable for the controls, a realistic operating process, and specialist help where your team lacks the expertise.
-
-## The Bottom Line
-
-Make security part of the shared infrastructure. People across the fund can build useful applications, but identity, permissions, data handling, and deployment shouldn't depend on each builder getting every detail right.
-
-Enforce access below the interface. Preserve source permissions through search and generated outputs. Give agents limited tools and contain the consequences of bad instructions or mistakes. Review vendors and connectors based on the data they actually receive.
-
-Keep the basics working: MFA, patching, secrets management, auditability, tested recovery, and prompt incident response. Agree on legal obligations and retention with compliance, then implement and test them.
-
-The next chapter covers [emerging trends](/guide/part-3-technical-foundations/emerging-trends): where AI tooling helps and how to decide what's worth adopting.
