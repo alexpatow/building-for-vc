@@ -1,170 +1,166 @@
 ---
 title: "Emerging Trends"
-description: "LLMs, MCP for connecting AI to internal data, agent orchestration, file-native agents, and what hype to ignore."
+description: "Decision APIs, smarter agent harnesses, and Claude and ChatGPT becoming application platforms - what changes for VC infrastructure."
 ---
-
-import { CurrentYear } from "/snippets/current-year.jsx"
 
 ## Overview
 
-Large language models are the most significant technology shift for VC infrastructure in the past decade. They've changed how you build tools, how you extract information from documents, how you analyze companies, and how fast you can ship features as a solo developer. If you're building VC technology in <CurrentYear /> without using LLMs, you're working at a significant disadvantage.
+The useful question has changed from "where can we add an LLM?" to "how much of this workflow do we still need to build?" Model providers now supply more of the execution environment, integrations, and application experience. Meanwhile, decision models offer another way to put AI inside software without generating a written answer at every step.
 
-But LLMs are becoming baseline, not cutting-edge. Every fund is using ChatGPT. Every engineer is using Claude Code or Cursor. The competitive advantage isn't that you're using LLMs, it's how you're using them and what you're building on top of them.
+For a small technical team at a fund, these changes affect where you spend your time: buying an application, connecting data to an existing assistant, building a narrow workflow, or maintaining a custom product.
 
-This chapter covers emerging trends that matter for VC technology: connecting AI to your internal data through MCP, the evolution from single coding sessions to orchestrated agent workflows, why file-native agents are replacing RAG systems, and what hype to ignore.
+## Claude and ChatGPT Are Becoming Application Platforms
 
-## MCP: Connecting AI to Your Internal Data (or Just Use CLI Tools)
+The model providers are moving up the stack. They're supplying the place people do the work, not just the API underneath someone else's application.
 
-Model Context Protocol (MCP) is Anthropic's standard for connecting AI assistants to data sources. Instead of copy-pasting data into Claude or building custom integrations for every tool, you build MCP servers that expose your data in a standardized way. Claude Code (and other MCP-compatible tools) can then query your internal systems directly.
+[Claude for Financial Services](https://claude.com/solutions/financial-services) packages financial workflows and data integrations. Claude's Office integrations put assistance inside spreadsheets, documents, and presentations. That overlaps with work funds have traditionally bought specialist software for or asked their engineering team to build: research, financial modeling, and preparing investment materials.
 
-**That's the official story. Here's the alternative take:** Some developers argue MCPs are unnecessary abstraction and you should just write CLI tools instead. Claude Code can already execute bash commands and call CLI tools. A simple CLI script that queries your database or CRM is more universal than an MCP server (works with any tool that can run bash), simpler to build (no SDK required), and easier to maintain.
+[ChatGPT apps](https://help.openai.com/en/articles/12515353-building-with-the-apps-sdk) let developers bring tools and interfaces into ChatGPT. [Workspace agents](https://help.openai.com/en/articles/20001143/) add reusable workflows connected to apps, with shared and scheduled execution. [Claude's connectors](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) similarly connect the assistant to external systems.
 
-The debate is ongoing, and it's not clear which approach will win. For now, here's practical guidance: if you're building something simple (query your database, fetch data from your CRM), start with a CLI tool. If you need features MCP provides (structured resources, interactive prompts, complex tooling), build an MCP server. Both approaches work for connecting AI to your internal data.
+**What this changes for your fund**
 
-**Why this matters for VC funds**
+Before building a research interface, try the workflow in the assistant your team already uses. A partner preparing for a founder meeting may need access to the CRM, past memos, and a briefing template. That may be enough to produce the briefing without a separate application.
 
-You have valuable data scattered across systems: companies in your CRM, research in your data warehouse, portfolio metrics in various dashboards, memos in Google Docs or Notion. When you're building features or analyzing data, you currently need to manually pull information from each system, paste it into prompts, and context-switch constantly.
+Keep a dedicated interface where it earns its place: comparing a pipeline of companies, tracking approvals, reviewing exceptions, or entering structured data every week. A conversation is useful for an open-ended research question; a table can be better for reviewing fifty records.
 
-MCP servers let AI tools access this data directly. You can ask Claude Code "show me all Series A companies in fintech we've talked to in the last 6 months" and it queries your CRM through an MCP server. You can ask "what are the latest metrics for our portfolio companies?" and it pulls from your data warehouse. The AI has the same access to data that you do, without you needing to be the intermediary.
+Your investment shifts toward reliable data access, reusable instructions, and integration with the fund's records. Keep company IDs, source documents, and completed outputs available outside a single assistant's conversation history. If you change providers, you shouldn't have to reconstruct the portfolio from chat transcripts.
 
-**The broader trend: Connecting AI to internal data**
+**People across the fund can build on the same foundation**
 
-Whether through MCP servers, CLI tools, or other approaches, the key insight is that AI tools become dramatically more useful when they can access your internal data directly. Instead of being a general-purpose assistant, they become specialized tools that understand your fund's portfolio, pipeline, and research.
+An investor may assemble a research workflow in an assistant while fund ops builds an interface in [Lovable](https://docs.lovable.dev/). You can support both with the same data and access controls. The [Common Mistakes chapter](/guide/part-1-understanding-vc/common-mistakes#you-dont-have-to-build-every-application-yourself) covers this division of work; [Security and Compliance](/guide/part-3-technical-foundations/security-and-compliance) covers the boundaries underneath it.
 
-This could mean:
+## MCP, APIs, and CLI Tools
 
-- Querying your CRM to find companies or check deal status
-- Running SQL against your data warehouse to analyze portfolio performance
-- Searching through investment memos and research to find relevant context
-- Pulling metrics from portfolio company dashboards
+[Model Context Protocol (MCP)](https://modelcontextprotocol.io/docs/getting-started/intro) is an open standard for connecting AI applications to tools and data. Use it when you want compatible assistants to discover and call your fund's tools. You may already have a vendor connector available, so check before writing your own server.
 
-The mechanism (MCP vs. CLI vs. something else) matters less than the outcome: AI tools that can answer questions about your fund's specific data without you manually feeding them information.
+Expose operations that match the work: find a company, retrieve its interaction history, fetch a source document, or save a draft note. Those are easier to reuse across assistants than an integration that only serves one screen in your application.
 
-**LLM providers moving up the stack**
+For your own engineering workflow, an existing CLI or script may be enough. For a background integration, a regular API may be the simplest fit. These interfaces can wrap the same underlying service. You don't need to pick a winner between MCP and command-line tools.
 
-This trend represents LLM providers (Anthropic, OpenAI, etc.) moving beyond just providing model APIs to building full development environments with data access. Claude Code isn't just a better coding assistant - it's becoming a platform for building and using internal tools. The new [Claude Cowork](https://support.claude.com/en/articles/13345190-getting-started-with-cowork) and [Claude in Excel](https://support.claude.com/en/articles/12650343-claude-in-excel) are further examples of LLM providers moving into the application layer.
+Keep permissions and business rules in that service. Changing the client from a dashboard to an assistant shouldn't change what the caller can access.
 
-The latest development is [MCP Apps](https://blog.modelcontextprotocol.io/posts/2026-01-26-mcp-apps/), which allow MCP servers to expose UI components directly to the LLM client. Instead of just providing tools that return text, an MCP server can now render interactive interfaces: forms, charts, tables, approval workflows. This blurs the line between "AI assistant" and "application platform" even further.
+## Decision APIs: Small Judgments Inside Software
 
-Watch this space. The tooling will evolve, standards may change, but the direction is clear: AI tools will increasingly integrate with your internal systems rather than operating in isolation.
+[OpenAI's Decisions API](https://developers.openai.com/api/docs/guides/decisions) evaluates evidence and returns typed answers: a probability that a condition is true, a choice from supplied options, or a score against ordered levels. [Jev from TypeSafe](https://docs.typesafe.ai/introduction) offers a similar decision-oriented interface, with typed questions and probability distributions. These are a different building block from asking a chat model to write an answer and then parsing it.
 
-## AI-Assisted Development: From Sessions to Orchestration
+This could fit a lot of the repetitive judgment calls in VC infrastructure:
 
-[Claude Code](https://code.claude.com/docs/en/overview) and [Cursor](https://cursor.com/) have already changed how you build software. You can implement features in hours that previously took days. You can build entire applications as a solo developer that previously required small teams. This is the current state, and it's already transformative.
+- Classify an inbound message as a pitch, portfolio update, LP request, or something else
+- Route a company to the relevant sector team using its description and your coverage rules
+- Flag whether a portfolio update contains a runway concern that needs review
+- Rank retrieved passages for relevance before a larger model drafts a briefing
+- Decide whether a request needs document search, a database query, or more extensive reasoning
 
-But we're at the beginning, not the end, of AI-assisted development.
+The appeal is putting small judgments into a pipeline where a full reasoning loop would add latency and cost. Use ordinary code for exact rules such as dates, permissions, and numerical thresholds. Use a decision model where interpreting language is the missing step. Keep generation for outputs that need it, such as a memo or explanation.
 
-**Current state: Single session, single developer**
+Evaluate these models on labeled examples from the fund. Measure missed concerns as well as false alarms, and set thresholds for routing uncertain cases to review. A returned probability is an estimate to test on your data. It isn't a verified fact about the company. Keep the evidence with the result so the reviewer can inspect it.
 
-Today, you start a Claude Code session, describe what you want to build, and Claude helps you write code, debug issues, and ship features. When the session ends (or you hit context limits), you start fresh. You're still fundamentally working alone, just with a very capable assistant.
+## Smarter Harnesses: More Than a Better Model
 
-This is already powerful. As covered in [Choosing Your Stack](/guide/part-3-technical-foundations/choosing-your-stack), choosing popular technology stacks (Next.js, TypeScript) means AI coding tools work better and you ship faster. But there are limits: complex features that span multiple services, background work that takes hours to run, coordinating changes across many files.
+A harness is the software around the model: the execution loop, tools, context management, saved state, and checks that determine what happens next. Improvements here can change whether an agent finishes the work, even with the same underlying model.
 
-**Near future: Agent orchestration**
+[Anthropic's harness engineering work](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) describes agents making incremental progress across sessions using persistent artifacts and explicit checks. Coding tools also offer execution capabilities directly: [Claude Code subagents](https://code.claude.com/docs/en/sub-agents) can handle delegated tasks, while [Cursor cloud agents](https://prod.cursor.com/help/ai-features/cloud-agents) run work in remote environments. Parallel and background work are available capabilities, rather than a future you need to design around.
 
-The next evolution is multiple AI agents working in parallel on the same codebase through git worktrees. Instead of one Claude Code session, you might have ten agents simultaneously:
+For a fund workflow, the useful harness improvements are concrete:
 
-- Agent 1 implements the frontend UI for a new feature
-- Agent 2 builds the backend API endpoints
-- Agent 3 writes tests for both
-- Agent 4 updates documentation
-- Agent 5 handles database migrations
-- Agents 6-10 work on related features or refactoring
+- Resume a document-processing run from its last completed item after a failure
+- Load the relevant company records and source documents instead of carrying every prior result in context
+- Validate extracted figures and retry the failed step, rather than rerunning the entire board-pack analysis
+- Save intermediate work and pause for a reviewer before updating shared records
+- Escalate an ambiguous case to a stronger model or a person
 
-Each agent works in its own git worktree (a separate working directory pointing to a different branch). They can work independently without conflicts. When agents finish their work, they create PRs that you review and merge. The agents coordinate through the git repository: they see each other's changes, can pull updates, and understand the evolving codebase.
+Decision APIs could provide some of those routing and checking steps. That's an architectural option to evaluate, not a reason to replace deterministic checks with model calls.
 
-This isn't science fiction. The building blocks exist: git worktrees are a standard git feature, Claude Code can already work with git, and orchestration systems are being built:
+Before writing a custom harness, check what your agent product or SDK already handles. Own the fund-specific workflow and data connections; avoid maintaining a second implementation of session management just to run a weekly briefing.
 
-- [Conductor](https://www.conductor.build/)
-- [Emdash](https://www.emdash.sh/)
-- [Superset](https://superset.sh/)
+## Parallel Development and Reusable Skills
 
-**What this means for VC tech**
+Coding agents can edit, run, and check changes across a codebase. For a solo engineer maintaining several fund tools, the question is how much work you can delegate without becoming the bottleneck for review and integration.
 
-Solo developers will be able to build and maintain even more ambitious systems. Maintaining multiple internal tools that currently requires your full attention becomes more manageable when agents handle routine updates and testing.
+**Start with one agent and a task you can check**
 
-You don't need to do anything now except be aware this is coming. When agent orchestration tools mature, the same principles from [Choosing Your Stack](/guide/part-3-technical-foundations/choosing-your-stack) apply: use boring, proven technology that AI tools understand. Use TypeScript and Next.js. Structure your code clearly. Write good documentation. These practices make both current AI tools and future agent orchestration more effective.
+Use the same principles from [Choosing Your Stack](/guide/part-3-technical-foundations/choosing-your-stack): boring technology, clear code, and good documentation. Give the agent a concrete outcome, a bounded scope, and a way to verify the result. You still need to review what it changes.
 
-**Personal AI agents: Beyond development**
+**When orchestration helps**
 
-The same pattern is emerging for personal productivity. Tools like [Moltbot](https://molt.bot/) ([formerly Clawdbot](https://x.com/moltbot/status/2016058924403753024), open source, runs locally) let you interact with an AI assistant through WhatsApp, Telegram, Slack, or iMessage. The agent has full system access: it can read files, execute commands, manage your calendar, send emails, and automate workflows across 50+ integrations.
+[Cursor](https://cursor.com/docs/configuration/worktrees), [ChatGPT/Codex](https://learn.chatgpt.com/docs/environments/git-worktrees), and [Claude Code](https://code.claude.com/docs/en/common-workflows) support parallel work through agents and separate workspaces. Git worktrees give each session its own checkout and branch, keeping uncommitted edits separate.
 
-This is worth watching as inspiration for what autonomous agents can do. But approach with caution: giving an agent full system access has real security implications. Understand what you're installing before running it on a machine with access to fund data.
+Worktrees don't eliminate integration problems. An agent changing an API and another building its frontend still need an agreed interface. Separate branches don't automatically share changes. Someone needs to reconcile assumptions, review the combined result, and run the checks. That's part of the work, even if an agent helps with it.
 
-**Sandboxed environments for agent execution**
+Start with independent tasks: fixes in separate tools, a documentation update alongside a feature, or an independent review. Splitting a tightly coupled feature across five agents can create more coordination work than it saves.
 
-As agents gain more autonomy, sandboxing becomes critical. Running AI-generated code or giving agents system access on your local machine is risky. A new category of infrastructure is emerging to address this: isolated execution environments purpose-built for agents.
+**Are frameworks just token burners?**
 
-- [Modal Sandboxes](https://modal.com/products/sandboxes): Container-based execution with sub-second startup, network controls for restricting outbound access, and scaling to 50,000+ concurrent sandboxes.
-- [Vercel Sandbox](https://vercel.com/docs/vercel-sandbox): Ephemeral Linux VMs designed for AI agents and code generation, with SDK-first integration.
-- [Sprites](https://sprites.dev/): Hardware-isolated Firecracker VMs with persistent state, checkpointing, and layer 3 network policies.
+They can be. Repeated planning, large shared contexts, retries, and agents reviewing each other all cost money and time. A framework earns its place when it makes a workflow easier to control, inspect, or recover after failure.
 
-These platforms let you run untrusted code without exposing your production systems or local machine. The key features for security are network isolation (preventing data exfiltration), ephemeral environments (no persistent access), and resource limits (preventing runaway processes).
+Before adopting one, compare it with a single agent doing the same kind of task:
 
-If you're building agent-powered features that execute code or access external systems, consider running them in sandboxed environments rather than on your local machine or production infrastructure.
+- Did the result pass the same acceptance checks?
+- How long did it take to reach a reviewed, usable result?
+- What was the total model and execution cost, including retries?
+- How much time did you spend correcting, reviewing, and integrating the work?
 
-## File-Native Agents: Beyond RAG and Knowledge Graphs
+For a recurring fund workflow, test representative inputs, including messy ones. A pitch-deck extraction pipeline might only need fixed steps with validation and retries. Don't add a team of agents when a straightforward workflow does the job.
 
-For the past two years, the standard approach to helping AI systems work with large document collections has been RAG (Retrieval Augmented Generation): chunk documents into pieces, embed them as vectors, store in a vector database, retrieve relevant chunks based on query similarity, stuff them into context.
+**Skills: Reuse the instructions that work**
 
-This approach is becoming obsolete.
+Skills package repeatable instructions and supporting resources for an agent to use when needed. A useful skill at your fund might describe how to draft a valuation memo from approved inputs, follow your internal application's conventions, or check a data import.
 
-**Why RAG was necessary**
+[Superpowers](https://github.com/obra/superpowers) and [Matt Pocock's skills](https://github.com/mattpocock/skills) are examples of reusable development workflows.
 
-RAG existed as a workaround for limited context windows. If you could only fit 8K or 32K tokens into context, you couldn't give an AI access to hundreds of documents. So you chunked documents, embedded them, and retrieved only the most relevant pieces for each query.
+You don't need to write the skill from scratch. Do the same task a few times with Claude or ChatGPT, correcting the output as you go. Once you're happy with the process, ask it to turn those sessions into a skill, including the examples, corrections, and preferences you've established. This captures how you actually do the work instead of making you specify the whole process upfront. Try it on the next instance of the task and refine anything it missed.
 
-Knowledge graphs were a similar workaround: extract entities and relationships, build a structured graph, query it to find relevant information. Both approaches created intermediate representations (vectors, graphs) because we couldn't work with documents directly.
+**Execution environments**
 
-**What changed**
+When an agent needs to execute code, services such as [Modal Sandboxes](https://modal.com/products/sandboxes), [Vercel Sandbox](https://vercel.com/docs/vercel-sandbox), and [Sprites](https://sprites.dev/) provide isolated execution environments. Compare persistence, network controls, credential handling, and how a run is stopped or recovered. The security chapter covers how to limit access around those environments.
 
-Context windows are now large enough and getting larger. AI agents have file system access and can use tools (grep, specialized readers). Context compaction techniques let agents maintain understanding across indefinitely long sessions.
+## Files, Retrieval, and Structured Data
 
-This means agents can work with files directly, like humans do. No chunking, no embedding, no graph extraction. Just "here's a folder of investment memos, analyze the fintech companies we've evaluated."
+Start with the simplest way to give an agent the evidence it needs. For a small collection of investment memos, that may mean searching files and reading the relevant documents. You don't need a vector database just to try answering questions about your research.
 
-**File-native agents: Documents stay as documents**
+**When working directly with files makes sense**
 
-Instead of transforming documents into vectors or graphs, file-native agents:
+An agent with file tools can search filenames and text, read documents, and follow references. Keep documents in formats your team can maintain. Markdown works well for text research; PDFs and spreadsheets need suitable readers. You don't need to migrate everything into a git repository to make it useful to an agent.
 
-1. Have direct access to files in their native formats (PDFs, markdown, spreadsheets)
-2. Use tools to search and analyze (grep for keywords, specialized readers for PDFs)
-3. Maintain context through compaction (file system holds artifacts, compacted context holds insights)
+This is a good starting point for bounded tasks: compare these five memos, summarize this board pack, or find our previous research on a company. Keep links to the source documents so someone can check the answer.
 
-The key insight: files work because they're a shared abstraction. They're not optimal for agents or humans individually, but they're common ground both can navigate. This shared interface enables collaboration. If you create agent-only structures (vector databases, proprietary knowledge graphs), you break the collaborative aspect.
+**When retrieval earns its place**
 
-**What this could mean for VC infrastructure**
+Retrieval-augmented generation (RAG) means finding relevant evidence and providing it to the model. Vector search is one option; keyword search and database queries can also supply that evidence. An agent searching files is still retrieving information.
 
-Building complex RAG systems for your internal documents could be a thing of the past: no need to extract entities from investment memos and build knowledge graphs. These are solutions to problems that no longer exist.
+Larger context windows don't make retrieval obsolete. You still need to find the right material, respect access permissions, handle updates, and control the cost of repeatedly reading documents. Compacted session summaries can lose details, so keep the underlying evidence available.
 
-Instead:
+For a shared research assistant over years of memos, indexed search may be more useful than repeatedly scanning folders. Try keyword search first, then semantic or hybrid search if the questions need it. Check whether the system finds the right evidence before judging how convincing its answers sound.
 
-- Store research as markdown files in git repositories
-- Give AI agents file system access to these repositories
-- Let agents use grep, read files, and search naturally
-- Focus on context compaction and session management, not retrieval algorithms
+[turbopuffer](https://turbopuffer.com/docs) supports vector and full-text search with metadata filtering, so you can combine semantic similarity with keyword matching in a RAG pipeline. Its storage architecture is built around object storage, with memory and SSD caching for queries.
 
-If you're using a tool like Claude Code, it already works this way. It has file access, uses grep and other tools, and manages context effectively. You don't need to build additional infrastructure.
+**Use structured data for structured questions**
 
-**The one exception: External vendor data**
+Ask your database which companies raised a Series A last quarter. Don't ask an agent to infer the list from a folder of documents when you already have funding-round records. Use SQL for filters, counts, and aggregations, as covered in [Data Warehousing](/guide/part-3-technical-foundations/data-warehousing).
 
-For large external datasets (all companies from PitchBook, millions of records), traditional database queries are still appropriate. File-native agents are for documents and internal research, not for structured data at scale. Continue using your data warehouse and SQL for that use case (as covered in [Data Warehousing](/guide/part-3-technical-foundations/data-warehousing)).
+A [knowledge graph](/guide/part-3-technical-foundations/knowledge-graphs) can help with relationship questions such as paths between founders, employers, and co-investors. Those relationships remain useful even when a model can read longer documents. Start with relationships in your relational database and add graph infrastructure when actual queries justify it.
 
-**What about existing RAG systems?**
+**Test before adding infrastructure**
 
-If you already built a RAG system for your investment memos or research, you don't need to immediately rip it out. But when you're building new features or reconsidering your architecture, consider file-native approaches. They're simpler, more maintainable, and work better with modern AI tools.
+Collect questions your team actually asks and identify the evidence needed to answer them. Include questions where the right response is "we don't have enough information." Compare file search with indexed retrieval on answer accuracy, source coverage, permissions, latency, and cost.
 
-## What to Ignore
+These approaches can work together: query the CRM for companies, retrieve relevant memos, then read the original documents for detail.
 
-**Don't fine-tune models**. Foundation models work fine for almost all VC use cases (extracting data, analyzing companies, answering questions). Fine-tuning requires training data, evaluation infrastructure, ongoing maintenance, and rarely produces better results for most VC tasks.
+## Model Choice and Evaluation
 
-**Don't add AI just to say you have AI**. Build features that solve actual problems. "AI-powered market maps" that are just LLM text aren't better than human-curated maps. Use AI where it creates real leverage: extracting information from documents, processing unstructured data, helping engineers build faster. Not for theater.
+Don't bake one model ranking into your architecture. A decision model, a fast general model, and a more capable reasoning model can serve different steps of the same workflow.
 
-**AGI timelines don't matter for your job**. Whether AGI arrives in 3 or 30 years doesn't change what you should build today. Build tools that work now and are maintainable by humans.
+Keep a small evaluation set for each recurring task: documents with checked extractions, questions with known source evidence, or examples of correct routing. Compare quality, latency, cost per completed task, and time spent correcting results. Run it again when you change the model, instructions, or tools.
 
-**Model selection is simpler than you think**. We use Claude Sonnet for most tasks, Claude Opus for deep reasoning. Don't optimize for tiny cost differences. Pick an LLM provider, stick with it, and focus on building features.
+Try better context and clearer task boundaries before fine-tuning. Fine-tuning becomes worth investigating when you have a recurring failure, enough labeled examples, and a way to measure improvement.
 
 ## Staying Current
 
-Technology for VC infrastructure evolves quickly. What's cutting-edge today becomes baseline within months. Here's how to stay up to date without spending all your time chasing trends:
+**Look at what larger engineering teams are building**
+
+Engineering teams outside VC have the resources to experiment with tooling you might eventually use yourself. Ramp's [Inspect](https://inspect.com/) is a good example: a collaborative cloud coding agent built for its own team. Their [engineering write-up](https://engineering.ramp.com/post/why-we-built-our-background-agent) explains how they gave it a working development environment, access to debugging tools, and the ability to verify changes with tests and browser previews.
+
+These write-ups can be more useful than another model announcement. Look at how teams assemble context, make environments reproducible, and bring people into review. You can borrow individual pieces for your fund's setup without building the whole platform.
 
 **General tech communities**
 
@@ -176,24 +172,12 @@ Technology for VC infrastructure evolves quickly. What's cutting-edge today beco
 
 - **[Data Driven VC](https://datadrivenvc.io/)**: Community and resources specifically for people building data infrastructure at VC funds. Much better signal than general tech communities for VC-specific challenges.
 
+- **[VC Stack](https://www.vcstack.com/data-software-tools)**: Directory of data providers and software for VC funds. Useful for finding options before you decide to build.
+
 - **[Vestberry VC Day](https://vcday.vestberry.com/)**: Conferences focused on VC operations and technology. Good for understanding what funds of all sizes are building and what tools are emerging in the ecosystem.
-
-**The balance: Follow loosely, adopt carefully**
-
-Don't try to implement every new tool or technique you see. Most trends don't matter for your fund. Follow these resources to build context about what's possible and what direction the industry is moving, but only adopt new approaches when they solve actual problems you're experiencing.
-
-The goal isn't to use the latest technology. It's to build tools that help your fund invest better. Sometimes that means adopting new approaches early. More often it means sticking with proven technology and focusing on execution.
 
 ## The Bottom Line
 
-LLMs have fundamentally changed how you build VC technology, but they're becoming baseline rather than differentiating. The competitive advantage is how you integrate AI into your workflows, not that you're using AI.
+Try the existing application layer before building another interface. Claude, ChatGPT, and specialist products increasingly supply workflows that used to require a custom tool.
 
-Connect AI tools to your internal data, whether through MCP servers, CLI tools, or other approaches. The mechanism matters less than the outcome: AI that can query your CRM, data warehouse, and research directly.
-
-Understand where AI-assisted development is heading: from single sessions to orchestrated agents working in parallel through git worktrees. Prepare by using technology stacks AI tools understand (TypeScript, Next.js, clear code structure) and writing good documentation.
-
-Skip building RAG systems for internal documents. File-native agents with large context windows and file system access work better. Store research as files, give agents file access, let them use tools naturally. Focus on context compaction, not retrieval algorithms.
-
-Ignore the hype: don't fine-tune models, don't add AI for theater, don't worry about AGI timelines, and don't overcomplicate model selection. Just use Claude Sonnet for most things and Opus when you need deeper reasoning.
-
-The next 6 months will bring better tooling for agent orchestration, more mature MCP ecosystems, and continued improvements in model capabilities. But the fundamentals won't change: use AI where it creates real leverage, integrate it into actual workflows, and focus on solving problems rather than using the latest technology for its own sake.
+Decision APIs are worth testing for classification, routing, and scoring inside those workflows. Smarter harnesses can handle the surrounding execution: context, state, retries, and review. Your fund's data, workflow definitions, and evaluation examples make these pieces useful together.

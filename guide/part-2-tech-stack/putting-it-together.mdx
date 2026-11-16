@@ -28,9 +28,26 @@ Before you build anything significant, spend time [understanding your fund](/gui
 
 **Identify the actual pain points**: Watch for what's actually broken or painful, not what people say would be nice to have. Is deal flow tracking chaotic? Is research getting lost? Are portfolio companies asking for help you can't deliver systematically? These are signals about where to invest.
 
-**Don't assume**: Just because EQT built Motherbrain or Inflection built Kepler doesn't mean your fund needs the same thing. Every fund is different. Some funds operate perfectly well with minimal technology. Others gain competitive advantage through sophisticated infrastructure. Figure out which you are before committing to major projects.
+**Don't assume**: Just because EQT built Motherbrain or Inflection built Kepler doesn't mean your fund needs the same thing.
 
 This learning phase might take a few months. That's fine. Building the wrong thing wastes more time than taking time to understand what to build.
+
+### When You Inherit a Stack That Nobody Really Uses
+
+An established fund can have plenty of tools without getting much value from them. You arrive to find a CRM, several data subscriptions, a warehouse, and dashboards. On paper, the backbone exists. In practice, partners keep their own spreadsheets and nobody trusts the pipeline report.
+
+Don't start by replacing the CRM. Find out why the current setup isn't working.
+
+- **Inventory what actually runs**: List tools, costs, administrators, integrations, and renewal dates. Check when each sync last succeeded.
+- **Follow one real workflow**: Watch a deal move from introduction to partner meeting. Where does information get entered twice? Where do people leave the system? Ask users to show you the last time they used it.
+- **Identify trusted data**: Which system does the team rely on for deal status, company identity, and portfolio metrics? Agree on an authoritative source for each. Don't merge conflicting records blindly just to clean up a dashboard.
+- **Assign ownership**: Someone needs to own deal updates and someone needs to own the integration that moves them. You can maintain the software, but you can't personally keep every investor's pipeline current.
+
+Pick one workflow and repair it with someone who uses it every week. For example, fix the email sync, remove unnecessary required fields, and make the Monday pipeline report useful enough that the team stops preparing a separate spreadsheet. Review ambiguous duplicates with the deal team and keep a record of merges.
+
+Measure whether the change sticks. Are active deals updated before the meeting? Has report preparation dropped from two hours to twenty minutes? Are people still maintaining a parallel tracker? Logins alone won't tell you whether you've solved the problem.
+
+Once the workflow works, document it, train the team, and retire the duplicate process. Replace a tool when you've found a specific limitation that matters and can't reasonably fix it through configuration or integration. The quick win may be making something you've already paid for useful.
 
 ## Phase 2: Build the Backbone and Quick Wins
 
@@ -40,7 +57,7 @@ Once you understand your fund, start with two parallel tracks: the backbone (fou
 
 These are non-negotiable infrastructure. Every fund needs to track deal flow and manage fund operations. Don't build these. Buy them.
 
-**CRM**: See [CRM and Deal Flow](/guide/part-2-tech-stack/crm-and-deal-flow). Get it set up immediately and make sure your team actually uses it. If adoption is low, you have a process problem to solve before building anything else.
+**CRM**: See [CRM and Deal Flow](/guide/part-2-tech-stack/crm-and-deal-flow). If you already have one, repair the workflow before considering a replacement. If you don't, get one set up and make sure your team actually uses it. If adoption is low, you have a process problem to solve before building anything else.
 
 **Fund operations**: See [Fund Operations](/guide/part-2-tech-stack/fund-operations). If you're Fund I with a small LP base, spreadsheets might work temporarily. But plan the migration before Fund II. Buy this off the shelf. Don't build fund operations software.
 
@@ -57,9 +74,9 @@ Examples of quick wins:
 - A lightweight research workflow improvement (better way to organize market maps, easier way to share insights)
 - Customer discovery prospect lists for portfolio companies (using data from PitchBook or LinkedIn)
 
-Quick wins should take days or weeks, not months. They should solve real problems people have right now. They should be immediately useful without requiring behavior change from the team.
+Quick wins should take days or weeks, not months. They should be immediately useful without requiring behavior change from the team.
 
-These projects do three things. First, they deliver tangible value. Second, they build trust with the investment team. Third, they help you test out new technology. When you later propose a bigger project, you've proven you can deliver useful things rather than over-engineered solutions nobody uses.
+Quick wins also give you a place to test technology before committing to a larger project.
 
 ## Phase 3: Decide on Your Big Swing
 
@@ -86,9 +103,5 @@ Three phases. Don't skip them.
 **Phase 2**: Build the backbone (CRM, fund ops) and quick wins (small tools that solve immediate pain points and prove value). Get the essentials working and establish credibility.
 
 **Phase 3**: Decide on your big swing based on where your fund's competitive advantage is. Research platform? Sourcing? Portfolio support? Make it count.
-
-This approach avoids [common mistakes](/guide/part-1-understanding-vc/common-mistakes). You're not jumping in too early because you spent Phase 1 learning. You're not over-engineering because Phase 2 focuses on small, proven wins. You're not building in a vacuum because you've validated what matters before Phase 3.
-
-Most importantly, you're building momentum. Quick wins in Phase 2 create energy and trust. By the time you're ready for your big swing in Phase 3, you have the credibility and understanding to do it right.
 
 In Part 3, we'll go deep on the technical foundations underlying all these tools: data modeling, entity resolution, data quality, warehousing, and integration patterns. These are the building blocks you need to implement any of the tools covered in Part 2.

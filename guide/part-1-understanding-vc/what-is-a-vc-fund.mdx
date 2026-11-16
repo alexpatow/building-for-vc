@@ -58,6 +58,8 @@ Portfolio companies also create most of the complexity in a fund's data model. E
 
 Understanding portfolio companies means understanding that they're not static database records. They're dynamic businesses that evolve over years. The company you invested in at seed stage looks completely different three years later when they've raised a Series B, hired 50 people, and pivoted twice. Your system needs to track this evolution while maintaining the historical record of how the company has developed.
 
+Tracking this evolution is a history problem first. You can keep dated company attributes, funding rounds, and employment records in Postgres. A graph can help you explore relationships, but it doesn't preserve history automatically, and giving an LLM access to your data doesn't require a graph database. Start with [temporal data and history](/guide/part-3-technical-foundations/data-modeling#temporal-data-and-history), then consider [knowledge graphs](/guide/part-3-technical-foundations/knowledge-graphs) when you have relationship queries that justify them.
+
 ## The Structure: Companies and Vehicles
 
 Here's where things get confusing for most people new to VC: a "venture capital fund" isn't just one entity. It's actually a collection of related but legally separate entities, each serving a specific purpose.
@@ -216,7 +218,7 @@ For deals that pass screening, **due diligence** begins. This is where the fund 
 
 The **investment committee** (IC) is where investment decisions are made. Someone at the fund (the deal champion) presents the opportunity to the partnership. There's discussion, debate, questions. The committee decides: pass, invest, or "not now but circle back later." The decision might be subject to conditions: "yes, but only if we can lead the round" or "yes, but at this valuation, not their asking price."
 
-**Syndication** often happens next, especially at earlier stages. The lead investor rarely fills the entire round alone. They bring in other funds, angels, or existing investors to complete the round. This involves coordinating with other parties, sharing deal information (with founder permission), and sometimes negotiating allocation if the round is oversubscribed. At pre-seed and seed, rounds are frequently syndicated across many investors; at later stages, rounds typically have fewer but larger investors. The fund needs to track who else is in the deal and coordinate timing for closing.
+**Syndication** means bringing multiple investors into the same round. Founders coordinate the fundraising process and decide who they want on the cap table. A lead investor may introduce other funds or angels, help fill the round, and coordinate with co-investors, but don't assume the lead assembles the whole syndicate. Founders may already have interested investors, and some rounds have no single lead. Discussions about participation, terms, and allocation often overlap with diligence. Your system needs to track who's interested, who's committed, allocation, and closing status. Share deal information with other investors only with founder permission.
 
 If the IC says yes, the **closing** process begins. Lawyers draft and negotiate documents. Terms get finalized. The company, fund, and other investors sign the paperwork. The fund issues a capital call to LPs. Money is wired. Equity is issued. The company is now officially in the portfolio.
 

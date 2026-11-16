@@ -89,19 +89,21 @@ Before building your own system, consider whether services exist that solve this
 
 - **[AWS Entity Resolution](https://aws.amazon.com/entity-resolution/)**: Amazon's native service with flexible, configurable workflows. Integrates directly with other AWS services if you're already in that ecosystem.
 
-These services maintain their own canonical entity IDs and provide mappings from various data sources to their IDs.
+These products differ in what they resolve, how you deploy them, and whether they match your records to an external dataset or to each other. Test with your own companies and people before choosing one. A generic customer-data demo won't tell you how well it handles startup rebrands or two founders with the same name.
 
-**The cost problem**: These services are tremendously expensive. Enterprise pricing often starts at tens of thousands per year and scales with usage. For large funds managing extensive data infrastructure, this might be justified. For smaller funds or those just starting to build data capabilities, the cost is prohibitive.
+**Compare the whole cost**: Enterprise contracts can be expensive, but don't assume every option requires one. [AWS Entity Resolution publishes usage-based pricing](https://aws.amazon.com/entity-resolution/pricing/). Include setup, repeated matching runs, enrichment, and ongoing review when comparing it with building your own rules.
 
-**When it makes sense**: If you're at significant scale (tracking hundreds of thousands of companies, integrating 5+ data sources, have engineering resources but want to avoid building matching infrastructure), a service might make sense. If you're smaller or earlier, the cost probably doesn't justify the benefit compared to simpler approaches.
+**Use a library before writing a matching engine**: [Splink](https://moj-analytical-services.github.io/splink/index.html) is an open-source option for probabilistic record linkage. It gives you matching machinery, but you still need to prepare the data, evaluate matches, and run the pipeline. It isn't a finished application for your investment team.
 
-**Vendor lock-in considerations**: Once you adopt a service's entity IDs, migrating to a different system is painful. All your internal systems reference these IDs. Switching providers means remapping everything. Make sure the vendor is reliable and will be around long-term.
+**Give non-technical colleagues a review workflow**: Start with your CRM's existing duplicate-management tools for CRM cleanup. For matches across sources, use a review queue in your existing internal tool: show records side by side, the fields that support the match, and options to accept, reject, or defer. Record who decided and preserve enough history to undo a mistake.
 
-Consider services, understand their costs, but don't assume they're the only solution. Many successful funds built their own entity resolution because services didn't exist or were too expensive.
+**Keep your own canonical IDs**: Store vendor IDs as mappings to your internal entities. You can replace the matching engine without changing every application's company IDs. Check that you can export both mappings and review decisions before committing to a vendor.
+
+Buy when a service performs well on your data and saves enough ongoing work to justify its cost. Use simple rules or a library when they cover your needs. Either way, budget for human review.
 
 ## Building Your Own Entity Resolution Service
 
-When simple matching stops working and services are too expensive, you need to build your own system. This is where it gets hard.
+When simple matching stops working and existing services or libraries don't meet your needs, you may need a custom system. This is where it gets hard.
 
 **The canonical ID approach**: Assign one internal ID per entity. Every company or person gets exactly one canonical ID in your system. All records from external sources (Crunchbase, PitchBook, LinkedIn, your CRM) map to these canonical IDs. When you query for a company, you query by canonical ID, which pulls data from all sources that reference that entity.
 
@@ -187,12 +189,12 @@ Entity resolution is incredibly difficult. It's also fundamental to making multi
 
 Start simple. Match on URLs and LinkedIn URLs. Normalize strings and do exact matching. See how far these basic rules take you. For many funds, especially smaller ones, this might be sufficient.
 
-Entity resolution services exist, but they're tremendously expensive. Consider them if you're at significant scale, but understand the costs and vendor lock-in implications.
+Evaluate services and open-source libraries before building a matching engine. Compare them on your own data, include review costs, and keep your canonical IDs independent of the vendor.
 
 When you need to build your own system, use the canonical ID approach: one ID per entity, all external data maps to it. Match on multiple fields (name, URL, location, LinkedIn). Use probabilistic scoring to determine confidence. Automatically merge high-confidence matches, flag medium-confidence for human review.
 
 Build interfaces for splitting and merging entities. You will need them. Mistakes happen at scale, and you need tooling to fix them easily.
 
-Entity resolution was part of the secret sauce that made EQT's Motherbrain powerful. It's not a solved problem. It requires continuous investment and refinement. Don't underestimate how hard this is, but also don't over-engineer it before you need sophisticated matching.
+Entity resolution was part of the secret sauce that made EQT's Motherbrain powerful. It's not a solved problem. It requires continuous investment and refinement.
 
 In the next chapter, we'll cover data quality and validation, which builds on entity resolution. Once you have canonical entities, you need to ensure the data about those entities is accurate, complete, and trustworthy.

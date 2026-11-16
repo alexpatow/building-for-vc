@@ -14,8 +14,8 @@
     "pre-commit": "bun run pre-commit"
   },
   "devDependencies": {
-    "mint": "^4.2.284",
-    "prettier": "^3.8.0",
-    "simple-git-hooks": "^2.13.1"
+    "mint": "^4.3.37",
+    "prettier": "^3.10.1",
+    "simple-git-hooks": "^2.14.0"
   }
 }
